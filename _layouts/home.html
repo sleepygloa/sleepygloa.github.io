@@ -2,21 +2,88 @@
 layout: archive
 ---
 
+
+
+
 {{ content }}
 
-<h3 class="archive__subtitle">{{ site.data.ui-text[site.locale].recent_posts | default: "Recent Posts" }}</h3>
+{% assign categories_max = 0 %}
+{% for category in site.categories %}
+  {% if category[1].size > categories_max %}
+    {% assign categories_max = category[1].size %}
+  {% endif %}
+{% endfor %}
 
-{% if paginator %}
+
+
+{% assign entries_layout = page.entries_layout | default: 'list' %}
+{% for i in (1..categories_max) reversed %}
+  {% for category in site.categories %}
+    {% if category[1].size == i %}
+      <section id="{{ category[0] | slugify | downcase }}" class="taxonomy__section">
+        <h2 class="archive__subtitle">{{ category[0] }}</h2>
+        <div class="entries-{{ entries_layout }}">
+          {% for post in category.last %}
+            {% include archive-single.html type=entries_layout %}
+          {% endfor %}
+        </div>
+        <a href="#page-title" class="back-to-top">{{ site.data.ui-text[site.locale].back_to_top | default: 'Back to Top' }} &uarr;</a>
+      </section>
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
+
+<!-- <h3 class="archive__subtitle">{{ site.data.ui-text[site.locale].recent_posts | default: "Recent Posts" }}</h3> -->
+
+
+
+
+<!-- {% if paginator %}
   {% assign posts = paginator.posts %}
 {% else %}
   {% assign posts = site.posts %}
-{% endif %}
+{% endif %} -->
 
+<!-- <style>
+  ul{
+    list-style:none;
+  }
+
+
+</style>
+<header class="site-category">
+  <ul>
+    
+    {% assign pages_list = site.pages %}
+    {% for node in pages_list %}
+      {% if node.title != null %}
+        {% if node.layout == "category" %}
+          <li><a class="category-link {% if page.url == node.url %} active{% endif %}"
+          href="{{ site.baseurl }}{{ node.url }}">{{ node.title }}</a></li>
+
+
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    
+</ul>
+</header> -->
+
+          
+<!-- {%- for post in site.categories[{{ node.title }}] -%}
+<div class="entries-{{ entries_layout }}">
+  {% include archive-single.html %}
+</div>
+{%- endfor -%} -->
+<!-- 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 <div class="entries-{{ entries_layout }}">
   {% for post in posts %}
     {% include archive-single.html type=entries_layout %}
   {% endfor %}
-</div>
+</div> -->
 
 {% include paginator.html %}
+
+
