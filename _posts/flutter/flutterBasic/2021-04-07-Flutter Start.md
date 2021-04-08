@@ -215,6 +215,60 @@ class _TabPageState extends State<TabPage> {
 9. RaisedButton
 - 버튼
 
+10. Row, Column
+- Row : 다단식으로 배열을 잘라 표현한다.
+- Column : 리스트처럼 위에서 아래로 내려오면서 배열을 잘라 표현한다.
+- Row, Column 을 조합하여 화면을 구성한다.
+```
+....
+child:Row(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: <Widget>[
+    Column(
+        ...
+    ),
+....
+```
+
+11.  Stack
+12.  
+
+13. Container
+- SizedBox와 비슷하지만, Container 는 여러 요소를 감싸는 느낌으로 사용한다.
+- 여러 SizedBox의 위치를 정렬하는 용도로 사용할 수 있다.
+```
+Container(
+  width:80.0,
+  height:80.0,
+  alignment: Alignment.bottomRight,
+  child: Stack(
+    alignment: Alignment.center,
+    children: [
+      SizedBox(
+          width:28.0,
+          height:28.0,
+          child: FloatingActionButton(
+              onPressed: null,
+              backgroundColor: Colors.white,
+          )
+      ),
+      SizedBox(
+          width:25.0,
+          height:25.0,
+          child: FloatingActionButton(
+              onPressed: null,
+              backgroundColor: Colors.blue,
+              child : Icon(Icons.add)
+          )
+      )
+    ],
+  ),
+)
+
+```
+
+
 
 ## 인스타그램 클론
 
@@ -297,6 +351,88 @@ class _TabPageState extends State<TabPage> {
             )
           )
         )
+      )
+    );
+  }
+```
+
+
+
+### 계정 페이지
+```
+
+  Widget _buildBody() {
+    return Padding(
+      padding:EdgeInsets.all(16.0),
+      child:Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Stack(
+                children: <Widget>[
+                  SizedBox(
+                    width:80.0,
+                    height:80.0,
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage('https://play-lh.googleusercontent.com/TVVIZnPw3rAi9o1DfCRH97UbbSRGqLo7fFKoDIYhQZ2j1B2T-fOQkDuLlCqki-gYKg'),
+                    )
+                  ),
+                  Container(
+                    width:80.0,
+                    height:80.0,
+                    alignment: Alignment.bottomRight,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
+                            width:28.0,
+                            height:28.0,
+                            child: FloatingActionButton(
+                                onPressed: null,
+                                backgroundColor: Colors.white,
+                            )
+                        ),
+                        SizedBox(
+                            width:25.0,
+                            height:25.0,
+                            child: FloatingActionButton(
+                                onPressed: null,
+                                backgroundColor: Colors.blue,
+                                child : Icon(Icons.add)
+                            )
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              Padding(
+                padding:EdgeInsets.all(8.0)
+              ),
+              Text(
+                '이름',
+                style:TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)
+              )
+            ],
+          ),
+          Text(
+              '0\n게시물',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18.0),
+          ),
+          Text(
+              '0\n팔로워',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18.0),
+          ),
+          Text(
+              '0\n팔로잉',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18.0),
+          ),
+        ],
       )
     );
   }
