@@ -268,13 +268,40 @@ Container(
 
 ```
 
+14. GridView
+- 인스타그램이나 특정 화면에서 동일한 형태의 도형이 반복되는 화면을 그릴때 사용
+- 화면크기가 변경되어도 유동적으로 크기가 변하며 모양을 유지시킬 수 있다.
+- ```crossAxisCount``` : 가로에 표현한 아이템 수
+- ```childAspectRatio``` : 아이템 크기 비율
+- ```mainAxisSpacing``` :  정렬 간격
+- ```crossAxisSpacing``` : 가로 간격
+- ```itemBuilder``` : 항목을 그리는 ??
 
+```
+  Widget _buildBody() {
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        childAspectRatio: 1.0,
+        mainAxisSpacing: 1.0,
+        crossAxisSpacing: 1.0
+      ),
+      itemCount: 5,
+      itemBuilder: (context, index){
+        return _buildListItem(context, index);
+      });
+  }
+
+  Widget _buildListItem(BuildContext context, int index) {
+    return Image.network('https://play-lh.googleusercontent.com/TVVIZnPw3rAi9o1DfCRH97UbbSRGqLo7fFKoDIYhQZ2j1B2T-fOQkDuLlCqki-gYKg');
+  }
+```
 
 ## 인스타그램 클론
 
 
-### 첫 페이지
 
+### 첫 페이지
 ```
   Widget _buildBody() {
     return Padding(
@@ -438,3 +465,25 @@ Container(
   }
 ```
 
+### 조회 페이지
+
+```
+  Widget _buildBody() {
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        childAspectRatio: 1.0,
+        mainAxisSpacing: 1.0,
+        crossAxisSpacing: 1.0
+      ),
+      itemCount: 5,
+      itemBuilder: (context, index){
+        return _buildListItem(context, index);
+      });
+  }
+
+  Widget _buildListItem(BuildContext context, int index) {
+    return Image.network('https://play-lh.googleusercontent.com/TVVIZnPw3rAi9o1DfCRH97UbbSRGqLo7fFKoDIYhQZ2j1B2T-fOQkDuLlCqki-gYKg');
+  }
+
+```
