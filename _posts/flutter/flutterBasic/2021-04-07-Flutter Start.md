@@ -81,7 +81,7 @@ Android Studio 에서 개발하기 위해서 핸드폰과 같은 ```가상 Devic
 > READMD.md : GIT 프로젝트 설명
 
 
-## 구현하기
+## 알아야할 코드
 1. AppBar
 ```
       home: Scaffold(
@@ -157,5 +157,148 @@ class _HelloPageState extends State<HelloPage> {
           ],
         )
       )
+```
+
+5. Tab Page
+  - 탭의 상태를 관리해야하기 때문에 ```StatefulWidget```  로 페이지를 구성한다.
+  - ```Scaffold```
+  - ```bottomNavigationBar``` : 로 탭페이지 UI 를 구성한다. 내부 옵션중 ```items```(탭), ```currentIndex```(탭번호), ```onTap```(탭클릭시 이벤트)  로 탭의 상태를 구현할 수 있다.
+  - ```body``` 에 탭클릭시 ```Scaffold``` 로 구성된 페이지의 전환을 볼 수 있다.
+
+```
+class TabPage extends StatefulWidget{
+  @override
+  _TabPageState createState() => _TabPageState();
+}
+
+class _TabPageState extends State<TabPage> {
+  int _selectedIndex = 0;
+  List _page = [
+    Text('page1'),
+    Text('page2'),
+    Text('page3'),
+  ];
+  
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      body : Center(child:_page[_selectedIndex]),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: _onItemTapped,
+        currentIndex: _selectedIndex,
+        items:<BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
+          BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('Search')),
+          BottomNavigationBarItem(icon: Icon(Icons.account_circle), title: Text('Account')),
+      ]),
+    );
+  }
+
+
+  void _onItemTapped(int value) {
+    setState(() {
+      _selectedIndex = value;
+    });
+  }
+}
+```
+
+6. SafeArea, SingleChildScrollView
+- 디바이스 장치 크기에 따라서 화면이 어떻게 보일지 모르기 때문에(제대로보일지, 짤려서 보일지), 처음에는 스크롤을 추가해 놓는 것이좋다.
+
+7. Padding(padding: EdgeInsets.all(8.0))
+- 각 위젯 사이에 간격을 줄 때, ```Padding(padding: EdgeInsets.all(8.0))``` 이런 식으로 추가만 하면 된다.
+8. SizedBox
+- 크기가 정해진 형태를 만들 때, 선언하고 ```width```, ```height```를 선언한다.
+- 내용은 ```child```안에 ```CircleAvatar``` 등으로 채울 수 있다.
+
+9. RaisedButton
+- 버튼
+
+
+## 인스타그램 클론
+
+
+### 첫 페이지
+
+```
+  Widget _buildBody() {
+    return Padding(
+      padding: EdgeInsets.all(0.0),
+      child: SafeArea(
+        child:SingleChildScrollView(
+          child:Center(
+            child:Column(
+              children: <Widget>[
+                Text('Instargram에 오신 것을 환영합니다.',
+                  style: TextStyle(fontSize: 24.0)
+                ),
+                Padding(padding: EdgeInsets.all(8.0)),
+                Text('사진과 동영상을 보려면 팔로우해주세요.'),
+                SizedBox(
+                  width:260.0,
+                  child:
+                    Card(
+                        elevation: 4.0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: <Widget>[
+                              Padding(padding: EdgeInsets.all(1.0)),
+                              SizedBox(
+                                width:80.0,
+                                height:80.0,
+                                child:CircleAvatar(
+                                  backgroundImage: NetworkImage('https://trialxxerror.medium.com/?source=post_page-----1474e54b55a0--------------------------------'),
+                                )
+                              ),
+                              Padding(padding: EdgeInsets.all(8.0)),
+                              Text('이메일 주소', style: TextStyle(fontWeight: FontWeight.bold)),
+                              Text('이름'),
+                              Padding(padding: EdgeInsets.all(8.0)),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  SizedBox(
+                                    width:70.0,
+                                    height:70.0,
+                                    child: Image.network('https://miro.medium.com/max/4000/0*8l-9ohGsAquPq_rZ.jpeg', fit:BoxFit.cover),
+                                  ),
+                                  Padding(padding: EdgeInsets.all(1.0)),
+                                  SizedBox(
+                                    width:70.0,
+                                    height:70.0,
+                                    child: Image.network('https://image.edaily.co.kr/images/Photo/files/NP/S/2019/08/PS19082300690.jpg', fit:BoxFit.cover),
+                                  ),
+                                  Padding(padding: EdgeInsets.all(1.0)),
+                                  SizedBox(
+                                    width:70.0,
+                                    height:70.0,
+                                    child: Image.network('https://play-lh.googleusercontent.com/TVVIZnPw3rAi9o1DfCRH97UbbSRGqLo7fFKoDIYhQZ2j1B2T-fOQkDuLlCqki-gYKg', fit:BoxFit.cover),
+                                  ),
+                                ],
+                              ),
+                              Padding(padding: EdgeInsets.all(4.0)),
+                              Text('Facebook 친구'),
+                              Padding(padding: EdgeInsets.all(4.0)),
+                              RaisedButton(
+                                child:Text('팔로우'),
+                                textColor: Colors.white,
+                                color: Colors.blueAccent,
+                                onPressed: ()=>{},
+                              ),
+                              Padding(padding: EdgeInsets.all(4.0)),
+                            ],
+                          ),
+                        )
+                    )
+                )
+              ],
+            )
+          )
+        )
+      )
+    );
+  }
 ```
 
