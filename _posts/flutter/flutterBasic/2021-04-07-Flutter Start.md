@@ -297,6 +297,30 @@ Container(
   }
 ```
 
+15. TextEditingController
+- 글을 쓰는 입력 폼의 데이터를 핸들링할 수 있는 객체
+- 화면이 정지될 때는 ```dispose```를 사용하여 메모리 삭제를 해주어야한다.
+- 사용
+```
+TextField(
+  decoration: InputDecoration(hintText: '내용을 입력하세요'),
+  controller: textEditingController,
+)
+```
+- 선언
+```
+final textEditingController = TextEditingController();
+```
+- 메모리 삭제
+```
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    textEditingController.dispose();
+    super.dispose();
+  }
+```
+
 ## 인스타그램 클론
 
 
@@ -486,4 +510,43 @@ Container(
     return Image.network('https://play-lh.googleusercontent.com/TVVIZnPw3rAi9o1DfCRH97UbbSRGqLo7fFKoDIYhQZ2j1B2T-fOQkDuLlCqki-gYKg');
   }
 
+```
+
+
+### 글쓰기 페이지
+```
+...
+  final textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    textEditingController.dispose();
+    super.dispose();
+  }
+...
+
+
+  Widget _buildAppBar() {
+    return AppBar(
+      actions: <Widget>[
+        IconButton(
+            icon: Icon(Icons.send),
+            onPressed: ()=>{}
+        )
+      ],
+    );
+  }
+
+  Widget _buildBody() {
+    return Column(
+      children: <Widget>[
+        Text('No Image'),
+        TextField(
+          decoration: InputDecoration(hintText: '내용을 입력하세요'),
+          controller: textEditingController,
+        )
+      ],
+    );
+  }
 ```
