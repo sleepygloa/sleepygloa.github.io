@@ -321,6 +321,93 @@ final textEditingController = TextEditingController();
   }
 ```
 
+16. image_picker
+- url : https://pub.dev/packages/image_picker/versions/0.7.4
+```
+File _image;
+...
+_image == null ? Text('No Image') : Image.file(_image),
+...
+Future _getImage() async {
+  File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+  setState(() {
+    _image = image;
+  });
+}
+```
+
+17. Login
+- url : https://pub.dev/packages/flutter_signin_button
+
+
+```
+dependencies:
+  ...
+  firebase_auth: ^0.14.0+5
+  flutter_signin_button: ^0.2.5
+  google_sign_in: ^4.0.7
+  cloud_firestore: ^0.12.9+3
+  firebase_storage: ^3.0.6
+```
+```
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+...
+final GoogleSignIn _googleSignIn = GoogleSignIn();
+final FirebaseAuth _auth = FirebaseAuth.instance;
+...
+SignInButton(
+  Buttons.Google,
+  onPressed: (){
+    _handleSignIn()
+        .then((user) => {
+          print(user)
+    });
+  }
+)
+
+...
+  Future<FirebaseUser> _handleSignIn() async {
+    GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    FirebaseUser user = (await _auth.signInWithCredential(
+        GoogleAuthProvider.getCredential(
+            idToken: googleAuth.idToken, accessToken: googleAuth.accessToken))).user;
+    print("signed in " + user.displayName);
+    return user;
+  }
+
+```
+
+```
+class RootPage extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+  return StreamBuilder<FirebaseUser>(
+    stream: FirebaseAuth.instance.onAuthStateChanged,
+    builder:(BuildContext context, AsyncSnapshot snapshot){
+      if(snapshot.hasData){
+        return TabPage(snapshot.data);
+      }else{
+        return LoginPage();
+      }
+    }
+  );
+  }
+}
+```
+18. firebase user
+- 각 위젯 끼리 로그인한 user 정보를 받아서 이름과 이미지를 출력함
+```
+  final FirebaseUser user;
+
+  AccountPage(this.user);
+
+  ...
+  widget.user.photoUrl
+```
+
 ## 인스타그램 클론
 
 
