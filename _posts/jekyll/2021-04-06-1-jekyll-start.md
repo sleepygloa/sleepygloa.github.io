@@ -84,6 +84,11 @@ gem 경로가 홈 디렉토리를 가리키고 있는지 확인합니다
 ```
 gem env
 ```
+## VS code 설치하기
+[VScode 설치하기]('https://code.visualstudio.com/')
+코딩을 하기 위해서, 블로그를 작성하기 위해서 다양한 방법이 있지만
+대중적으로 알려진 VScode를 설치하여 작성하기로한다.
+
 # 3. Github 가입하기
 기존 이용자는 패스하여도 된다.
 
@@ -100,7 +105,7 @@ gem env
 # 3. Github 저장소 만들기
 [Repository 만들기]('https://github.com/new')
 
-[![Repository 만들기](./images/githubnewrepository.png)](./images/2021-04-07-1-img-install.png)
+[![Repository 만들기](./images/github-new-repository.png)](./images/github-new-repository.png)
 
 Repository name 부분에 ```username.github.io``` 형식으로 이름을 작성하고
 아래에 보이는 부분은 체크없이 ```Create repository``` 버튼을 누르자.
@@ -129,6 +134,10 @@ git clone https://github.com/mmistakes/minimal-mistakes
 ```
 bundle exec jekyll serve
 ```
+
+아래와 같은 로그가 뜬다면 정상적으로 실행이 되는 것이다.
+기본 ip와 port는 ```localhost:4000``` 으로 실행되게 됩니다.
+[![Repository 만들기](./images/jekyll-first-start.png)](./images/jekyll-first-start.png)
 
 ## 내 저장소로 Template 복사
 아까 만든 저장소를 다운로드하고 jekyll template 을 복사하자.
