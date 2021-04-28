@@ -34,7 +34,7 @@ toc: true
 flutter docotr
 ```
 사진과 같은 결과가 나올 것이다.
-[![install](./images/2021-04-07-1-img-install.png)](./images/2021-04-07-1-img-install.png)
+[![install](/assets/flutter-basic/images/2021-04-07-1-img-install.png)](/assets/flutter-basic/images/2021-04-07-1-img-install.png)
 toolchain 해결을 위해 아래 명령어를 실행하자
 ```
 flutter doctor --android-licenses
@@ -47,21 +47,21 @@ y
 ## 프로젝트 세팅
 1. Flutter 프로젝트 실행
    - [File] - [new Flutter Project] - [Flutter Application] - [com.회사명.어플리케이션 이름] (Kotlin, IOS 체크!!) - [완료]
-   - [![install](./images/2021-04-07-3-flutter-application.png)](./images/2021-04-07-3-flutter-application.png)
+   - [![install](/assets/flutter-basic/images/2021-04-07-3-flutter-application.png)](/assets/flutter-basic/images/2021-04-07-3-flutter-application.png)
    - ```Flutter SDK Path``` 경로가 아까 다운받은 경로로 설정되어있는지 확인
-   - [![install](./images/2021-04-07-4-flutter-sdk-path.png)](./images/2021-04-07-4-flutter-sdk-path.png)
+   - [![install](/assets/flutter-basic/images/2021-04-07-4-flutter-sdk-path.png)](/assets/flutter-basic/images/2021-04-07-4-flutter-sdk-path.png)
    - 프로젝트 위치 설정
-   - [![install](./images/2021-04-07-5-application-name.png)](./images/2021-04-07-5-application-name.png)
+   - [![install](/assets/flutter-basic/images/2021-04-07-5-application-name.png)](/assets/flutter-basic/images/2021-04-07-5-application-name.png)
    - 완료
   
 2. Device 설치
 Android Studio 에서 개발하기 위해서 핸드폰과 같은 ```가상 Device```를 띄워 테스트를 할 수 있다.
    - [AVD Manager] - [원하는 기기 설치 및 클릭] - [Device 선택] - [실행]
-   - [![install](./images/2021-04-07-6-findavdmanager.png)](./images/2021-04-07-6-findavdmanager.png)
+   - [![install](/assets/flutter-basic/images/2021-04-07-6-findavdmanager.png)](/assets/flutter-basic/images/2021-04-07-6-findavdmanager.png)
    - 아래에서 설치한 Device 를 찾아 선택하면 Device가 실행된다. 
-   - [![install](./images/2021-04-07-7-finddevice.png)](./images/2021-04-07-7-finddevice.png)
+   - [![install](/assets/flutter-basic/images/2021-04-07-7-finddevice.png)](/assets/flutter-basic/images/2021-04-07-7-finddevice.png)
    - Device 실행 확인
-   - [![install](./images/2021-04-07-8-checkDevice.png)](./images/2021-04-07-8-checkDevice.png)
+   - [![install](/assets/flutter-basic/images/2021-04-07-8-checkDevice.png)](/assets/flutter-basic/images/2021-04-07-8-checkDevice.png)
 
 3. 프로젝트 구조 확인
 
@@ -124,7 +124,7 @@ class _HelloPageState extends State<HelloPage> {
 ```
 
 3. FloatingActtionButton 
-[![install](./images/2021-04-07-9-floatingactionbutton.png)](./images/2021-04-07-9-floatingactionbutton.png)
+[![install](/assets/flutter-basic/images/2021-04-07-9-floatingactionbutton.png)](/assets/flutter-basic/images/2021-04-07-9-floatingactionbutton.png)
 
 ```
       floatingActionButton: FloatingActionButton(

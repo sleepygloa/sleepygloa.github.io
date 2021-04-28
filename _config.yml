@@ -14,25 +14,28 @@
 # remote_theme           : "mmistakes/minimal-mistakes"
 minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
+
+
 # Site Settings
 locale                   : "ko-KR"
-title                    : "꾸준하게 개발HA자" # Meta 태그에 들어가는 영역 , masthead_title등이 없으면 기본값으로 나온다.
-title_separator          : "-" # 타이틀 사이 구분자 <title>Welcome to Jekyll | Minimal Mistakes</title> 해당 형식으로 들어갑니다.
-subtitle                 : #"Version 1.0" # 타이틀 아래에 나올 작은 글씨 
-name                     : "Kim SeonHo" # 맨 하단 이름 찍히는 영역
-description              : "꾸준히 개발을 공부하는 블로그" # Meta 태그에 들어가는 영역 
-url                      : "https://sleepygloa.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+title                    : ""
+title_separator          : "-"
+subtitle                 : # site tagline that appears below site title in masthead
+name                     : "취미로 개발하는 개발자"
+description              : "일도 개발, 취미도 개발. 허허.."
+url                      : "https://sleepygloa.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
-repository               : "sleepygloa/sleepygloa.github.io" # GitHub username/repo-name  
+repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
-masthead_title           : "꾸준하게 개발HA자 Blog" # 홈페이지 최 상탄에 들어갈 타이틀
- #breadcrumbs            :  true # true, false (default)
+masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
+
+# breadcrumbs            : false # true, false (default)
 words_per_minute         : 200
 comments:
-  provider               : "disqus" #(default), "disqus", "discourse", "facebook", "staticman", "staticman_v2", "utterances", "custom"
+  provider               : # false (default), "disqus", "discourse", "facebook", "staticman", "staticman_v2", "utterances", "custom"
   disqus:
-    shortname            : "sleepygloa" # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
+    shortname            : # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
   discourse:
     server               : # https://meta.discourse.org/t/embedding-discourse-comments-via-javascript/31963 , e.g.: meta.discourse.org
   facebook:
@@ -52,8 +55,8 @@ reCaptcha:
 atom_feed:
   path                   : # blank (default) uses feed.xml
   hide                   : # true, false (default)
-search                   : true # true, false (default)
-search_full_content      : true # true, false (default)
+search                   : # true, false (default)
+search_full_content      : # true, false (default)
 search_provider          : # lunr (default), algolia, google
 algolia:
   application_id         : # YOUR_APPLICATION_ID
@@ -94,15 +97,15 @@ analytics:
 
 # Site Author
 author:
-  name             : "Kim Seonho"
+  name             : "취미로 개발하는 개발자"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "꾸준하게 공부하는 개발자입니다. 포스팅 내용에 잘못된 부분이 있다면 댓글과 연락 주시면 감사하겠습니다."
-  location         : "Republic of Korea"
-  email            : "slepeygloa@gmail.com"
+  bio              : # "취미로 개발하는 개발자"
+  location         : "Seoul"
+  email            : "sleepygloa@gmail.com"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
-      #url: "mailto:sleepygloa@gmail.com"
+      # url: "mailto:your.name@email.com"
     - label: "Website"
       icon: "fas fa-fw fa-link"
       # url: "https://your-website.com"
@@ -114,7 +117,7 @@ author:
       # url: "https://facebook.com/"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/sleepygloa"
+      # url: "https://github.com/"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
       # url: "https://instagram.com/"
@@ -130,7 +133,7 @@ footer:
       # url:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/sleepygloa"
+      # url:
     - label: "GitLab"
       icon: "fab fa-fw fa-gitlab"
       # url:
@@ -182,6 +185,7 @@ markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 
 # Conversion
 markdown: kramdown
+encoding: utf-8
 highlighter: rouge
 lsi: false
 excerpt_separator: "\n\n"
@@ -208,7 +212,7 @@ sass:
 
 # Outputting
 permalink: /:categories/:title/
-paginate: 10 # amount of posts to show
+paginate: 5 # amount of posts to show
 paginate_path: /page:num/
 timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
@@ -277,14 +281,9 @@ defaults:
       layout: single
       author_profile: true
       read_time: true
-      comments: true
+      comments: # true
       share: true
       related: true
 
-  # _pages
-  - scope:
-      path: "_pages"
-      type: pages
-    values:
-      layout: single
-      author_profile: true
+
+

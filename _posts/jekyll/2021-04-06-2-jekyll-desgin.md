@@ -9,7 +9,7 @@ toc: true
 ---
 
 처음 블로그를 push 하면 아래와 같은 화면으로 보일 것이다.
-[![Repository 만들기](./images/jekyll-first-page.png)](./images/jekyll-first-page.png)
+[![Repository 만들기](/assets/jekyll/images/jekyll-first-page.png)](/assets/jekyll/images/jekyll-first-page.png)
 이제는 내 블로그를 어떻게 꾸밀지 생각해보고 하나씩 수정해나가도록하자.
 
 아래의 부분은 필자의 기분으로 작성되었기 때문에 참고하시되 넘어가시거나 다른 분의 블로그를 참고하셔도 됩니다.

@@ -105,7 +105,7 @@ gem env
 # 3. Github 저장소 만들기
 [Repository 만들기]('https://github.com/new')
 
-[![Repository 만들기](./images/github-new-repository.png)](./images/github-new-repository.png)
+[![Repository 만들기](/assets/jekyll/images/github-new-repository.png)](/assets/jekyll/images/github-new-repository.png)
 
 Repository name 부분에 ```username.github.io``` 형식으로 이름을 작성하고
 아래에 보이는 부분은 체크없이 ```Create repository``` 버튼을 누르자.
@@ -137,7 +137,7 @@ bundle exec jekyll serve
 
 아래와 같은 로그가 뜬다면 정상적으로 실행이 되는 것이다.
 기본 ip와 port는 ```localhost:4000``` 으로 실행되게 됩니다.
-[![Repository 만들기](./images/jekyll-first-start.png)](./images/jekyll-first-start.png)
+[![Repository 만들기](/assets/jekyll/images/jekyll-first-start.png)](/assets/jekyll/images/jekyll-first-start.png)
 
 ## 내 저장소로 Template 복사
 아까 만든 저장소를 다운로드하고 jekyll template 을 복사하자.
