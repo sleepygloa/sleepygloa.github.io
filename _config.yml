@@ -287,3 +287,6 @@ defaults:
 
 
 
+
+category_dir: category/
+tag_dir: tag/
