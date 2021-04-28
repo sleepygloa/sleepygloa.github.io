@@ -252,3 +252,22 @@ layout: archive
 
 먼저, ```page```를 공부할 때, ```category/edge-case``` 를 봤던 기억이 있을 것이다.
 어떤 선택한 ```category``` 모아보는 기능이었는데, 이부분을 활용해 볼 것이다.
+
+## 세부 카테고리 폴더 생성
+폴더 최상단의 ```categories``` 안에 추가할 카테고리 폴더를 만들어보자. ```categories/jekyll``` 
+
+
+## 카테고리 설정 파일 추가.
+```test/_pages/edge-case.md``` 파일을 추가하여 위의 ```categories/jekyll``` 폴더에 붙여넣자. 그리고 이름을 ```edge-case.md``` 에서 ```jekyll.md``` 로 변경하자.
+파일을 열어 내용을 아래와 같이 변경하자
+```
+---
+title: jekyll
+layout: category
+permalink: /categories/jekyll/
+taxonomy: jekyll
+---
+
+Sample post listing for the category `jekyll`.
+
+```
