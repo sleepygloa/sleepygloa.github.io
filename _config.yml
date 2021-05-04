@@ -18,11 +18,11 @@ minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt"
 
 # Site Settings
 locale                   : "ko-KR"
-title                    : ""
+title                    : "RD"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
-name                     : "취미로 개발하는 개발자"
-description              : "일도 개발, 취미도 개발. 허허.."
+name                     : "R:D (개발루틴)"
+description              : ""
 url                      : "https://sleepygloa.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -97,11 +97,11 @@ analytics:
 
 # Site Author
 author:
-  name             : "취미로 개발하는 개발자"
+  name             : "냄비"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : # "취미로 개발하는 개발자"
-  location         : "Seoul"
-  email            : "sleepygloa@gmail.com"
+  bio              : "1일 1시간 포스팅하잡"
+  location         : #"Seoul"
+  email            : #"sleepygloa@gmail.com"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
