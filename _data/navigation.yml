@@ -1,6 +1,6 @@
 # main links
 main:
   - title: "About"
-    url: https://mmistakes.github.io/minimal-mistakes/about/
-  - title: "category"
-    url: /categories/
+    url: /about
+  # - title: "category"
+  #   url: /categories/
