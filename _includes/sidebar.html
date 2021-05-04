@@ -16,20 +16,28 @@
     {% endif %}
   {% endif %}
 
+  {% assign categories_cnt = 0 %}
+
 <!-- 카테고리 list -->
   {% assign categories_max = 0 %}
   {% for category in site.categories %}
-    {% if category[1].size > categories_max %}
+  {% if category[1].size > categories_max %}
+  {% assign categories_cnt = categories_cnt+category[1].size %}
       {% assign categories_max = category[1].size %}
     {% endif %}
   {% endfor %}
 
   <ul class="taxonomy__index1">
+    <li style="width:100%">
+      <a href="/categories/">
+        <strong>전체</strong> <span class="taxonomy__count">{{categories_cnt}}</span>
+      </a>
+    </li>
     {% for i in (1..categories_max) reversed %}
       {% for category in site.categories %}
         {% if category[1].size == i %}
           <li style="width:100%">
-            <a href="{{ category[0] | slugify }}">
+            <a href="/categories/{{ category[0] | slugify }}">
               <strong>{{ category[0] }}</strong> <span class="taxonomy__count">{{ i }}</span>
             </a>
           </li>
