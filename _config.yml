@@ -24,7 +24,7 @@ subtitle                 : # site tagline that appears below site title in masth
 name                     : "R:D (개발루틴)"
 description              : ""
 url                      : "https://sleepygloa.github.io"
-baseurl                  : "https://sleepygloa.github.io"
+baseurl                  : "https://github.com/sleepygloa/sleepygloa.github.io/tree/master/"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
