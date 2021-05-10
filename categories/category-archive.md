@@ -20,7 +20,9 @@ author_profile: true
         <h3> {{ category[0] }} </h3>
         <div class="card">
         {% for post in category[1] %}
-        <li class="category-posts"><span>{{ post.date | date_to_string }}</span> &nbsp; <a href="{{ post.url }}">{{ post.title }}</a></li>
+        <li class="category-posts">
+        <!-- <span>{{ post.date | date_to_string }}</span> &nbsp;  -->
+        <a href="{{ post.url }}">{{ post.title }}</a></li>
         {% endfor %}
         </div>
       {% endif %}
