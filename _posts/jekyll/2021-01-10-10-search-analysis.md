@@ -28,8 +28,8 @@ Google Search Console 등록을 위해서 Google Search Console 사이트에 방
 Google Search Console의 변경된 방식에 의한 Domain 등록 방식과 URL prefix 방식이 있다. Domain 등록 방식은 서브도메인을 포함한 모든 URL을 통합으로 관리하는 방식이다. 이 방식은 DNS verification만 지원하므로 github.io 도메인을 사용하면 지원이 안된다.(커스텀 도메인을 등록했다면 DNS verification이 가능하다.)
 
 지금은 URL prefix을 선택하고, URL 주소를 기재하자. 다음 스텝을 위해서 CONTINUE를 선택한다.
-[![google search console 가입하기0]({{site.url}}/assets/jekyll/images/jekyll-page-googlesearchconsole0.png)]({{site.url}}/assets/jekyll/images/jekyll-page-googlesearchconsole0.png)
-[![google search console 가입하기1]({{site.url}}/assets/jekyll/images/jekyll-page-googlesearchconsole1.png)]({{site.url}}/assets/jekyll/images/jekyll-page-googlesearchconsole1.png)
+[![google search console 가입하기0](assets/jekyll/images/jekyll-page-googlesearchconsole0.png)](assets/jekyll/images/jekyll-page-googlesearchconsole0.png)
+[![google search console 가입하기1](assets/jekyll/images/jekyll-page-googlesearchconsole1.png)](assets/jekyll/images/jekyll-page-googlesearchconsole1.png)
 
 
 이제 사이트 소유권자임을 구글에 증명해야 한다. 사이트 소유권자가 아님에도 소유권자 행세를 하며 정보를 얻어가는 일을 방지하지 위해서 소유권자 증명이 필요하다.
