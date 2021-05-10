@@ -23,7 +23,7 @@ title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "R:D (개발루틴)"
 description              : ""
-url                      : "https://sleepygloa.github.io"
+url                      : "http://sleepygloa.github.io"
 baseurl                  : #"https://github.com/sleepygloa/sleepygloa.github.io/blob/master"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
