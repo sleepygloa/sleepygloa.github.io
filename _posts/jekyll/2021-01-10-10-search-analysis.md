@@ -29,7 +29,7 @@ Google Search Console의 변경된 방식에 의한 Domain 등록 방식과 URL 
 
 지금은 URL prefix을 선택하고, URL 주소를 기재하자. 다음 스텝을 위해서 CONTINUE를 선택한다.
 
-![google search console 가입하기0](images/Test.png)
+![google search console 가입하기0](./images/Test.png)
 
 
 [![google search console 가입하기1](images/jekyll-page-googlesearchconsole1.png)](assets/jekyll/images/Jekyll-page-googlesearchconsole1.png)
