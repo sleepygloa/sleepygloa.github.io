@@ -4,9 +4,6 @@ layout: category
 permalink: /about/
 ---
 
-# XXXXX
-
-서잔
 
 # Introduce
 - 안녕하세요. ```5년차 웹개발자 김선호``` 입니다.
