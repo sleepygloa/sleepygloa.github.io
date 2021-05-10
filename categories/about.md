@@ -18,12 +18,11 @@ permalink: /about/
 
 # Contacts
 - 이메일 : sleepygloa@gmail.com
-- Github : sleepygloa
+- Github : [github.com/sleepygloa](github.com/sleepygloa)
 
-# Personal Experiences & Projects
+# Personal Experiences & Projects (총 3년 10개월)
 - ```2020.12 - Now``` : WCS(Warehouse Control System) 개발
   - WMS 솔루션 개발 및 ECS, SAP간 실시간 연동 제어인터페이스 및 관리 시스템 개발
-
 - ```2020.10 - 2020.11``` : 정산시스템 개발
   - ```네이버 길찾기 API``` 를 이용한 월정산 시스템 개발.
 - ```2020.09 - 2020.10``` :  TMS(Transit Management System) 개발
@@ -43,42 +42,57 @@ permalink: /about/
 - ```2017.08 - 2017.10``` : WMS 개발
   - 솔루션 개발(UI 개선, 레포트 개발, 코딩패턴 정리)
 
-# Other Project
+
 
 # Toy Project
 
 
 
 # Skills
+항상 꾸준히 자기계발과 기술을 습득합니다. 습득한 기술은 최대한 업무에 활용하고, 할 수 있는 영역을 넓혀 나가고자 합니다.
 ## Languages
 주로 응용프로그램을 개발하여 ```Javascript```, ```UI-tool``` 을 이용한 개발을 하였으나, 개인 프로젝트나 프론트엔드가 필요한 환경에서 개발 가능하도록 적절한 개발지식을 공부하고있습니다.
+Lean Project, Toy Project 에서는 각종 화면을 자유자재로 개발, 환경을 비교하기 위해서 여러환경에서 동일한 화면을 만들어보는 걸 해보고있습니다.
 - ```Javascript```
-  - 브라우저 호환성을 중요시하여 IE 환경에서도 정상 작동하도록 개발하고 있으며 최신 문법인 ES6 또한 자유자재로 사용.
-- ```ES```
+  - 브라우저 호환성을 중요시하여, IE 환경에서도 정상 작동하도록 개발하고 있습니다.
+- ```ES6```
+  - 브라우저 호환성을 중요시하여, IE 환경에서도 정상 작동하도록 개발하고 있습니다.
 - ```React/Native```
+  - 간단한 앱 개발이 가능하여, 물류관련(검수, 피킹, 배송기사앱) 개발 경험이 있습니다.
 - ```Flutter```
+  - 간단한 앱 개발이 가능하여, 물류관련(검수, 피킹, 배송기사앱) 개발 경험이 있습니다.
 - ```Android```
+  - 간단한 앱 개발이 가능하여, 물류관련(검수, 피킹, 배송기사앱) 개발 경험이 있습니다.
 - ```IOS```
+  - 간단한 앱 개발이 가능하여, 물류관련(검수, 피킹, 배송기사앱) 개발 경험이 있습니다.
 
 ## DB
 개인프로젝트나 Lean Project 에서 가볍게 ```MariaDB```, ```SQLite```, ```json(nodatabase)```를 주로 이용하고, 응용프로그램 개발 프로젝트에서는 주로 상용 DB 를 이용한 개발, 자료구조 이해, PL/SQL 및 다양한 Database의 처리 또한 가능합니다.
 - ```Mysql/MaridDB```
-- ```Oracle```
-- ```Mssql```
+  - 주로 오픈소스 프로젝트에서 Cloud Service 제공시 선정하여 개발한 경험이있습니다.
+- ```Oracle/Mssql```
+  - RDBMS를 설계하고 생산성 높은 API를 개발하고 있습니다.
+  - PL/SQL 을 이용한 비즈니스 로직을 패키지화하여 구현 가능합니다.
+  - 최근 Query 최적화를 이용한 대용량 처리에 대한 대안을 공부하고 있습니다.
 
 
 ## Tool
 응용프로그램의 개발을 위한 ```Spring``` 관련한 기본적인 지식, 개발 세팅, 목적에 맞는 프레임워크 수정이 가능하며, ```VScode```를 이용한 JS Base 의 프로젝트 또한 개발이 가능합니다.
-- ```Spring```
-- ```Spring Boot```
+- ```Spring/SpringBoot```
+  - Spring F/W 의 동작환경을 분석하여 각종 Java 등의 언어로 이뤄진 MVC 외의 패턴의 프레임워크 구성이 가능합니다.
+  - Spring Boot, Spring Security, Spring Cloud 등을 사용,  Cloud Service 에 배포하여 안전하고 탄탄한 간단한 서비스를 제공할 수 있습니다.
 - ```Jpb/Hiernate```
+  - Spring Boot 와 연계하여 JPA 설계가 가능하고 프로젝트 경험이 있습니다.
+  - RDBMS 에 의존성을 최소화하여 DB Transfer 에 대응 할 수 있습니다.
 - 
 
 ## Cloud
 클라우딩 컴퓨팅에 대한 기본적인 지식을 가지고 있고, 클라우드 환경개발의 기본적인 지식 및 경험이 있습니다.
-- ```AWS(EC2)``` 
+- ```AWS(EC2) / AWS(Lightsail)``` 
+  - 개발서버를 EC2에 두고 개발한 경험이 있으며 github, travis 를 이용한 CI/CD 자동화 모듈 개발 할 수 있습니다.
 - ```AWS(S3)```
-- ```AWS(Lightsail)```
+  - 이미지, 파일 등을 AWS에서 제공하는 AWS S3 라이브러리를 연동하여 사용하고 있습니다.
+  - 파일을 업로드하고 퍼블릭 주소를 반환받아 문자열 형태로 데이터베이스에 보관하여 사용하고 있습니다
 
 # 게임개발
 ## C# / Unity
@@ -90,8 +104,10 @@ permalink: /about/
 - coroutine의 대한 이해와 활용 가능(Update 와 Coroutine 리소스 비교, Coroutine 을 객체화하여 버프시스템 개발)
 - Excel, Json, 통신을 통한 다양한 데이터베이스 활용 및 개발 경험
 
-# 경력
 
-# 대외활동
-
-# 교육이수
+# Company History
+- ```2020.06 ~ Now``` : 엔디에스
+- ```2018.02 ~ 2020.06``` : 그리티스
+- ```2017.08 ~ 2018.01``` : 보우테크
+- ```2015.05 ~ 2016.05``` : 미르기술(1년)
+- 
