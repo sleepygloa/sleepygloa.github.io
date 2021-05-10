@@ -29,10 +29,9 @@ Google Search Console의 변경된 방식에 의한 Domain 등록 방식과 URL 
 
 지금은 URL prefix을 선택하고, URL 주소를 기재하자. 다음 스텝을 위해서 CONTINUE를 선택한다.
 
-![google search console 가입하기0](/assets/imgs/jekyll/Test.png)
+![google search console 가입하기0](/assets/imgs/jekyll/GoogleSearchConsole0.png)
 
-
-[![google search console 가입하기1](images/jekyll-page-googlesearchconsole1.png)](assets/jekyll/images/Jekyll-page-googlesearchconsole1.png)
+![google search console 가입하기1](/assets/imgs/jekyll/GoogleSearchConsole1.png)
 
 
 이제 사이트 소유권자임을 구글에 증명해야 한다. 사이트 소유권자가 아님에도 소유권자 행세를 하며 정보를 얻어가는 일을 방지하지 위해서 소유권자 증명이 필요하다.
