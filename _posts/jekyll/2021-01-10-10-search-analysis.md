@@ -31,6 +31,8 @@ Google Search Console의 변경된 방식에 의한 Domain 등록 방식과 URL 
 
 ![google search console 가입하기0](/assets/images/jekyll/Jekyll-page-googlesearchconsole0.png)
 
+![google search console 가입하기0](images/Jekyll-page-googlesearchconsole0.png)
+
 [![google search console 가입하기1](images/jekyll-page-googlesearchconsole1.png)](assets/jekyll/images/Jekyll-page-googlesearchconsole1.png)
 
 
