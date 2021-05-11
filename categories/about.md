@@ -103,8 +103,8 @@ Lean Project, Toy Project 에서는 각종 화면을 자유자재로 개발, 환
   - ```asperte```, ```photoshop``` 을 이용한 애니메이션 제작, 스프라이트 제작
   - 기본 스프라이트-애니메이션 구조를 이용한 간단한 캐릭터 모델링
   - 캐릭터 각 부위별 애니메이션 및 각 부위의 스프라이트 제작하여 각기 다른 모습의 캐릭터 모델링
-- coroutine의 대한 이해와 활용 가능(Update 와 Coroutine 리소스 비교, Coroutine 을 객체화하여 버프시스템 개발)
-- Excel, Json, 통신을 통한 다양한 데이터베이스 활용 및 개발 경험
+- ```Coroutine``` 의 대한 이해와 활용 가능(Update 와 Coroutine 리소스 비교, Coroutine 을 객체화하여 버프시스템 개발)
+- ```Excel```, ```Json``` 통신을 통한 다양한 데이터베이스 활용 및 개발 경험
 
 
 # Company History
