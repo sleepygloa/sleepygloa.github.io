@@ -1,18 +1,23 @@
 ---
-title: 
+title: 개발이력서
 layout: category
 permalink: /about/
 toc: true
 ---
 
+------
 
 # 소개
 - 안녕하세요. ```5년차 웹개발자 김선호``` 입니다.
 - 개발을 좋아하고 더 나은 프로그래밍을 하기 위해 프로그래머의 길을 걷고 있습니다.
-- ```Lean Thinking```, ```Agile``` 방법론 등 개발다 다움을 사랑합니다.
+- ```Lean Thinking```, ```Agile``` 방법론 등 개발자다움을 사랑합니다.
 - 항상 즐거운 일에 가치를 더하는 방법을 생각하고, 충분한 대화를 통해 인간관계나 프로그램의 목적, 오류 등 흔들리지 않는 개발을 지향합니다.
 - 프론트 엔드 및 간단한 백엔드 개발, 취미로의 게임 개발, 함께하는 코딩을 즐깁니다.
-- 물류관련 업무를 주로 하였고, 다양한 케이스에서의 비즈니스업무를 배우려 꾸준히 공부 중입니다.
+- ```물류```관련 업무를 주로 하였고, 다양한 케이스에서의 비즈니스업무를 배우려 꾸준히 공부 중입니다.
+
+# 연락처
+- 이메일 : sleepygloa@gmail.com
+- Github : [http://github.com/sleepygloa](http://github.com/sleepygloa)
 
 # 프로젝트 경험 (총 3년 10개월)
 - 엔디에스 (2020.06 ~ Now) : SI 개발
@@ -43,37 +48,75 @@ toc: true
     - 솔루션 개발 : 완성단계인 솔루션의 코드패턴을 단순하게 리팩토링하여, 동시에 UI 디자인을 수정하였습니다. 추가로 필요한 모듈인 Jasper Report 를 도입하여 필요한 화면을 개발하였습니다.
 
 # 프로젝트 상세 (총 3년 10개월)
-- 엔디에스 (2020.06 ~ Now) : SI 개발
+- 엔디에스
   - ```2020.12 - Now``` : [ 깨끗한나라 ] WCS 개발
-    - WMS 솔루션 개발 및 ECS, SAP간 실시간 연동 제어인터페이스 및 관리 시스템 개발(웹, 웹앱)
+     1. 개발 환경
+        - Spring, Exbuilder6
+     2. 개발 언어/라이브러리
+        - FrontEnd(Exbuilder6),  Cloud(AWS), DB(Mssql), BackEnd(Java, Spring F/W, Jpa), Report(Jasper Report), PDA(WebApp, Exbuilder6)
+     3. 상세 업무
+        - 주요 비즈니스 로직 개발(입고검수, 입고적치, 입고완료, 재고이동(임의, 지시), 이동완료, 권장로케이션 산출)
+        - Interface 프로그램 개발 : (ECS, SAP) 간 실시간 연동
+        - Jasper Report 를 이용한 입고라벨 제작.
   - ```2020.10 - 2020.11``` : [ 3SFORYOU ] 정산시스템 개발
-    - 월정산 시스템 개발(웹)
+     1. 개발 환경
+        - Spring, websquare
+     2. 개발 언어/라이브러리
+        - FrontEnd(websquare),  Cloud(AWS), DB(Oracle), BackEnd(Java, Spring F/W, Jpa)
+     3. 상세 업무
+        - 매니저의 방문지리스트를 통한 매니저별 월정산 프로그램 개발.
   - ```2020.06 - 2020.10``` : [ 엔디에스 ] TMS 개발
-    - 고정배차 및 월정산 시스템 개발(웹, 웹앱))
+     1. 개발 환경
+        - Spring, Exbuilder6
+     2. 개발 언어/라이브러리
+        - FrontEnd(Exbuilder6),  Cloud(AWS), DB(Oracle), BackEnd(Java, Spring F/W, Jpa), Report(Jasper Report), PDA(WebApp, Exbuilder6)
+     3. 상세 업무
+        - 주요 비즈니스 로직 개발(고정배차, 배송실시간 조회(Daum지도), 배송완료, 월정산)
   
-- 그리티스 (2018.02 ~ 2020.06) : 물류솔루션 기반의 SI 개발
+- 그리티스
   - ```2019.08 - 2020.06``` : [ 동원홈푸드 ] 차세대 통합물류 시스템 TMS 개발
-    - TMS 시스템 프론트엔드 개발(웹)
-    - 반고정배차 시스템 개발, TMAP API 을 이용한 도로기반의 최단거리, 최적거리 배차 구현.
-    - 어쩌다 업무 PL 역할을 맡아 팀내 업무 협의 조율진행(고객사와 업무 협의 및 배송기사앱(납품관련), 다양한 마스터를 이용한 정산시스템 도움)
+     1. 개발 환경
+        - Spring, Nexacro
+     2. 개발 언어/라이브러리
+        - FrontEnd(Nexacro),  DB(Oracle), BackEnd(Java, Spring F/W), Report(Clip Report), NodeJs
+     3. 상세 업무
+        - 주요 비즈니스 로직 개발(고정노선에 의한 고정 배차, 배차조정, 운행일지, 배송완료, 배송조회)
+        - PL 로서의 프로그램 개발 도움(일정산, 배송기사 납품완료앱)
+        - VMS, WMS 와 업무 협의
   - ```2018.06 - 2019.05``` : [ 오리온베트남 ] WMS 개발
-    - WMS 시스템 프론트엔드 개발(반응형화면, 웹앱)
-    - 기존 고정형 웹화면을 반응형웹화면으로 전환 및 Android Native 자료를 웹웹 형태로 전환 개발
-    - 해외출장(베트님-호치민, 하노이)
+     1. 개발 환경
+        - Spring
+     2. 개발 언어/라이브러리
+        - FrontEnd(JS),  DB(Oracle), BackEnd(Java, Spring F/W), Report(Jasper Report), CI/CD(Jenkins, SVN)
+     3. 상세 업무
+        - UI 개발(마스터, 입고, 출고, 재고, 인터페이스 화면)
+        - Bootstrap 을 이용한 솔루션 화면을 반응형 화면으로 변경
+        - Native Android 화면을 JS 를 이용한 웹앱 화면으로 변경
   - ```2018.02 - 2018.05``` : [ 한국이콜랩 ] WMS 개발
-    - WMS 시스템 프론트엔드 개발(웹, Android)
+     1. 개발 환경
+        - Spring
+     2. 개발 언어/라이브러리
+        - FrontEnd(JS),  DB(Oracle), BackEnd(Java, Spring F/W), Report(Jasper Report), CI/CD(Jenkins, SVN)
+     3. 상세 업무
+        - UI 개발(마스터, 입고, 출고, 재고, 인터페이스 화면)
+        - Native Android 간단한 요구사항 수정 및 버전업데이트 프로그램 개발
 
--  보우테크 (2017.08 ~ 2018.01) : SI 개발
+-  보우테크
   - ```2017.11 - 2018.01``` : [ 롯데정보통신 ] MMS 개발
-    - MMS 시스템 프론트엔드 개발
+     1. 개발 환경
+        - Spring
+     2. 개발 언어/라이브러리
+        - FrontEnd(JS),  DB(MyriaDB), BackEnd(Java, Spring F/W)
+     3. 상세 업무
+        - UI 개발(자산관리, 예방점검)
   - ```2017.08 - 2017.10``` : [ 버텍스아이디 ] WMS 개발
-     1. 프로젝트 명/프로젝트 간단 소개
-     2. 프로젝트 기간
-     3. 개발 환경
-     4. 개발 언어/라이브러리
-     5. 상세 업무
-    - WMS 시스템 프론트엔드 개발
-    - 솔루션 개발 : 완성단계인 솔루션의 코드패턴을 단순하게 리팩토링하여, 동시에 UI 디자인을 수정하였습니다. 추가로 필요한 모듈인 Jasper Report 를 도입하여 필요한 화면을 개발하였습니다.
+     1. 개발 환경
+        - Spring
+     2. 개발 언어/라이브러리
+        - FrontEnd(JS),  DB(Oracle), BackEnd(Java, Spring F/W), Report(Jasper Report), CI/CD(Jenkins, SVN)
+     3. 상세 업무
+        - UI 개발(마스터, 입고, 출고, 재고, 인터페이스 화면)
+        - 솔루션 개발 : 완성단계인 솔루션의 코드패턴을 단순하게 리팩토링하여, 동시에 UI 디자인을 수정하였습니다. 추가로 필요한 모듈인 Jasper Report 를 도입하여 필요한 화면을 개발하였습니다.
 
 # 개인 스터디
 - React / React Native
@@ -149,7 +192,3 @@ toc: true
 - 개인 개발 자료 Github에 제대로 Link 남기기 또는 블로그 글쓰기  - 진행중
 - 코딩테스트 첨삭(프로그래머스) - 예정
 
-
-# 연락처
-- 이메일 : sleepygloa@gmail.com
-- Github : [http://github.com/sleepygloa](http://github.com/sleepygloa)
