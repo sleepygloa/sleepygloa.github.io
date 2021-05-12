@@ -1,6 +1,6 @@
 ---
 title: 개발이력서
-layout: category
+layout: single
 permalink: /about/
 toc: true
 ---
@@ -100,8 +100,8 @@ toc: true
      3. 상세 업무
         - UI 개발(마스터, 입고, 출고, 재고, 인터페이스 화면)
         - Native Android 간단한 요구사항 수정 및 버전업데이트 프로그램 개발
-
--  보우테크
+  
+- 보우테크
   - ```2017.11 - 2018.01``` : [ 롯데정보통신 ] MMS 개발
      1. 개발 환경
         - Spring
