@@ -51,6 +51,7 @@ toc: true
 @Transactional(propagation=Propagation.NESTED, rollbackFor=Exception.class)
 ```
 2. XML : 
+
 ```
 <tx:method name="insert*" propagation="NESTED" rollback-for="Exception" />
 ```
