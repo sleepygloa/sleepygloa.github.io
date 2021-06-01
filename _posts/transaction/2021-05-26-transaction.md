@@ -1,5 +1,5 @@
 ---
-title: [트랜잭션] Transaction?
+title:  Transaction?
 categories: 
   - transaction
 tags:

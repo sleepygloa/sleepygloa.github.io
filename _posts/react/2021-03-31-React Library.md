@@ -1,9 +1,9 @@
 ---
 title: React 라이브러리
 categories: 
-  - React
+  - react
 tags:
-  - React
+  - react
   
 toc: true
 ---

@@ -1,9 +1,9 @@
 ---
 title: Flutter 시작하기
 categories: 
-  - Flutter
+  - flutter
 tags:
-  - Flutter
+  - flutter
 toc: true
 ---
 

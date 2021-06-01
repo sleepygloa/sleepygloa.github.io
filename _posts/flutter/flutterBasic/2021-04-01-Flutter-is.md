@@ -1,9 +1,9 @@
 ---
 title: Flutter란?
 categories: 
-  - Flutter
+  - flutter
 tags:
-  - Flutter
+  - flutter
 toc: true
 ---
 

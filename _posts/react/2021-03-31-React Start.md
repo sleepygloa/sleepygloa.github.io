@@ -1,9 +1,9 @@
 ---
 title: React 시작하기
 categories: 
-  - React
+  - react
 tags:
-  - React
+  - react
 toc: true
 ---
 
