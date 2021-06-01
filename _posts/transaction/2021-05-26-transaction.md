@@ -60,15 +60,16 @@ toc: true
 스프링환경에서 JDBC 를 이용한 트랜젝션 처리.
 주로 사용하는 세팅으로는
 1. ```global.properties``` : ```.ignore``` 항목. 연결정보는 여기 저장
+
 ```
 Globals.DriverClass.oracle = oracle.jdbc.driver.OracleDriver
 
 DB.UserName = UserName
 DB.Password = Password
 DB.Url = jdbc:sqlserver://Url:Port;DatabaseName=DBName
-
 ```
-2. ```Context-Datasource.xml``` : DB 연결정보
+1. ```Context-Datasource.xml``` : DB 연결정보
+
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -112,7 +113,10 @@ DB.Url = jdbc:sqlserver://Url:Port;DatabaseName=DBName
 	</bean>
 </beans>
 ```
+
 2. Context-transaction.xml :  트랜잭션 매니저, AOP 설정을 해준다.
+
+
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -197,6 +201,7 @@ DB 접속정보를 ```DataSourcre``` 에 작성하고, ```TransactionManager``` 
 
 
 ```JtaTransactionManager``` 를 선언해주자.
+
  ```
 <bean id="txManager" class="org.springframework.transaction.jta.JtaTransactionManager" />
 ```
@@ -205,11 +210,13 @@ DB 접속정보를 ```DataSourcre``` 에 작성하고, ```TransactionManager``` 
 트랜잭션을 서버에서 관리하기 때문이다. 톰캣 안네 ```jdbc/DatabaseName``` 을 선언해주어야한다.
 
 ```tomcat``` - ```context.xml```
+
 ```
 <Resource name="jdbc/DatabaseName" auth="Container" type="javax.sql.DataSouurce" factory="org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory" driverClassName="oracle.jdbc.OracleDriver" url="jdbc:oracle:thin:@//url:port/dbname" username="username" password="pw" maxActive="100" maxIdle="30" maxWait="100009" removeAbandoned="true" removeAbandoneTimeout="60" />
 ```
 
 ```tomcat``` - ```web.xml```
+
 ```
 <resource-ref>
  <description>DB Connection</description>
