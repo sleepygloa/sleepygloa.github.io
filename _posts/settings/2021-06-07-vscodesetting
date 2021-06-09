@@ -1,0 +1,18 @@
+---
+title: VSCode 라이브러리 유용한 것.
+categories: 
+  - vscode
+tags:
+  - vscode
+toc: false
+---
+
+- Live Server : 저장시 실시간으로 브라우저에 반영되어 보여짐
+- Beautify 코드 깔끔하게 보여줌
+- ESLint : 문법 검사
+- Auto Close Tag : 태그를 자동으로 닫아줌
+- Auto Rename Tag : 태그 이름 변경시 세트로 자동으로 변경
+- Material Theme : 테마
+- Material Icon Theme : 아이콘 테마
+- Indent-rainbow : 탭 별 컬러로 구분
+- prettier - code formeter : 코드를 예쁘게 정렬, 협업시 미사용
