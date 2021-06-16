@@ -1,0 +1,115 @@
+body {
+  overflow: hidden;
+  font-size: 16px;
+}
+
+.contentWrap {
+  background: linear-gradient(120deg, #0272a4, #f6a564);
+  -webkit-transition: background 1s ease-out;
+  transition: background 1s ease-out;
+  width: 100vw;
+  height: 100vh;
+  -ms-touch-action: none;
+      touch-action: none;
+}
+
+.contentWrap .album {
+  position: absolute;
+  top: 47%;
+  left: 55%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 600px;
+  height: 400px;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+}
+
+.contentWrap .album.active {
+  visibility: visible;
+  opacity: 1;
+  left: 50%;
+}
+
+.contentWrap .album.active .disk {
+  left: 180px;
+  -webkit-transition-delay: .5s;
+          transition-delay: .5s;
+}
+
+.contentWrap .album .coverImg {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  -webkit-box-shadow: 2px 14px 40px rgba(0, 0, 0, 0.3);
+          box-shadow: 2px 14px 40px rgba(0, 0, 0, 0.3);
+}
+
+.contentWrap .album .coverImg img {
+  width: inherit;
+  height: inherit;
+}
+
+.contentWrap .album .disk {
+  position: absolute;
+  top: 4px;
+  left: 0px;
+  width: 392px;
+  height: 392px;
+  border-radius: 50%;
+  background: linear-gradient(120deg, #000, #333333, #000);
+  -webkit-box-shadow: 4px 14px 40px rgba(0, 0, 0, 0.3);
+          box-shadow: 4px 14px 40px rgba(0, 0, 0, 0.3);
+  -webkit-transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  -webkit-animation: rotateAni 10s ease infinite;
+          animation: rotateAni 10s ease infinite;
+}
+
+.buttonWrap {
+  position: fixed;
+  bottom: 5vh;
+  text-align: center;
+  width: 100%;
+}
+
+.buttonWrap button {
+  padding: 6px 20px;
+  margin: 0 3px;
+  background-color: #000;
+  color: #fff;
+  -webkit-transition: all .3s ease-out;
+  transition: all .3s ease-out;
+}
+
+.buttonWrap button:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+.buttonWrap .pointWrap {
+  position: relative;
+  display: inline-block;
+  padding: 0 10px;
+}
+
+.buttonWrap .pointWrap li {
+  position: relative;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  text-align: center;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  -webkit-transition: background .3s ease-out;
+  transition: background .3s ease-out;
+}
+
+.buttonWrap .pointWrap li.active {
+  background-color: black;
+}
+/*# sourceMappingURL=motion.css.map */
