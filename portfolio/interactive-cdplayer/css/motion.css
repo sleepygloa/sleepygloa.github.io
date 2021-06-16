@@ -68,6 +68,19 @@ body {
           animation: rotateAni 10s ease infinite;
 }
 
+.contentWrap .album .disk .disk_inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 160px;
+  height: 160px;
+  background-color: #0473a4;
+  border-radius: 50%;
+  border: 3px dashed rgba(255, 255, 255, 0.4);
+}
+
 .buttonWrap {
   position: fixed;
   bottom: 5vh;
