@@ -1,0 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap");
+body {
+  overflow-x: hidden;
+  background: url(../image/bg.jpg);
+  font-family: 'Do Hyeon', sans-serif;
+}
+
+section {
+  position: relative;
+  width: 100vw;
+}
+
+section.bottom {
+  background: url(../image/bottom.png) center bottom/100% no-repeat;
+  min-height: 60vh;
+}
+
+section.bottom .contWrap {
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 700px;
+}
+
+section.bottom .contWrap ul li {
+  display: inline-block;
+  margin: 0 2%;
+  width: 130px;
+  height: 200px;
+  border-radius: 6px 6px 6px 6px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  cursor: pointer;
+}
+
+section.bottom .contWrap ul li p {
+  font-size: 20px;
+  color: #fff;
+  border-bottom: 2px dashed #fff;
+}
+
+section.bottom .contWrap ul li:nth-child(1) {
+  background: linear-gradient(45deg, #f7b733, #fc4a1a);
+}
+
+section.bottom .contWrap ul li:nth-child(2) {
+  background: linear-gradient(45deg, #FC00FF 0%, #401241 100%);
+}
+
+section.bottom .contWrap ul li:nth-child(3) {
+  background-image: linear-gradient(45deg, #ce713b 0%, #F7CE68 100%);
+}
+
+section.bottom .contWrap ul li:nth-child(4) {
+  background-image: linear-gradient(45deg, #FA8BFF 0%, #2BD2FF 52%, #2BFF88 90%);
+}
+
+section.bottom .contWrap h2 {
+  text-align: center;
+  color: #fff;
+  margin-top: 30px;
+  font-weight: 100;
+}
+
+section.bottom .topBtn {
+  position: absolute;
+  bottom: 10%;
+  right: 70px;
+  padding: 10px;
+  border-radius: 6px 6px 6px 6px;
+  background-color: #eee;
+  border: 2px solid #eee;
+  -webkit-transition: all .3s ease-out;
+  transition: all .3s ease-out;
+}
+/*# sourceMappingURL=star.css.map */
