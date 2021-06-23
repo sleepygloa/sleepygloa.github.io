@@ -222,3 +222,107 @@ body {
 ```
 
 [![배경 만들기](/assets/imgs/interactive-downthestar/4.background.png)](/assets/imgs/interactive-downthestar/4.background.png)
+
+상단 부분의 영역을 만들어보자. 기존의 section.bottom 위에 아래 코드를 추가하자.
+
+```html
+<body>
+  <div class="starBg"></div>
+  <section class="top">
+    <h1 class="title">
+      <div>별</div>
+      <div>이 &nbsp</div>
+      <div>쏟</div>
+      <div>아</div>
+      <div>지</div>
+      <div>는 &nbsp</div>
+      <div>코</div>
+      <div>딩</div>
+      <div>일</div>
+      <div>레</div>
+      <div>븐</div>
+    </h1> 
+  </section>
+  ...
+
+</body>
+```
+
+CSS 가 적용되지 않아 보이지 않고, 왼쪽에 붙은 글자들을 볼수 있다.
+[![배경 만들기](/assets/imgs/interactive-downthestar/5.sectiontopcode.gif)](/assets/imgs/interactive-downthestar/5.sectiontopcode.gif)
+
+
+배경 적용하기
+div.starBg 에 배경을 링크를 달고 해당영역의 높이를 지정하여 스크롤이 충분히 되도록 배경을 지정 한다.
+이 높이는 section.top 과의 호환이 중요하다.
+
+```css
+
+body{
+...
+}
+.starBg {
+    background: url(../image/star.png);
+}
+
+... 최하단
+.starBg {
+    position: fixed;
+    top:0;
+    width:100vw;
+    height: 200vh;
+}
+
+```
+
+[![배경 CSS 적용](/assets/imgs/interactive-downthestar/6.backgroundcss.gif)](/assets/imgs/interactive-downthestar/6.backgroundcss.gif)
+
+별이쏟아지는 ... 부분 CSS 적용
+미리 작성한 section.bottom 의 ```position:relative;``` 와 연결되어 순서대로. 상위에 있도록 ```position:relative;``` 로 지정하고 충분히 높도록 ```min-height: 300vh;``` 으로 지정한다. h1 의 ```inline``` 태그 안에 div 영역이 가로로 배치 될 수 있도록, ```display: inline-block;```로 선언하고 나머지 스타일을 꾸며준다.
+
+```css
+    &.top {
+        min-height: 300vh;
+        h1.title {
+            position: relative;
+            color: #fff;
+            text-align: center;
+            padding-top: 35vh;
+            font-size: 40px;
+            font-weight: 100;
+            div {
+                display: inline-block;
+                letter-spacing: -7px;
+            }
+        }
+    }
+
+```
+
+
+[![section.top css 적용](/assets/imgs/interactive-downthestar/7.sectiontop.gif)](/assets/imgs/interactive-downthestar/7.sectiontop.gif)
+
+### 꾸미기
+hover 기능을 이용하여 추가적인 효과를 기대하자.
+
+```css
+ul{
+  li{
+
+    ...
+                    &:nth-child(4){
+                        background-image: linear-gradient(45deg, #FA8BFF 0%, #2BD2FF 52%, #2BFF88 90%);
+                    }
+                    transition : all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+                    &:hover {
+                        transform: translateY(-20px);
+                    }
+  }
+}
+...
+
+```
+[![section.top css 적용](/assets/imgs/interactive-downthestar/7.sectiontop.gif)](/assets/imgs/interactive-downthestar/7.sectiontop.gif)
+
+### JS 파악하기
+사실 이렇게 했지만, JS 가 추가되어있지 않았다면 움직이는 동작과 tweenMax 효과를 보지 못했을 것이다.
