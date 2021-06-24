@@ -103,20 +103,7 @@ window.onload = function(){
                 })
             })
         }
-        else if(pageNum == 3){
-            //여러분이 해보세요
-            _cards.forEach(function(item, i){
-                TweenMax.to(item, 1, {
-                    top : 0,
-                    left : 0 ,
-                    rotationX : 0,
-                    rotationY : 0,
-                    rotationZ : 0,
-                    ease : Power4.easeInOut, 
-                    delay : i * .15
-                })
-            })
-        }
+w
     }
 
 
