@@ -326,3 +326,72 @@ ul{
 
 ### JS 파악하기
 사실 이렇게 했지만, JS 가 추가되어있지 않았다면 움직이는 동작과 tweenMax 효과를 보지 못했을 것이다.
+
+
+- 스크롤시 원근감 표현 및 별의 움직임 표현
+앞과 뒤의 배경이 움직이는 정도를 조절, 반대로 함으로 하나는 위로 올라가고 하나는 아래로 내려가게 표현
+```javascript
+    window.addEventListener("scroll", function(event){
+        // scrollTop = document.documentElement.scrollTop;
+        var scroll = this.scrollY;
+        starBg.style.transform = "translateY("+ -scroll/3 +"px)";
+        title.style.transform = "translateY("+ scroll/1.7 +"px)";
+    });
+```
+
+- TweenMax 기능을 이용한 글자 애니메이션
+글자 한글자씩 div로 묶고, 그것들을 찾아서 for문을 돌때, 하나하나에 대한 애니메이션 효과를 줌.
+
+```javascript
+    //텍스트 모션
+    for(var i=0; i < title.querySelectorAll('div').length; i++){
+        
+        var _text = title.querySelectorAll('div')[i];
+
+        TweenMax.from( _text , 1, {
+            autoAlpha:0,
+            // scale:4,
+            // rotate: Math.random()*360,
+            delay : Math.random()*1,
+            ease:Power3.easeInOut 
+        });
+    }
+```
+
+- 페이지 바닥 및 해당 영역에 도달했을때
+.bottom 의 영역에 도달 했을때, 약간의 지연 1.7... 2.2 을 주면서 크기를 변경하는 애니메이션 효과를 줌.
+
+```javascript
+    TweenMax.to( window, 2, {
+        scrollTo:{
+            y: ".bottom"
+            //autoKill: true
+        }, 
+        delay : 1.7,
+        ease:Power4.easeInOut 
+    });
+    
+    //하단 영역 커지는 것
+    TweenMax.from( ".bottom", 2.5, {
+        scale : .7,
+        y:100,
+        delay : 2.2,
+        ease:Power3.easeInOut 
+    });
+
+```
+
+- TOP 버튼 클릭시 최상단 이벤트
+이건 특별한 설명 없어도 알수 있다.
+
+```javascript
+    topBtn.addEventListener("click", function(){
+        TweenMax.to( window, 1.5, {
+            scrollTo:{
+                y: 0,
+                autoKill: true
+            }, 
+            ease:Power3.easeInOut 
+        });
+    })
+```
