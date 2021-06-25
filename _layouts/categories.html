@@ -78,3 +78,17 @@ layout: archive
     <li class="category-posts">
      <a href="/portfolio/interactive-3Dcard/2021-06-24-interactive-3Dcard.html">[인터렉티브 페이지] 3D 입체카드</a></li>
 </div>
+
+
+
+</hr>
+
+<div class="card">
+  <h5> [코딩테스트 공부] 아무도 보지 않겠지. 공부하자 그래 코딩테스트로 알고리즘 실력을 늘려보는거야. </h5>
+
+  1레벨
+    {% for post in site.categories.codingtest-level1 %}
+   <li class="category-posts">
+   <a href="{{ post.url }}">{{ post.title }}</a></li>
+  {% endfor %}
+</div>
