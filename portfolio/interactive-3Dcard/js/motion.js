@@ -34,7 +34,7 @@ window.onload = function () {
                     x = event.gamma;
                     y = event.beta;
                 });
-                // loopMobile();
+                loopMobile();
             }
 
         } else {
