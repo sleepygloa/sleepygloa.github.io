@@ -19,32 +19,108 @@ toc: true
 ## 1차 시도
 
 ```java
-import java.util.HashMap;
-
 class Solution {
-    public int[] solution(int[] lottos, int[] win_nums) {
-        int[] answer = new int[2];
+    public String solution(int[] numbers, String hand) {
+        String answer = "";
         
-        HashMap<Integer, Integer> hm = new HashMap<>();
-        int zerocnt = 0;
-        for(int lotto : lottos) { 
-            if(lotto == 0) {
-                zerocnt++;
+        int beforeL = -1;
+        int beforeR = -1;
+        for (int i = 0; i < numbers.length; i++){
+            int j = numbers[i];
+            System.out.println(beforeL + "/" + beforeR);
+            if(j == 1 || j == 4 || j == 7){
+                beforeL= j;
+                answer += "L";
+            }else if(j == 3 || j == 6 || j == 9){
+                beforeR= j;
+                answer += "R";
             }else{
-                hm.put(lotto, hm.getOrDefault(lotto, 0) + 1);
+                if(j == 2){
+                    if((beforeL == 1 || beforeL == 5) && (beforeR == 3 || beforeR == 5)){
+                        if(hand.equals("left")){
+                            beforeL = j;
+                            // beforeR = -1;
+                            answer += "L";
+                        }else{
+                            // beforeL = -1;
+                            beforeR = j;
+                            answer += "R";
+                        }
+                    }else if(beforeL == 1 || beforeL == 5){
+                        beforeL = j;
+                        // beforeR = -1;
+                        answer += "L";
+                    }else{
+                        // beforeL = -1;
+                        beforeR = j;
+                        answer += "R";
+                    }
+                }else if(j == 5){
+                    if((beforeL == 4 || beforeL == 2 || beforeL == 8) 
+                    && (beforeR == 6 || beforeR == 2 || beforeR == 8)){
+                        if(hand.equals("left")){
+                            beforeL = j;
+                            // beforeR = -1;
+                            answer += "L";
+                        }else{
+                            // beforeL = -1;
+                            beforeR = j;
+                            answer += "R";
+                        }
+                    }else if((beforeL == 4 || beforeL == 2 || beforeL == 8)){
+                        beforeL = j;
+                        // beforeR = -1;
+                        answer += "L";
+                    }else{
+                        // beforeL = -1;
+                        beforeR = j;
+                        answer += "R";
+                    }
+                }else if(j == 8){
+                    if((beforeL == 7 || beforeL == 5 || beforeL == 0) 
+                    && (beforeR == 9 || beforeR == 5 || beforeR == 0)){
+                        if(hand.equals("left")){
+                            beforeL = j;
+                            // beforeR = -1;
+                            answer += "L";
+                        }else{
+                            // beforeL = -1;
+                            beforeR = j;
+                            answer += "R";
+                        }
+                    }else if(beforeL == 7 || beforeL == 5 || beforeL == 0){
+                        beforeL = j;
+                        // beforeR = -1;
+                        answer += "L";
+                    }else{
+                        // beforeL = -1;
+                        beforeR = j;
+                        answer += "R";
+                    }
+                }else if(j == 0){
+                    if((beforeL == -1 || beforeL == 8) 
+                    && (beforeR == -1 || beforeR == 8)){
+                        if(hand.equals("left")){
+                            beforeL = j;
+                            // beforeR = -1;
+                            answer += "L";
+                        }else{
+                            // beforeL = -1;
+                            beforeR = j;
+                            answer += "R";
+                        }
+                    }else if(beforeL == -1 || beforeL == 8){
+                        beforeL = j;
+                        // beforeR = -1;
+                        answer += "L";
+                    }else{
+                        // beforeL = -1;
+                        beforeR = j;
+                        answer += "R";
+                    }
+                }
             }
         }
-        
-        int successcnt = 0;
-        for (int key : hm.keySet()) {
-            if (hm.get(key) != 0){
-                successcnt++;
-            }
-        }
-        
-        answer[0] = (successcnt == 0 ? 1 : 7 - (successcnt == 1 ? 1 : successcnt));
-        answer[1] = (zerocnt == 6 ? zerocnt : (zerocnt == 0 ? 1 : 7 - zerocnt));
-        
         return answer;
     }
 }
@@ -54,13 +130,15 @@ class Solution {
  
 [![결과](/assets/imgs/codetest/3.pushkeypad/2-1-1.success.png)](/assets/imgs/imgs/codetest/3.pushkeypad/2-1-1.success.png)
 
-### 효율성테스트
+<!-- ### 효율성테스트
 
-[![결과](/assets/imgs/codetest/3.pushkeypad/2-1-2.fail.png)](/assets/imgs/imgs/codetest/3.pushkeypad/2-1-2.fail.png)
+[![결과](/assets/imgs/codetest/3.pushkeypad/2-1-2.fail.png)](/assets/imgs/imgs/codetest/3.pushkeypad/2-1-2.fail.png) -->
 
 ### 생각
 
-- 맞는거 같긴한데 케이스에서 걸리나보다.
+- 우선 대충 했는데, 안되었다.
+- 중첩 IF 문으로 왼손 오른손 기본케이스를 정하고, 가운데 누를때의 상하좌우로 가까운 손가락 케이스를 잡았는데 결과를 보고 다시 문제를 분석해보니 1,3번은 그경우에 속하지만 2번문제의 경우는 다른문제이다.
+- 2번 문제를 봤을땐, 왼손 8과 오른손 0의 경우에는 로직이없어서, 오........... 문제에 나온 거리에 대한 기준치를 정해서 다시 해야할 것 같다.
 
 
 
