@@ -8,7 +8,8 @@ layout: archive
   <h5> Intro </h5>
     {% for post in site.categories.intro %}
    <li class="category-posts">
-   <a href="{{ post.url }}">{{ post.title }}</a></li>
+   <a href="{{ post.url }}">{{ post.title }}
+  </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="page__date"><i class="far fa-clock" aria-hidden="true"></i> {{ post.date | date: "%Y-%m-%d" }}</span></li>
   {% endfor %}
 </div>
 
@@ -16,7 +17,8 @@ layout: archive
   <h5> Jekyll 시작하기</h5>
     {% for post in site.categories.jekyll %}
    <li class="category-posts">
-   <a href="{{ post.url }}">{{ post.title }}</a></li>
+   <a href="{{ post.url }}">{{ post.title }}
+  </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="page__date"><i class="far fa-clock" aria-hidden="true"></i> {{ post.date | date: "%Y-%m-%d" }}</span></li>
   {% endfor %}
 </div>
 
@@ -24,7 +26,8 @@ layout: archive
 <h5> Flutter 시작하기</h5>
   {% for post in site.categories.flutter %}
  <li class="category-posts">
- <a href="{{ post.url }}">{{ post.title }}</a></li>
+ <a href="{{ post.url }}">{{ post.title }}
+</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="page__date"><i class="far fa-clock" aria-hidden="true"></i> {{ post.date | date: "%Y-%m-%d" }}</span></li>
 {% endfor %}
 </div>
 
@@ -32,7 +35,8 @@ layout: archive
   <h5> React 시작하기</h5>
     {% for post in site.categories.react %}
    <li class="category-posts">
-   <a href="{{ post.url }}">{{ post.title }}</a></li>
+   <a href="{{ post.url }}">{{ post.title }}
+  </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="page__date"><i class="far fa-clock" aria-hidden="true"></i> {{ post.date | date: "%Y-%m-%d" }}</span></li>
   {% endfor %}
 </div>
 
@@ -40,7 +44,8 @@ layout: archive
   <h5> Docker 시작하기</h5>
     {% for post in site.categories.docker %}
    <li class="category-posts">
-   <a href="{{ post.url }}">{{ post.title }}</a></li>
+   <a href="{{ post.url }}">{{ post.title }}
+  </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="page__date"><i class="far fa-clock" aria-hidden="true"></i> {{ post.date | date: "%Y-%m-%d" }}</span></li>
   {% endfor %}
 </div>
 
@@ -48,7 +53,8 @@ layout: archive
   <h5> Transaction</h5>
     {% for post in site.categories.transaction %}
    <li class="category-posts">
-   <a href="{{ post.url }}">{{ post.title }}</a></li>
+   <a href="{{ post.url }}">{{ post.title }}
+  </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="page__date"><i class="far fa-clock" aria-hidden="true"></i> {{ post.date | date: "%Y-%m-%d" }}</span></li>
   {% endfor %}
 </div>
 
@@ -57,7 +63,9 @@ layout: archive
   <h5> 인터렉티브 페이지 </h5>
     {% for post in site.categories.interactive_page %}
    <li class="category-posts">
-   <a href="{{ post.url }}">{{ post.title }}</a></li>
+   <a href="{{ post.url }}">{{ post.title }}
+  </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="page__date"><i class="far fa-clock" aria-hidden="true"></i> {{ post.date | date: "%Y-%m-%d" }}</span></li>
+   </a></li>
   {% endfor %}
 </div>
 
@@ -66,17 +74,23 @@ layout: archive
 <div class="card">
   <h5> Portfolio </h5>
    <li class="category-posts">
-   <a href="/portfolio/interactive-nike/2021-06-10-interactive-nike.html">[인터렉티브 페이지] 나이키 소개</a></li>
+   <a href="/portfolio/interactive-nike/2021-06-10-interactive-nike.html">[인터렉티브 페이지] 나이키 소개
+  </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="page__date"><i class="far fa-clock" aria-hidden="true"></i> {{ post.date | date: "%Y-%m-%d" }}</span></li>
    <li class="category-posts">
-   <a href="/portfolio/interactive-cdplayer/2021-06-11-interactive-cdplayer.html">[인터렉티브 페이지] CD Player</a></li>
+   <a href="/portfolio/interactive-cdplayer/2021-06-11-interactive-cdplayer.html">[인터렉티브 페이지] CD Player
+  </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="page__date"><i class="far fa-clock" aria-hidden="true"></i> {{ post.date | date: "%Y-%m-%d" }}</span></li>
    <li class="category-posts">
-   <a href="/portfolio/interactive-downthestar/2021-06-22-interactive-downthestar.html">[인터렉티브 페이지] 별이 쏟아지는 카드사 페이지</a></li>
+   <a href="/portfolio/interactive-downthestar/2021-06-22-interactive-downthestar.html">[인터렉티브 페이지] 별이 쏟아지는 카드사 페이지
+  </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="page__date"><i class="far fa-clock" aria-hidden="true"></i> {{ post.date | date: "%Y-%m-%d" }}</span></li>
    <li class="category-posts">
-   <a href="/portfolio/interactive-cardslide/2021-06-24-interactive-cardslide.html">[인터렉티브 페이지] 카드 슬라이드</a></li>
+   <a href="/portfolio/interactive-cardslide/2021-06-24-interactive-cardslide.html">[인터렉티브 페이지] 카드 슬라이드
+  </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="page__date"><i class="far fa-clock" aria-hidden="true"></i> {{ post.date | date: "%Y-%m-%d" }}</span></li>
    <li class="category-posts">
-    <a href="/portfolio/interactive-particle/2021-06-24-interactive-particle.html">[인터렉티브 페이지] 파티클</a></li>
+    <a href="/portfolio/interactive-particle/2021-06-24-interactive-particle.html">[인터렉티브 페이지] 파티클
+  </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="page__date"><i class="far fa-clock" aria-hidden="true"></i> {{ post.date | date: "%Y-%m-%d" }}</span></li>
     <li class="category-posts">
-     <a href="/portfolio/interactive-3Dcard/2021-06-24-interactive-3Dcard.html">[인터렉티브 페이지] 3D 입체카드</a></li>
+     <a href="/portfolio/interactive-3Dcard/2021-06-24-interactive-3Dcard.html">[인터렉티브 페이지] 3D 입체카드
+    </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="page__date"><i class="far fa-clock" aria-hidden="true"></i> {{ post.date | date: "%Y-%m-%d" }}</span></li>
 </div>
 
 
@@ -89,6 +103,6 @@ layout: archive
   1레벨
     {% for post in site.categories.codingtest-level1 %}
    <li class="category-posts">
-   <a href="{{ post.url }}">{{ post.title }}</a></li>
+   <a href="{{ post.url }}">{{ post.title }} </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="page__date"><i class="far fa-clock" aria-hidden="true"></i> {{ post.date | date: "%Y-%m-%d" }}</span></li>
   {% endfor %}
 </div>

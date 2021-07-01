@@ -130,63 +130,223 @@ class Solution {
  
 [![결과](/assets/imgs/codetest/3.pushkeypad/2-1-1.success.png)](/assets/imgs/imgs/codetest/3.pushkeypad/2-1-1.success.png)
 
-<!-- ### 효율성테스트
+### 제출결과
 
-[![결과](/assets/imgs/codetest/3.pushkeypad/2-1-2.fail.png)](/assets/imgs/imgs/codetest/3.pushkeypad/2-1-2.fail.png) -->
+[![결과](/assets/imgs/codetest/3.pushkeypad/2-1-2.fail.png)](/assets/imgs/imgs/codetest/3.pushkeypad/2-1-2.fail.png)
 
 ### 생각
 
-- 우선 대충 했는데, 안되었다.
+- 우선 대충.. 생각나는 대로 했는데
 - 중첩 IF 문으로 왼손 오른손 기본케이스를 정하고, 가운데 누를때의 상하좌우로 가까운 손가락 케이스를 잡았는데 결과를 보고 다시 문제를 분석해보니 1,3번은 그경우에 속하지만 2번문제의 경우는 다른문제이다.
 - 2번 문제를 봤을땐, 왼손 8과 오른손 0의 경우에는 로직이없어서, 오........... 문제에 나온 거리에 대한 기준치를 정해서 다시 해야할 것 같다.
 
-
-
-
 ## 2차 시도
 
-- Set을 봤다고 써봤는데, 안되서 2중 for문으로 다시 해봤다.
+- 거리에 대한 케이스를 다시 정리해서 메서드를 뽑앗다.
+- 왼손으로 갈 수 있는 케이스1, 오른손으로 갈 수 있는 케이스2, 중첩되는 범위에서의 케이스3 을 나눴고, 메인 문장에서는 간단하게 케이스1, 2, 3의 판단만 하였다.
 
 ```java
 class Solution {
-    public int[] solution(int[] lottos, int[] win_nums) {
-        int[] answer = new int[2];
+    
+    public String solution(int[] numbers, String hand) {
+        String answer = "";
         
-        int zerocnt = 0;
-        int successcnt = 0;
-        
-        for(int lotto : lottos) { 
-            if(lotto == 0) {
-                zerocnt++;
+        int beforeL = -1;
+        int beforeR = -2;
+        for (int i = 0; i < numbers.length; i++){
+            
+            int j = numbers[i];
+            int distanceL = funcDistance(beforeL, j);
+            int distanceR = funcDistance(beforeR, j);
+            
+            // System.out.println(beforeL+"["+distanceL+"]" + "/" + beforeR+"["+distanceR+"]");
+            if(j == 1 || j == 4 || j == 7){
+                beforeL= j;
+                answer += "L";
+            }else if(j == 3 || j == 6 || j == 9){
+                beforeR= j;
+                answer += "R";
             }else{
-                for(int win_num : win_nums){
-                    if(lotto == win_num) successcnt++;
+                if(distanceL < distanceR){
+                    beforeL = j;
+                    answer += "L";
+                }else if(distanceL > distanceR){
+                    beforeR = j;
+                    answer += "R";
+                }else{
+                    if(hand.equals("left")){
+                        beforeL = j;
+                        answer += "L";
+                    }else{
+                        beforeR = j;
+                        answer += "R";
+                    }
                 }
             }
         }
-        System.out.println(successcnt+ "/ "+ zerocnt);
-        
-        answer[0] = (successcnt == 0 ? 1 : 7 - (successcnt == 1 ? 1 : successcnt+zerocnt));
-        answer[1] = (zerocnt == 6 ? zerocnt : (zerocnt == 0 ? 1 : 7 - zerocnt));
-        
         return answer;
     }
+    
+    public int funcDistance(int before, int after){
+            if(before == -1 && 
+              (after == 7 || after == 0)
+              ) return 1;
+            if(before == -1 && 
+              (after == 4 || after == 8)
+              ) return 2;
+            if(before == -1 && 
+              (after == 1 || after == 5)
+              ) return 3;
+            if(before == -1 && 
+              (after == 2)
+              ) return 4;
+
+            if(before == 7 && 
+              (after == 4 || after == 8)
+              ) return 1;
+            if(before == 7 && 
+              (after == 1 || after == 5 || after == 0)
+              ) return 2;
+            if(before == 7 && 
+              (after == 2)
+              ) return 3;
+
+            if(before == 4 && 
+              (after == 1 || after == 5 || after == 7)
+              ) return 1;
+            if(before == 4 && 
+              (after == 2 || after == 8)
+              ) return 2;
+            if(before == 4 && 
+              (after == 0)
+              ) return 3;
+
+
+            if(before == 1 && 
+              (after == 2 || after == 4)
+              ) return 1;
+            if(before == 1 && 
+              (after == 5 || after == 7)
+              ) return 2;
+            if(before == 1 && 
+              (after == 8)
+              ) return 3;
+            if(before == 1 && 
+              (after == 0)
+              ) return 4;
+
+      
+        
+            if(before == -2 && 
+              (after == 9 || after == 0)
+              ) return 1;
+            if(before == -2 && 
+              (after == 6 || after == 8)
+              ) return 2;
+            if(before == -2 && 
+              (after == 3 || after == 5)
+              ) return 3;
+            if(before == -2 && 
+              (after == 2)
+              ) return 4;
+
+            if(before == 9 && 
+              (after == 6 || after == 8)
+              ) return 1;
+            if(before == 9 && 
+              (after == 3 || after == 6 || after == 0)
+              ) return 2;
+            if(before == 9 && 
+              (after == 2)
+              ) return 3;
+
+            if(before == 6 && 
+              (after == 3 || after == 5 || after == 9)
+              ) return 1;
+            if(before == 6 && 
+              (after == 2 || after == 8)
+              ) return 2;
+            if(before == 6 && 
+              (after == 0)
+              ) return 3;
+
+
+            if(before == 3 && 
+              (after == 2 || after == 6)
+              ) return 1;
+            if(before == 3 && 
+              (after == 5 || after == 9)
+              ) return 2;
+            if(before == 3 && 
+              (after == 8)
+              ) return 3;
+            if(before == 3 && 
+              (after == 0)
+              ) return 4;
+
+        
+        
+            //공통부분
+            if(before == 2 && 
+              (after == 1 || after == 3 || after == 5)
+              ) return 1;
+            if(before == 2 && 
+              (after == 4 || after == 6 || after == 8)
+              ) return 2;
+            if(before == 2 && 
+              (after == 7 || after == 0 || after == 9)
+              ) return 3;
+
+            if(before == 5 && 
+              (after == 2 || after == 4 || after == 6 || after == 8)
+              ) return 1;
+            if(before == 5 && 
+              (after == 1 || after == 3 || after == 7 || after == 9 || after == 0)
+              ) return 2;
+
+            if(before == 8 && 
+              (after == 5 || after == 7 || after == 9 || after == 0)
+              ) return 1;
+            if(before == 8 && 
+              (after == 2 || after == 4 || after == 6)
+              ) return 2;
+            if(before == 8 && 
+              (after == 1 || after == 3)
+              ) return 3;
+
+            if(before == 0 && 
+              (after == 8)
+              ) return 1;
+            if(before == 0 && 
+              (after == 5 || after == 7 || after == 9)
+              ) return 2;
+            if(before == 0 && 
+              (after == 2 || after == 4 || after == 6)
+              ) return 3;
+            if(before == 0 && 
+              (after == 1 || after == 3)
+              ) return 4;
+        
+        
+        return 99;
+    }
 }
+
+
 ```
 
 ### 결과
  
 [![결과](/assets/imgs/codetest/3.pushkeypad/2-2-1.success.png)](/assets/imgs/imgs/codetest/3.pushkeypad/2-2-1.success.png)
 
-### 효율성테스트
+### 제출결과
 
 [![결과](/assets/imgs/codetest/3.pushkeypad/2-2-2.fail.png)](/assets/imgs/imgs/codetest/3.pushkeypad/2-2-2.fail.png)
 
 ### 생각
 
-- 한 케이스 더 맞췄는데, 사실 코드가 별반 바뀐게 없으니, 통과못할건 뻔했다.
-- 이번엔 효율성을 보는건 없이 답만 맞으면 되는건가?
-- 코드를 다시 정리해봐야겟다. 답만 다맞출수 있도록.
+- 3개의 문제에 성공해서 성공할 줄 알았는데, 이전 코드보다 조금더 잘맞춘 코드가 됬다.
+- 
 
 
 
@@ -195,54 +355,206 @@ class Solution {
 
 ## 3차 시도
 
-- 아에 케이스 분석을 다시 했다. 케이스가 아에 잘 못 되어서 그 부분을 잡았더니, 결과가 좋아졌다.
+- 케이스의 내용을 좀더 보강하여 ```return 99```로 빠지던 예외를 모든 거리를 계산하여 처리할 수 있게 수정했다.
 
 ```java
 class Solution {
-    public int[] solution(int[] lottos, int[] win_nums) {
-        int[] answer = new int[2];
+    
+    public String solution(int[] numbers, String hand) {
+        String answer = "";
         
-        int zerocnt = 0;
-        int successcnt = 0;
-        
-        for(int lotto : lottos) { 
-            if(lotto == 0) {
-                zerocnt++;
+        int beforeL = -1;
+        int beforeR = -2;
+        for (int i = 0; i < numbers.length; i++){
+            
+            int j = numbers[i];
+            int distanceL = funcDistance(beforeL, j);
+            int distanceR = funcDistance(beforeR, j);
+            
+            // System.out.println(beforeL+"["+distanceL+"]" + "/" + beforeR+"["+distanceR+"]");
+            if(j == 1 || j == 4 || j == 7){
+                beforeL= j;
+                answer += "L";
+            }else if(j == 3 || j == 6 || j == 9){
+                beforeR= j;
+                answer += "R";
             }else{
-                for(int win_num : win_nums){
-                    if(lotto == win_num) successcnt++;
+                if(distanceL < distanceR){
+                    beforeL = j;
+                    answer += "L";
+                }else if(distanceL > distanceR){
+                    beforeR = j;
+                    answer += "R";
+                }else{
+                    if(hand.equals("left")){
+                        beforeL = j;
+                        answer += "L";
+                    }else{
+                        beforeR = j;
+                        answer += "R";
+                    }
                 }
             }
         }
-       
-        //zerocnt 6 {1,6}
-        //zerocnt 5 {1,6}
-        //zerocnt 4 {1,6}
-        //zerocnt 3 {1,6}
-        //zerocnt 2 {1,6}
-        //zerocnt 1 {1,6}
-        //zerocnt 0 {1,6}
-        
-        //zerocnt 6 s 0 {1,6}
-        //zerocnt 5 s 1 {1,6}
-        //zerocnt 4 s 2 {1,5}
-        //zerocnt 3 s 3 {1,4}
-        //zerocnt 2 s 4 {1,3}
-        //zerocnt 1 s 5 {1,2}
-        //zerocnt 0 s 6 {1,1}
-        
-        //zerocnt 6 s 0 {1,6}
-        //zerocnt 5 s 0 {2,6}
-        //zerocnt 4 s 0 {3,6}
-        //zerocnt 3 s 0 {4,6}
-        //zerocnt 2 s 0 {5,6}
-        //zerocnt 1 s 0 {6,6}
-        //zerocnt 0 s 0 {6,6}
-        
-        answer[0] = (successcnt == 0 ? 1 : (7 - zerocnt - successcnt));
-        answer[1] = (successcnt == 0 ? 6 : (7 - successcnt));
-        
         return answer;
+    }
+    
+    public int funcDistance(int before, int after){
+        
+            if(before == -1 && 
+              (after == 7 || after == 0)
+              ) return 1;
+            if(before == -1 && 
+              (after == 4 || after == 8)
+              ) return 2;
+            if(before == -1 && 
+              (after == 1 || after == 5 || after == 9)
+              ) return 3;
+            if(before == -1 && 
+              (after == 2 || after == 6)
+              ) return 4;
+            if(before == -1 && 
+              (after == 3)
+              ) return 5;
+
+            if(before == 7 && 
+              (after == 4 || after == 8)
+              ) return 1;
+            if(before == 7 && 
+              (after == 1 || after == 5 || after == 0 || after == 9)
+              ) return 2;
+            if(before == 7 && 
+              (after == 2 || after == 6)
+              ) return 3;
+            if(before == 7 && 
+              (after == 3)
+              ) return 4;
+
+
+            if(before == 4 && 
+              (after == 1 || after == 5 || after == 7)
+              ) return 1;
+            if(before == 4 && 
+              (after == 2 || after == 6 || after == 8)
+              ) return 2;
+            if(before == 4 && 
+              (after == 0 || after == 3 || after == 9)
+              ) return 3;
+
+
+            if(before == 1 && 
+              (after == 2 || after == 4)
+              ) return 1;
+            if(before == 1 && 
+              (after == 3 || after == 5 || after == 7)
+              ) return 2;
+            if(before == 1 && 
+              (after == 6 || after == 8)
+              ) return 3;
+            if(before == 1 && 
+              (after == 9 || after == 0)
+              ) return 4;
+
+      
+        
+            if(before == -2 && 
+              (after == 9 || after == 0)
+              ) return 1;
+            if(before == -2 && 
+              (after == 6 || after == 8)
+              ) return 2;
+            if(before == -2 && 
+              (after == 3 || after == 5 || after == 7)
+              ) return 3;
+            if(before == -2 && 
+              (after == 2 || after == 4)
+              ) return 4;
+            if(before == -2 && 
+              (after == 1)
+              ) return 5;
+
+            if(before == 9 && 
+              (after == 6 || after == 8)
+              ) return 1;
+            if(before == 9 && 
+              (after == 3 || after == 5 || after == 7 || after == 0)
+              ) return 2;
+            if(before == 9 && 
+              (after == 2 || after == 4)
+              ) return 3;
+            if(before == 9 && 
+              (after == 1)
+              ) return 4;
+
+            if(before == 6 && 
+              (after == 3 || after == 5 || after == 9)
+              ) return 1;
+            if(before == 6 && 
+              (after == 2 || after == 4 || after == 8)
+              ) return 2;
+            if(before == 6 && 
+              (after == 1 || after == 7 || after == 0)
+              ) return 3;
+
+
+            if(before == 3 && 
+              (after == 2 || after == 6)
+              ) return 1;
+            if(before == 3 && 
+              (after == 1 || after == 5 || after == 9)
+              ) return 2;
+            if(before == 3 && 
+              (after == 4 || after == 8)
+              ) return 3;
+            if(before == 3 && 
+              (after == 7 || after == 0)
+              ) return 4;
+
+        
+        
+            //공통부분
+            if(before == 2 && 
+              (after == 1 || after == 3 || after == 5)
+              ) return 1;
+            if(before == 2 && 
+              (after == 4 || after == 6 || after == 8)
+              ) return 2;
+            if(before == 2 && 
+              (after == 7 || after == 0 || after == 9)
+              ) return 3;
+
+            if(before == 5 && 
+              (after == 2 || after == 4 || after == 6 || after == 8)
+              ) return 1;
+            if(before == 5 && 
+              (after == 1 || after == 3 || after == 7 || after == 9 || after == 0)
+              ) return 2;
+
+            if(before == 8 && 
+              (after == 5 || after == 7 || after == 9 || after == 0)
+              ) return 1;
+            if(before == 8 && 
+              (after == 2 || after == 4 || after == 6)
+              ) return 2;
+            if(before == 8 && 
+              (after == 1 || after == 3)
+              ) return 3;
+
+            if(before == 0 && 
+              (after == 8)
+              ) return 1;
+            if(before == 0 && 
+              (after == 5 || after == 7 || after == 9)
+              ) return 2;
+            if(before == 0 && 
+              (after == 2 || after == 4 || after == 6)
+              ) return 3;
+            if(before == 0 && 
+              (after == 1 || after == 3)
+              ) return 4;
+        
+        
+        return 99;
     }
 }
 ```
@@ -257,62 +569,214 @@ class Solution {
 
 ### 생각
 
-- 케이스에 구멍이있는 것 같지는 않은데, 답변을 구하는 방식이 잘못된거같다.
-- 15케이스중 1케이스만 빵꾸가 난다는건 확률적으로 0갯수와 성공개수로 핸들링하는 방법으로는 둘다 0 이거나 둘 다 모두 성공인 경우의 케이스이다.
+- 케이스를 보강하였지만, (IF문의 경우의 수 추가) 통과되지 않았다.
+- 뭘까뭘까하다, 테스트 케이스를 추가해보기 시작했다.
 
 ## 4차 시도 - 성공
 
-- 3차 시도의 케이스를 잡았다. 둘 다 0 인케이스에서 처리를 안했더니 7로 떨어져 실패했던 경우였다. 
-- ```answer[0] = (successcnt + zerocnt == 6 ? 1 : (successcnt + zerocnt == 0 ? 6 : (7 - zerocnt - successcnt)));```
+- 테스트 케이스 ```[0,0,0,0,0]``` 가 실패했다. ?????? 아! 동일한 숫자가 나오면 99로 빠지는것 같다.
 
 
 
 ```java
 class Solution {
-    public int[] solution(int[] lottos, int[] win_nums) {
-        int[] answer = new int[2];
+    
+    public String solution(int[] numbers, String hand) {
+        String answer = "";
         
-        int zerocnt = 0;
-        int successcnt = 0;
-        
-        for(int lotto : lottos) { 
-            if(lotto == 0) {
-                zerocnt++;
+        int beforeL = -1;
+        int beforeR = -2;
+        for (int i = 0; i < numbers.length; i++){
+            
+            int j = numbers[i];
+            int distanceL = funcDistance(beforeL, j);
+            int distanceR = funcDistance(beforeR, j);
+            
+            // System.out.println(beforeL+"["+distanceL+"]" + "/" + beforeR+"["+distanceR+"]");
+            if(j == 1 || j == 4 || j == 7){
+                beforeL= j;
+                answer += "L";
+            }else if(j == 3 || j == 6 || j == 9){
+                beforeR= j;
+                answer += "R";
             }else{
-                for(int win_num : win_nums){
-                    if(lotto == win_num) successcnt++;
+                if(distanceL < distanceR){
+                    beforeL = j;
+                    answer += "L";
+                }else if(distanceL > distanceR){
+                    beforeR = j;
+                    answer += "R";
+                }else{
+                    if(hand.equals("left")){
+                        beforeL = j;
+                        answer += "L";
+                    }else{
+                        beforeR = j;
+                        answer += "R";
+                    }
                 }
             }
         }
-       
-        //zerocnt 6 {1,6}
-        //zerocnt 5 {1,6}
-        //zerocnt 4 {1,6}
-        //zerocnt 3 {1,6}
-        //zerocnt 2 {1,6}
-        //zerocnt 1 {1,6}
-        //zerocnt 0 {1,6}
-        
-        //zerocnt 6 s 0 {1,6}
-        //zerocnt 5 s 1 {1,6}
-        //zerocnt 4 s 2 {1,5}
-        //zerocnt 3 s 3 {1,4}
-        //zerocnt 2 s 4 {1,3}
-        //zerocnt 1 s 5 {1,2}
-        //zerocnt 0 s 6 {1,1}
-        
-        //zerocnt 6 s 0 {1,6}
-        //zerocnt 5 s 0 {2,6}
-        //zerocnt 4 s 0 {3,6}
-        //zerocnt 3 s 0 {4,6}
-        //zerocnt 2 s 0 {5,6}
-        //zerocnt 1 s 0 {6,6}
-        //zerocnt 0 s 0 {6,6}
-        
-        answer[0] = (successcnt + zerocnt == 6 ? 1 : (successcnt + zerocnt == 0 ? 6 : (7 - zerocnt - successcnt)));
-        answer[1] = (successcnt == 0 ? 6 : (7 - successcnt));
-        
         return answer;
+    }
+    
+    public int funcDistance(int before, int after){
+            if(before == after) return 0;
+        
+            if(before == -1 && 
+              (after == 7 || after == 0)
+              ) return 1;
+            if(before == -1 && 
+              (after == 4 || after == 8)
+              ) return 2;
+            if(before == -1 && 
+              (after == 1 || after == 5 || after == 9)
+              ) return 3;
+            if(before == -1 && 
+              (after == 2 || after == 6)
+              ) return 4;
+            if(before == -1 && 
+              (after == 3)
+              ) return 5;
+
+            if(before == 7 && 
+              (after == 4 || after == 8)
+              ) return 1;
+            if(before == 7 && 
+              (after == 1 || after == 5 || after == 0 || after == 9)
+              ) return 2;
+            if(before == 7 && 
+              (after == 2 || after == 6)
+              ) return 3;
+            if(before == 7 && 
+              (after == 3)
+              ) return 4;
+
+
+            if(before == 4 && 
+              (after == 1 || after == 5 || after == 7)
+              ) return 1;
+            if(before == 4 && 
+              (after == 2 || after == 6 || after == 8)
+              ) return 2;
+            if(before == 4 && 
+              (after == 0 || after == 3 || after == 9)
+              ) return 3;
+
+
+            if(before == 1 && 
+              (after == 2 || after == 4)
+              ) return 1;
+            if(before == 1 && 
+              (after == 3 || after == 5 || after == 7)
+              ) return 2;
+            if(before == 1 && 
+              (after == 6 || after == 8)
+              ) return 3;
+            if(before == 1 && 
+              (after == 9 || after == 0)
+              ) return 4;
+
+      
+        
+            if(before == -2 && 
+              (after == 9 || after == 0)
+              ) return 1;
+            if(before == -2 && 
+              (after == 6 || after == 8)
+              ) return 2;
+            if(before == -2 && 
+              (after == 3 || after == 5 || after == 7)
+              ) return 3;
+            if(before == -2 && 
+              (after == 2 || after == 4)
+              ) return 4;
+            if(before == -2 && 
+              (after == 1)
+              ) return 5;
+
+            if(before == 9 && 
+              (after == 6 || after == 8)
+              ) return 1;
+            if(before == 9 && 
+              (after == 3 || after == 5 || after == 7 || after == 0)
+              ) return 2;
+            if(before == 9 && 
+              (after == 2 || after == 4)
+              ) return 3;
+            if(before == 9 && 
+              (after == 1)
+              ) return 4;
+
+            if(before == 6 && 
+              (after == 3 || after == 5 || after == 9)
+              ) return 1;
+            if(before == 6 && 
+              (after == 2 || after == 4 || after == 8)
+              ) return 2;
+            if(before == 6 && 
+              (after == 1 || after == 7 || after == 0)
+              ) return 3;
+
+
+            if(before == 3 && 
+              (after == 2 || after == 6)
+              ) return 1;
+            if(before == 3 && 
+              (after == 1 || after == 5 || after == 9)
+              ) return 2;
+            if(before == 3 && 
+              (after == 4 || after == 8)
+              ) return 3;
+            if(before == 3 && 
+              (after == 7 || after == 0)
+              ) return 4;
+
+        
+        
+            //공통부분
+            if(before == 2 && 
+              (after == 1 || after == 3 || after == 5)
+              ) return 1;
+            if(before == 2 && 
+              (after == 4 || after == 6 || after == 8)
+              ) return 2;
+            if(before == 2 && 
+              (after == 7 || after == 0 || after == 9)
+              ) return 3;
+
+            if(before == 5 && 
+              (after == 2 || after == 4 || after == 6 || after == 8)
+              ) return 1;
+            if(before == 5 && 
+              (after == 1 || after == 3 || after == 7 || after == 9 || after == 0)
+              ) return 2;
+
+            if(before == 8 && 
+              (after == 5 || after == 7 || after == 9 || after == 0)
+              ) return 1;
+            if(before == 8 && 
+              (after == 2 || after == 4 || after == 6)
+              ) return 2;
+            if(before == 8 && 
+              (after == 1 || after == 3)
+              ) return 3;
+
+            if(before == 0 && 
+              (after == 8)
+              ) return 1;
+            if(before == 0 && 
+              (after == 5 || after == 7 || after == 9)
+              ) return 2;
+            if(before == 0 && 
+              (after == 2 || after == 4 || after == 6)
+              ) return 3;
+            if(before == 0 && 
+              (after == 1 || after == 3)
+              ) return 4;
+        
+        
+        return 99;
     }
 }
 ```
@@ -327,53 +791,79 @@ class Solution {
 
 ### 생각
 
-- 처음부터 케이스를 확실하게 정리하면 쉬웠을 케이스이다.
+- 아흑 통과다. 
+- 너무 무식한방법이지만, 결과가 좋다
+- 다른 사람들은 계산식으로하는거같은데.. 생각을 넓혀야겠다.
 
-<!-- 
+
 ## 첨삭
 
 like 가 가장많은 다른 사람의 코드
 
 ```java
-import java.util.HashMap;
-
 class Solution {
-    public String solution(String[] participant, String[] completion) {
-        String answer = "";
-        HashMap<String, Integer> hm = new HashMap<>();
-        for (String player : participant) hm.put(player, hm.getOrDefault(player, 0) + 1);
-        for (String player : completion) hm.put(player, hm.get(player) - 1);
+    //        0부터 9까지 좌표 {y,x}
+    int[][] numpadPos = {
+            {3,1}, //0
+            {0,0}, //1
+            {0,1}, //2
+            {0,2}, //3
+            {1,0}, //4
+            {1,1}, //5
+            {1,2}, //6
+            {2,0}, //7
+            {2,1}, //8
+            {2,2}  //9
+    };
+    //초기 위치
+    int[] leftPos = {3,0};
+    int[] rightPos = {3,2};
+    String hand;
+    public String solution(int[] numbers, String hand) {
+        this.hand = (hand.equals("right")) ? "R" : "L";
 
-        for (String key : hm.keySet()) {
-            if (hm.get(key) != 0){
-                answer = key;
-            }
+        String answer = "";
+        for (int num : numbers) {
+            String Umji = pushNumber(num);
+            answer += Umji;
+
+            if(Umji.equals("L")) {leftPos = numpadPos[num]; continue;}
+            if(Umji.equals("R")) {rightPos = numpadPos[num]; continue;}
         }
         return answer;
+    }
+
+    //num버튼을 누를 때 어디 손을 사용하는가
+    private String pushNumber(int num) {
+        if(num==1 || num==4 || num==7) return "L";
+        if(num==3 || num==6 || num==9) return "R";
+
+        // 2,5,8,0 일때 어디 손가락이 가까운가
+        if(getDist(leftPos, num) > getDist(rightPos, num)) return "R";
+        if(getDist(leftPos, num) < getDist(rightPos, num)) return "L";
+
+        //같으면 손잡이
+        return this.hand;
+    }
+
+    //해당 위치와 번호 위치의 거리
+    private int getDist(int[] pos, int num) {
+        return Math.abs(pos[0]-numpadPos[num][0]) + Math.abs(pos[1]-numpadPos[num][1]);
     }
 }
 ```
 
-[![결과](/assets/imgs/codetest/3.pushkeypad/3.othersuccess.png)](/assets/imgs/imgs/codetest/3.pushkeypad/3.othersuccess.png)
+[![결과](/assets/imgs/codetest/3.pushkeypad/3.othersuccess.png)](/assets/imgs/codetest/3.pushkeypad/3.othersuccess.png)
 
 
 ### 검토
-getOrDefault 부분의 결과 비교를 어떻게 할지 생각이 안나서 찍어봤다.
+- 2차원 테이블을 이용해 거리를 계산했다.
+- 테이블의 순서를 키패드로 이용했고, 그 위치를 좌상단 1번기준으로 좌표처럼 표시했다.
+- 나의 엄청난 IF 문 빼고는 거의 비슷하다.
+- 나의 엄청난 IF문은 이 한 문장으로 대체 되었다. ```Math.abs(pos[0]-numpadPos[num][0]) + Math.abs(pos[1]-numpadPos[num][1]);``` 가로 절대값 길이 + 세로 절대값 길이
+  
 
-```java
-        for (String player : participant) {
-            System.out.println(player+"/"+(hm.getOrDefault(player, 0) + 1));
-            hm.put(player, hm.getOrDefault(player, 0) + 1);
-        }
-```
-
-[![결과](/assets/imgs/codetest/3.pushkeypad/3-1.othersuccess.png)](/assets/imgs/imgs/codetest/3.pushkeypad/3-1.othersuccess.png)
-
-프린트 결과를 보면, 값이 있다면 1, 없다면 0, 동명2인 있다면 +1 로 수가 증가했다.
-결과를 찾자면 0 이 아닌 선수를 뽑았다.
 
 ### 생각
 
-- 내 코드보다 3-4배는 빠른것 같다.
-- 아마 Array.sort 하는 부분에서 값을 찾긴 쉬워도(사람의 생각으로 답을 찾는다는 사고) 성능이 느려진것 같다.
-- 결국 개발 처음 입문시 닥쳤던 map, set.. 순서 정한다는 (쉬운)개념에 익숙해진 느낌이다. -->
+- 고정된 거리의 계산문제에서 저 코드를 활용할 수 있도록 눈여겨 봐놔야겠다.
