@@ -1,0 +1,48 @@
+---
+title: TDD 관련 자료
+categories: 
+  - vscode
+tags:
+  - vscode
+toc: false
+---
+
+- 실시간 서비스 플랫폼 개발 사례
+https://www.slideshare.net/JohnKim0331/ss-46270520
+
+- TDD 잘알못을 위한 돌직구 세미나 참석 후기
+https://jojoldu.tistory.com/306
+
+- [기술면접] TDD(Test-Driven-Development) 방법론에 대해서
+https://wooaoe.tistory.com/33
+
+- [TDD] TDD의 장단점에 대해 생각해보기..
+https://medium.com/@jang.wangsu/tdd-tdd%EC%9D%98-%EC%9E%A5%EB%8B%A8%EC%A0%90%EC%97%90-%EB%8C%80%ED%95%B4-%EC%83%9D%EA%B0%81%ED%95%B4%EB%B3%B4%EA%B8%B0-dcf32a72b098
+
+- TDD (Test-Driven Development) 란?
+https://soulpark.wordpress.com/2012/09/12/test-driven-development/
+
+- 테스트 자동화와 TDD(테스트 주도 개발방법론)
+https://www.slideshare.net/hoonsbara/tdd-41738171?qid=2cf27e9f-7683-402a-bad8-fa6d252a32e0&v=&b=&from_search=8
+
+- TDD&Refactoring Day 01: Refactoring
+https://www.slideshare.net/doortts/all-in-onev10?qid=0acbf7fa-4f54-4be4-9f4b-2e2d0cd02bdd&v=&b=&from_search=43
+
+- TDD&Refactoring Day 02: TDD
+https://www.slideshare.net/doortts/tddrefactoring-day-02-tdd?qid=0acbf7fa-4f54-4be4-9f4b-2e2d0cd02bdd&v=&b=&from_search=16
+
+- TDD&Refactoring Day 03: TDD
+https://www.slideshare.net/doortts/tddrefactoring-day-03-tdd?qid=0acbf7fa-4f54-4be4-9f4b-2e2d0cd02bdd&v=&b=&from_search=17
+
+- 기본적인 테스트에 대한 pytest 자동화 접근
+https://www.slideshare.net/genycho/pytest-240931546?next_slideshow=1
+
+- 도메인 주도 설계의 본질
+https://www.slideshare.net/baejjae93/ss-27536729
+
+- 테스트 가능한 소프트웨어 설계와 TDD작성 패턴 (Testable design and TDD)
+https://www.slideshare.net/doortts/tdd-testable-design-and-tdd
+
+
+
+
