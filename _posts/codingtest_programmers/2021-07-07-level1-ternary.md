@@ -21,14 +21,7 @@ class Solution {
         //입력값 3진법 변환
         int mok = 0;
         int re = 0;
-        Stack<Integer> stack = new Stack<Integer>();
-        while(3 <= n){
-            mok = Math.round(n / 3);
-            re = n % 3 ;
-            n = mok;
-            stack.push(re);
-        }
-        stack.push(mok);
+        
         
         //역순 만들기
         int[] answerarr = new int[stack.size()];
@@ -68,6 +61,11 @@ class Solution {
 List 로 다시변경하였다. 테스트케이스를 증가시켜 테스트를하였다.
 사실 오늘 퇴사와 프리랜서얘기가 오고가며 정신이 사나워 더이상 코딩이 안되었다..
 
+다시시도.
+코드를 갈아엎었다.
+문제 유도방법대로 명시적인 코드를 작성했었으나
+역순뒤집기를 그냥 빼버리고, 간단한 코드로 바꿔버렸다.
+
 
 ```java
 import java.util.*;
@@ -76,29 +74,28 @@ class Solution {
         int answer = 0;
         
         //입력값 3진법 변환
-        int mok = 0;
         int re = 0;
-        Stack<Integer> stack = new Stack<Integer>();
-        while(3 <= n){
-            mok = Math.round(n / 3);
+        String str = "";
+        while(n != 0){
             re = n % 3 ;
-            n = mok;
-            stack.push(re);
+            str += re;
+            n /= 3;
         }
-        stack.push(mok);
-        
-        //역순 만들기
-        int[] answerarr = new int[stack.size()];
-        int cnt = 0;
-        while(stack.size() > 0){
-            int num = stack.pop();
-            answerarr[cnt] = num;
-            cnt++;
-        }
-        
+
         //10진수 변환
-        for(int i = answerarr.length-1; i >= 0; i--){
-            answer += answerarr[i] * (Math.pow(3, i));
+        String[] arr = str.split("");
+        
+        //결과
+        if(!str.equals("") && arr.length < 2) {
+            answer = Integer.parseInt(str);
+            return answer;
+        }
+        
+        int num = 0;
+        for(int i = arr.length-1; i >= 0; i--){
+            if(arr[i].equals("")) continue;
+            answer += Integer.parseInt(arr[i]) * (Math.pow(3, num));
+            num++;
         }
         
         return answer;
@@ -116,7 +113,7 @@ class Solution {
 
 ### 생각
 
-- 와 잘짰다. 내가 생각해도 stack도 쓰고, 깔끔한거같다. 싶었다. 통과인줄알았다. 1,2 실패
+- 테스트케이스를 0~10 까지늘려 테스트를 했었는데, 1과 2의 테스트 케이스 기대값을 잘못넣어 헤딩 했다.
 
 
 ## 첨삭
@@ -124,31 +121,18 @@ class Solution {
 like 가 많고, 요구사항과 코딩이 가시적으로 한번에 구분되는 코드.
 
 ```java
-import java.util.Stack;
-
 class Solution {
-    public int solution(int[][] board, int[] moves) {
-        int answer = 0;
-        Stack<Integer> stack = new Stack<>();
-        for (int move : moves) {
-            for (int j = 0; j < board.length; j++) {
-                if (board[j][move - 1] != 0) {
-                    if (stack.isEmpty()) {
-                        stack.push(board[j][move - 1]);
-                        board[j][move - 1] = 0;
-                        break;
-                    }
-                    if (board[j][move - 1] == stack.peek()) {
-                        stack.pop();
-                        answer += 2;
-                    } else
-                        stack.push(board[j][move - 1]);
-                    board[j][move - 1] = 0;
-                    break;
-                }
-            }
+    public int solution(int n) {
+        String a = "";
+
+        while(n > 0){
+            a = (n % 3) + a;
+            n /= 3;
         }
-        return answer;
+        a = new StringBuilder(a).reverse().toString();
+
+
+        return Integer.parseInt(a,3);
     }
 }
 ```
@@ -157,11 +141,8 @@ class Solution {
 
 
 ### 검토
-- stack 을 이용한 처리
+- Integer.parseInt 를 잘 알고 있는지. 간단한 reverse 함수를 쓸 수 있는지.
 
 
 ### 생각
-
-- stack 을 이용한 처리를 해본적이없어서 조금 오래 보았다.
-- 편한 List 만 쓸것이아니라 이런 형식의 알고리즘? 에서는 stack 을 써봐야겠다.
-- 결과치대체로 스택을 이용한 문구가 빨랐다.
+- Integer.parseInt 를 많이 쓰긴하지만. int 형으로 변환한다는 생각만 있었지, 10진법 수로 변환한다는 내부적인 코드를 보진 않았었다. ```parseInt(String s, int radix)``` radix 라는 변수를 받아서 해당 진수로 변환까지 해준다.
