@@ -66,10 +66,6 @@ class Solution {
 }
 ```
 
-### 제출결과
-
-[![결과](/assets/imgs/codetest/10.failpercent/2-2-2.fail.png)](/assets/imgs/imgs/codetest/10.failpercent/2-2-2.fail.png)
-
 ### 생각
 
 - 아.. 내코드와 거의 비슷하다. 변수선언하지않고 직접 쓴내용만 달랐다.

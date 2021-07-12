@@ -853,9 +853,6 @@ class Solution {
 }
 ```
 
-[![결과](/assets/imgs/codetest/3.pushkeypad/3.othersuccess.png)](/assets/imgs/codetest/3.pushkeypad/3.othersuccess.png)
-
-
 ### 검토
 - 2차원 테이블을 이용해 거리를 계산했다.
 - 테이블의 순서를 키패드로 이용했고, 그 위치를 좌상단 1번기준으로 좌표처럼 표시했다.

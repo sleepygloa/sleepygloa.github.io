@@ -59,8 +59,6 @@ class Solution {
 }
 ```
 
-[![결과](/assets/imgs/codetest/8.minusplusadd/3.othersuccess.png)](/assets/imgs/codetest/8.minusplusadd/3.othersuccess.png)
-
 
 ### 검토
 - ```-1```, ```+1``` 의 경우를 삼항연산자를 이용하여 처리함.

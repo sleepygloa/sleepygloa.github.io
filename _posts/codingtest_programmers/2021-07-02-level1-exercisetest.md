@@ -157,8 +157,6 @@ class Solution {
 }
 ```
 
-[![결과](/assets/imgs/codetest/7.exercisetest/3.othersuccess.png)](/assets/imgs/codetest/7.exercisetest/3.othersuccess.png)
-
 
 ### 검토
 - 경우의 수를 배열로 저장하였고, 최대 값 비교에 Math.max 함수를 사용하였다.

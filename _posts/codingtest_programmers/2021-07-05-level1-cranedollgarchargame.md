@@ -113,9 +113,6 @@ class Solution {
 }
 ```
 
-[![결과](/assets/imgs/codetest/9.cranedollgarchargame/3.othersuccess.png)](/assets/imgs/codetest/9.cranedollgarchargame/3.othersuccess.png)
-
-
 ### 검토
 - stack 을 이용한 처리
 

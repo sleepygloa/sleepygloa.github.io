@@ -143,14 +143,6 @@ class Solution {
 }
 ```
 
-### 결과
- 
-[![결과](/assets/imgs/codetest/10.failpercent/2-2-1.success.png)](/assets/imgs/imgs/codetest/10.failpercent/2-2-1.success.png)
-
-### 제출결과
-
-[![결과](/assets/imgs/codetest/10.failpercent/2-2-2.fail.png)](/assets/imgs/imgs/codetest/10.failpercent/2-2-2.fail.png)
-
 ### 생각
 
 - 성공했다. 테스트케이스를 만드는 것도 중요하지만, 질문에 대한 원하는바를 정확히 알고 코딩이 되어야 할 것이다. 라는 생각을 했다. 그러면 0에 대한 처리가 눈에 보였을텐데, 성공하기 바빴다.

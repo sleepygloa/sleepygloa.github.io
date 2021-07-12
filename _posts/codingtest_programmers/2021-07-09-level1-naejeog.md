@@ -27,14 +27,6 @@ class Solution {
 }
 ```
 
-### 결과
- 
-[![결과](/assets/imgs/codetest/14.naejeog/2-1-1.success.png)](/assets/imgs/imgs/codetest/14.naejeog/2-1-1.success.png)
-
-### 제출결과
-
-[![결과](/assets/imgs/codetest/14.naejeog/2-1-2.fail.png)](/assets/imgs/imgs/codetest/14.naejeog/2-1-2.fail.png)
-
 ### 생각
 
 - 내용무. 

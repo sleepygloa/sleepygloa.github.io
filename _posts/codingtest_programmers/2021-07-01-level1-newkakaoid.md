@@ -190,9 +190,6 @@ class Solution {
 }
 ```
 
-[![결과](/assets/imgs/codetest/5.newkakaoid/3.othersuccess.png)](/assets/imgs/codetest/5.newkakaoid/3.othersuccess.png)
-
-
 ### 검토
 - 정규식으로 모든 처리가 끝났다. 나는 자르고 붙이고 지지고볶고.
   

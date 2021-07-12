@@ -217,14 +217,9 @@ class Solution {
 }
 ```
 
-[![결과](/assets/imgs/codetest/6.atheletecloth/3.othersuccess.png)](/assets/imgs/codetest/6.atheletecloth/3.othersuccess.png)
-
 
 ### 검토
 - 총인원 배열에 -1 과 1 로 상태 체크를 하고, -1 경우에만 체육복을 빌리는 행위를 하였다. 
-
-
-  
 
 
 ### 생각

@@ -224,7 +224,7 @@ class Solution {
 
 
 ### 검토
-getOrDefault 부분의 결과 비교를 어떻게 할지 생각이 안나서 찍어봤다.
+- getOrDefault 부분의 결과 비교를 어떻게 할지 생각이 안나서 찍어봤다.
 
 ```java
         for (String player : participant) {
@@ -233,13 +233,7 @@ getOrDefault 부분의 결과 비교를 어떻게 할지 생각이 안나서 찍
         }
 ```
 
-[![결과](/assets/imgs/codetest/1.noncompletemarathon/3-1.othersuccess.png)](/assets/imgs/imgs/codetest/1.noncompletemarathon/3-1.othersuccess.png)
-
-프린트 결과를 보면, 값이 있다면 1, 없다면 0, 동명2인 있다면 +1 로 수가 증가했다.
-결과를 찾자면 0 이 아닌 선수를 뽑았다.
-
-### 생각
-
+- 프린트 결과를 보면, 값이 있다면 1, 없다면 0, 동명2인 있다면 +1 로 수가 증가했다. 결과를 찾자면 0 이 아닌 선수를 뽑았다.
 - 내 코드보다 3-4배는 빠른것 같다.
 - 아마 Array.sort 하는 부분에서 값을 찾긴 쉬워도(사람의 생각으로 답을 찾는다는 사고) 성능이 느려진것 같다.
 - 결국 개발 처음 입문시 닥쳤던 map, set.. 순서 정한다는 (쉬운)개념에 익숙해진 느낌이다.

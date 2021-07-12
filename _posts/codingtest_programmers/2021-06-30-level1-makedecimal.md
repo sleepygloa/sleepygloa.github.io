@@ -102,7 +102,6 @@ class Solution {
     }
 }
 ```
-[![결과](/assets/imgs/codetest/4.makedecimal/3.othersuccess.png)](/assets/imgs/codetest/4.makedecimal/3.othersuccess.png)
 
 ### 검토
 - for문의 길이를 미리 뺌으로 loop의 경우를 제거. 좀 더 효율적인 코드.

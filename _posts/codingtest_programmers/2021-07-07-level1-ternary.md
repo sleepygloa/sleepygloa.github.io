@@ -137,9 +137,6 @@ class Solution {
 }
 ```
 
-[![결과](/assets/imgs/codetest/12.ternary/3.othersuccess.png)](/assets/imgs/codetest/12.ternary/3.othersuccess.png)
-
-
 ### 검토
 - Integer.parseInt 를 잘 알고 있는지. 간단한 reverse 함수를 쓸 수 있는지.
 
