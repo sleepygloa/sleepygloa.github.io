@@ -139,7 +139,4 @@ class Solution {
 
 ### 검토
 - Integer.parseInt 를 잘 알고 있는지. 간단한 reverse 함수를 쓸 수 있는지.
-
-
-### 생각
 - Integer.parseInt 를 많이 쓰긴하지만. int 형으로 변환한다는 생각만 있었지, 10진법 수로 변환한다는 내부적인 코드를 보진 않았었다. ```parseInt(String s, int radix)``` radix 라는 변수를 받아서 해당 진수로 변환까지 해준다.
