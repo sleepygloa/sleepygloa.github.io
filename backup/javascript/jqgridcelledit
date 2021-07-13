@@ -1,0 +1,3 @@
+jQuery("#table").jqGrid('setCell', rowid,  '컬럼 name, "", 'editable-cell'); // 특정 cell 수정 가능하게
+jQuery("#table").jqGrid('setCell', rowid,  '컬럼 name', "", 'not-editable-cell'); // 특정 cell 수정 못하게
+

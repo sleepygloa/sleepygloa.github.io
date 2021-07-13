@@ -1,0 +1,10 @@
+opener.parent.location.reload();
+	function sc(){
+		opener=self;
+		
+		setTimeout('self.close()',500);
+	}
+  opener 가 중첩되지 않는 것이 중요하다
+  
+  PAGE에서 FORM 과 Submit으로 데이터를 처리한다음 동일한페이지로 접근하고
+  처리결과값을보내어 if 을사용하여 닫기만을위한 JS

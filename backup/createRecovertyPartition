@@ -1,0 +1,49 @@
+0. 사전에 디스크 관리를 통해 하드디스크에 약 20GB의 복구 영역을 생성한다. 또한, 명령프롬프트에서 net user Administrator /active:yes를 입력하고 Administrator 계정에 들어온 상태에서 모든 사용자 계정을 제거한다. 복구 후 중복된 사용자 계정이 등록되는 것을 막기 위함이다. 추가로 드라이버를 미리 설치해두면 추후 PC초기화 할 때도 드라이버가 자동으로 설치되므로 하는 편이 좋다.
+
+1. Administrator 계정에 접속하고 모든 계정을 삭제했다면 명령프롬프트를 연다.
+
+2. diskpart를 실행한다.
+
+3. list disk -> select disk * -> list partition -> select partition * 을 통해 복구 영역을 지정할 파티션을 선택한다. *은 자신의 디스크에 맞는 번호를 입력한다.
+
+4. set id=DE94BBA4-06D1-4D40-A16A-BFD50179D6AC 를 입력, 이 파티션을 복구 파티션으로 인식시킨다.
+
+5. assign letter=z 를 입력하면 Z 드라이브로 생성된다. (이 때 여기에 imagex를 넣어준다.)
+
+6. C:\Windows\System32\recovery에 있는 winre.wim을 Z:\Recovery\WindowsRE 라는 폴더를 생성하여 그 폴더에 넣는다.
+
+만약, winre.wim이 없다면 Windows 설치 디스크의 sources\install.wim을 반디집 등의 프로그램으로 열어서 Windows\System32\recovery 폴더를 확인하면 있을것이다.
+
+7. reagentc /setreimage /path Z:\Recovery\WindowsRE\winre.wim /target C:\Windows 를 입력하여 Windows RE를 로드한다.
+
+8. Z:\sources 폴더를 생성하고 임시적으로, CD에서 install.wim을 추출하여 넣는다.
+
+9. reagentc /setosimage /path Z:\sources /index 1 /target C:\Windows 를 입력, 기본 이미지로 복구 이미지를 지정한다.
+
+10.reagentc /enable을 입력, Windows RE를 활성화시킨다.
+
+11. 명령프롬프트에 net user Administrator /active:no를 입력한다. 이 후 작업을 할 때까지 절대로 끄거나 로그아웃을 하면 안 된다.
+
+12. Windows 설치 CD나 USB를 연결하고, 명령프롬프트에 C:\Windows\System32\sysprep /generalize /oobe 를 입력한다. 봉인작업이 실시되고 Windows가 자동으로 종료될것이다.
+
+13. 다시 컴퓨터를 켜면서 Windows 설치 디스크, USB로 부팅한다. 만약 그냥 부팅됐다면 위 작업을 다시 해야한다.
+
+14. 키보드에서 Shift + F10 을 누르면 명령프롬프트가 열린다. 두 개 정도 켜 둔다.
+
+15. 창 하나로 diskpart를 입력, 위 3번 작업을 다시 한다음 assign letter=z 로 드라이브 문자 할당을 해준다. 5번에 괄호를 이행했다면 해당 드라이브에서 작업할 수 있을것이다. list volume 이나 select disk->list partition을 통해 현재 윈도우가 설치된 파티션의 문자를 다시 확인해준다.
+
+16. 또 다른 창 하나로
+
+Z:\imagex /compress fast /check /scroll /capture (Windows 가 설치된 파티션의 문자):\ Z:\sources\install.wim "Recovery Image"
+
+를 입력하고 기다려준다. 라면 하나 끓여먹고 오자 30분 정도 걸리니 뭐든 하나 하고 오면 끝날거다
+
+용량이 부족하다고 나오면 del Z:\sources\install..wim 으로 임시로 넣었던 install.wim을 제거한다.
+
+끝나면 윈도우로 부팅한다음 초기 작업을 진행한다.
+
+ 
+
+윈도우로 들어오면 reagentc /info 를 입력한다. Windows RE 상태가 Enable이고, BCD(부팅 구성 데이터) 식별자와 복구 이미지 위치, 복구 이미지 인덱스: 1 이 나오고 있다면 정상적으로 작업한것이다. 이제, 복구파티션에 드라이브 문자가 할당되어있다면 제거해준다.
+
+정상적으로 완료되었다면 'PC 초기화'를 시작할 때, CD를 넣는 과정이 생략될것이다.

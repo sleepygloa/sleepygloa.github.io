@@ -1,0 +1,55 @@
+# 새폴더 만들기
+--------------
+File cutewebiDirectory = new File("cutewebi"); 
+// cutewebi가 폴더명 
+	if(!cutewebiDirectory.exists()){
+		cutewebiDirectory.mkdirs(); 
+		System.out.println("cutewebi 디렉토리를 생성했습니다.");
+	}else{ 
+		// cutewebi 폴더가 존재하면 폴더 내 기존 파일 다 삭제
+		File[] cutewebiFiles = cutewebiDirectory.listFiles();
+		for (File file : cutewebiFiles) {
+		file.delete(); 
+	}
+	System.out.println("cutewebi 폴더내의 기존 파일을 모두 삭제하였습니다.");
+}
+
+
+
+-----------------
+f_list = new File(source).listFiles(); // 폴더들 위치 
+
+Arrays.sort(f_list);
+System.out.println("총 " + f_list.length + " 개의 폴더가 존재합니다. ");
+
+for(int folder = 0 ; folder < f_list.length ; folder++){
+	System.out.println(folder + " 번째 디렉토리를 분석중입니다.");
+
+// 디렉토리 명을 수정 ( / 기호가 안붙을 경우를 위함) 
+	String chk = destination.substring(destination.length()-1, destination.length());
+	if(!chk.equals("/"))destination = destination+"/"; 
+// 생성할 디렉토리 명을 지정
+	String mkFolder = destination+f_list[folder].getName(); //하나의 폴더  
+	
+	File[] fileList = f_list[folder].listFiles(); // 파일들
+  Arrays.sort(fileList);
+	//디렉토리 생성 
+	File desti = new File(mkFolder);
+  //해당 디렉토리의 존재여부를 확인
+	if(!desti.exists()){
+  //없다면 생성
+	desti.mkdirs(); 
+	}else{
+		//있다면 현재 디렉토리 파일을 삭제 
+		File[] destroy = desti.listFiles(); 
+		for(File des : destroy){
+		des.delete(); 
+		}	
+	}
+
+	System.out.println("디렉토리 명 = " + mkFolder);
+	for(int f = 0; f < fileList.length ; f++){
+	System.out.println("\t" + f + " 번째 파일 분석 중...");
+
+
+

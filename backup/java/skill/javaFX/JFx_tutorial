@@ -1,0 +1,11 @@
+# in eclipse, setup
+
+1. new javaFX project, name = [jfx]
+
+2. if you had finished code, go to directory (in src), delete whole files and copy&paste your project files.
+
+3. [project] mouse right click ! - configure - convert to maven project
+
+4. select pom.xml and in <dependencies>, write code that connect url(https://mvnrepository.com/), search 'simple json' and copy&paste code.
+
+5.

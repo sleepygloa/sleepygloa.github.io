@@ -1,0 +1,151 @@
+
+
+
+
+
+
+
+function moveCam(eye_x, eye_y, eye_z, target_x, target_y, target_z)
+{
+	//동중이던 자동화 기능들을 모두 지우는 기능
+	createjs.Tween.removeAllTweens();
+	//카메라를 부드럽게 이동하는 명령
+	createjs.Tween.get(camera.position)
+		.to({
+			x: eye_x, 
+			y: eye_y, 
+			z: eye_z
+		}, 900, 
+		createjs.Ease.sineInOut)
+	.get(controls.target)
+		.to({
+			x: target_x, 
+			y: target_y, 
+			z: target_z
+		}, 900, 
+		createjs.Ease.sineInOut);
+
+	animate();
+}
+
+function aroundCam()
+{
+	createjs.Tween.removeAllTweens();
+
+/*
+	createjs.Tween.get(controls.target)
+		.to({
+			x: 0, 
+			y: 0, 
+			z: 0
+		}, 900, 
+		createjs.Ease.sineInOut);
+			*/
+
+//createjs.Ease.sineInOut
+//createjs.Ease.quartIn
+//createjs.Ease.bounceOut
+//createjs.Ease.cubicIn
+//createjs.Ease.elasticIn
+//createjs.Ease.backOut
+//createjs.Ease.bounceInOut
+//createjs.Ease.elasticIn
+
+
+	createjs.Tween.get(camera.position, {loop: true})
+		.to({
+			x: 10, y: 10, z: 10
+		}, 5000, 
+		createjs.Ease.sineInOut)
+
+		.wait(500)
+
+		.to({
+			x: 10, y: 10, z: -10
+		}, 2000, 
+		createjs.Ease.sineInOut)
+
+		.wait(500)
+
+		.to({
+			x: -10, y: 10, z: -10
+		}, 6000, 
+		createjs.Ease.sineInOut)
+
+		.wait(500)
+
+		.to({
+			x: -10, y: 10, z: 10
+		}, 2000,				
+		createjs.Ease.sineInOut)
+
+		.wait(500)
+
+		.to({
+			x: 10, y: 10, z: 10
+		}, 15000,				
+		createjs.Ease.sineInOut)
+
+		.wait(500)
+
+		.to({
+			x: 0, y: 3, z: 0
+		}, 3000,				
+		createjs.Ease.sineInOut)
+
+		.wait(500)
+
+		.to({
+			x: -10, y: 10, z: -10
+		}, 12000,				
+		createjs.Ease.sineInOut)
+
+		.wait(500)
+
+		.to({
+			x: 10, y: 10, z: 10
+		}, 5000,				
+		createjs.Ease.sineInOut)
+
+		.wait(1500);
+
+
+/*
+	createjs.Tween.get(camera.position)
+		.to({
+			x: 10, 
+			y: 10, 
+			z: 10
+		}, 900, 
+		createjs.Ease.sineInOut);
+
+	createjs.Tween.get(controls.target)
+		.to({
+			x: 0, 
+			y: 0, 
+			z: 0
+		}, 900, 
+		createjs.Ease.sineInOut);
+			*/
+}
+
+
+
+var framesPerSecond=60;
+
+
+// 에니메이션 효과를 자동으로 주기 위한 보조 기능입니다.
+var animate = function () {
+	// 프레임 처리
+	setTimeout(function() {
+		 requestAnimationFrame(animate); 
+	}, 1000 / framesPerSecond);
+
+
+	// 랜더링을 수행합니다.
+	renderer.render( scene, camera );
+
+};
+
+// animate()함수를 최초에 한번은 수행해주어야 합니다.
+animate();

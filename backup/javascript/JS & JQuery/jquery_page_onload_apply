@@ -1,0 +1,27 @@
+window.onload=function(){
+	var id = '${sessionScope.loginId}';
+	$.ajax({
+		url : "franchiseeSelectList.do",
+		type: "post",
+		data : {id : id},
+		success:function(data){
+			$('.flist').html(data);
+								}
+			});
+}
+-----------------------------------------
+$(document).ready(function(){
+	$("#franchiseeSelect").change(function(){
+		var b_key =$(this).children("option:selected").val();
+        $.ajax({
+        	url: "franchiseeSelect.do",
+        	type:"post",
+        	data:{b_key:b_key},
+        	success:function(data){
+        		window.location="bossErpMain.do";
+        	}
+        });
+})
+})
+
+# 무엇보다먼저 $(document).ready(function)(){ ~~ 앞에 코드를 작성한다

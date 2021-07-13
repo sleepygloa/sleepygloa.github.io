@@ -1,0 +1,264 @@
+1. Reader, InputStreamReader, FileReader and BufferedReader
+Reader is the abstract class for reading character streams. It implements the following fundamental methods:
+read(): reads a single character.
+read(char[]): reads an array of characters.
+skip(long): skips some characters.
+close(): closes the stream.
+InputStreamReader is a bridge from byte streams to character streams. It converts bytes into characters using a specified charset. The charset can be default character encoding of the operating system, or can be specified explicitly when creating an InputStreamReader.
+FileReader is a convenient class for reading text files using the default character encoding of the operating system.
+BufferedReader reads text from a character stream with efficiency (characters are buffered to avoid frequently reading from the underlying stream) and provides a convenient method for reading a line of text readLine().
+The following diagram show relationship of these reader classes in the java.io package:
+Reader Hierarchy
+ 
+2. Writer, OutputStreamWriter, FileWriter and BufferedWriter
+Writer is the abstract class for writing character streams. It implements the following fundamental methods:
+write(int): writes a single character.
+write(char[]): writes an array of characters.
+write(String): writes a string.
+close(): closes the stream.
+OutputStreamWriter is a bridge from byte streams to character streams. Characters are encoded into bytes using a specified charset. The charset can be default character encoding of the operating system, or can be specified explicitly when creating an OutputStreamWriter.
+FileWriter is a convenient class for writing text files using the default character encoding of the operating system.
+BufferedWriter writes text to a character stream with efficiency (characters, arrays and strings are buffered to avoid frequently writing to the underlying stream) and provides a convenient method for writing a line separator: newLine().
+The following diagram show relationship of these writer classes in the java.io package:
+Writer Hierarchy
+ 
+3. Character Encoding and Charset
+When constructing a reader or writer object, the default character encoding of the operating system is used (e.g. Cp1252 on Windows):
+1 FileReader reader = new FileReader("MyFile.txt");
+2 FileWriter writer = new FileWriter("YourFile.txt");
+
+So if we want to use a specific charset, use an InputStreamReader or OutputStreamWriter instead. For example:
+1 InputStreamReader reader = new InputStreamReader(
+2                     new FileInputStream("MyFile.txt"), "UTF-16");
+
+That creates a new reader with the Unicode character encoding UTF-16.
+And the following statement constructs a writer with the UTF-8 encoding:
+1 OutputStreamWriter writer = new OutputStreamWriter(
+2                     new FileOutputStream("YourFile.txt"), "UTF-8");
+
+In case we want to use a BufferedReader, just wrap the InputStreamReader inside, for example:
+1 InputStreamReader reader = new InputStreamReader(
+2         new FileInputStream("MyFile.txt"), "UTF-16");
+3
+4 BufferedReader bufReader = new BufferedReader(reader);
+
+And for a BufferedWriter example:
+1 OutputStreamWriter writer = new OutputStreamWriter(
+2                     new FileOutputStream("YourFile.txt"), "UTF-8");
+3
+4 BufferedWriter bufWriter = new BufferedWriter(writer);
+
+Now, let’s look at some complete examples.
+ 
+ 
+4. Reading from Text File Example
+The following small program reads every single character from the file MyFile.txt and prints all the characters to the output console:
+1 package net.codejava.io;
+2
+3 import java.io.FileReader;
+4 import java.io.IOException;
+5
+6 /**
+7 * This program demonstrates how to read characters from a text file.
+8 * @author www.codejava.net
+9 *
+10 */
+11 public class TextFileReadingExample1 {
+12
+13    public static void main(String[] args) {
+14        try {
+15            FileReader reader = new FileReader("MyFile.txt");
+16            int character;
+17
+18            while ((character = reader.read()) != -1) {
+19                System.out.print((char) character);
+20            }
+21            reader.close();
+22        } catch (IOException e) {
+23            e.printStackTrace();
+24        }
+25    }
+26 }
+
+
+The following example reads a text file with assumption that the encoding is UTF-16:
+1 package net.codejava.io;
+2 
+3 import java.io.FileInputStream;
+4 import java.io.IOException;
+5 import java.io.InputStreamReader;
+6  
+7 /**
+8 * This program demonstrates how to read characters from a text file using
+9  * a specified charset.
+10 * @author www.codejava.net
+11 *
+12 */
+13 public class TextFileReadingExample2 {
+14 
+15    public static void main(String[] args) {
+16        try {
+17            FileInputStream inputStream = new FileInputStream("MyFile.txt");
+18            InputStreamReader reader = new InputStreamReader(inputStream, "UTF-16");
+19            int character;
+20 
+21            while ((character = reader.read()) != -1) {
+22                System.out.print((char) character);
+23            }
+24            reader.close();
+25 
+26        } catch (IOException e) {
+27            e.printStackTrace();
+28        }
+29    }
+30 
+31 }
+
+And the following example uses a BufferedReader to read a text file line by line (this is the most efficient and preferred way):
+
+1 package net.codejava.io;
+2  
+3 import java.io.BufferedReader;
+4 import java.io.FileReader;
+5 import java.io.IOException;
+6  
+7 /**
+8  * This program demonstrates how to read characters from a text file
+9  * using a BufferedReader for efficiency.
+10 * @author www.codejava.net
+11 *
+12 */
+13 public class TextFileReadingExample3 {
+14 
+15    public static void main(String[] args) {
+16        try {
+17            FileReader reader = new FileReader("MyFile.txt");
+18            BufferedReader bufferedReader = new BufferedReader(reader);
+19 
+20            String line;
+21 
+22            while ((line = bufferedReader.readLine()) != null) {
+23                System.out.println(line);
+24            }
+25            reader.close();
+26 
+27        } catch (IOException e) {
+28            e.printStackTrace();
+29        }
+30    }
+31 
+32 }
+ 
+Recommended Book: Java I/O
+ 
+5. Writing to Text File Example
+In the following example, a FileWriter is used to write two words “Hello World” and “Good Bye!” to a file named MyFile.txt:
+
+1 package net.codejava.io;
+2  
+3 import java.io.FileWriter;
+4 import java.io.IOException;
+5  
+6 /**
+7 * This program demonstrates how to write characters to a text file.
+8  * @author www.codejava.net
+9  *
+10 */
+11 public class TextFileWritingExample1 {
+12  
+13    public static void main(String[] args) {
+14        try {
+15            FileWriter writer = new FileWriter("MyFile.txt", true);
+16            writer.write("Hello World");
+17            writer.write("\r\n");   // write new line
+18            writer.write("Good Bye!");
+19            writer.close();
+20        } catch (IOException e) {
+21            e.printStackTrace();
+22        }
+23 
+24    }
+25 
+26 }
+Note that, a writer uses default character encoding of the operating system by default. It also creates a new file if not exits, or overwrites the existing one. If you want to append text to an existing file, pass a boolean flag of true to constructor of the writer class:
+1 FileWriter writer = new FileWriter("MyFile.txt", true);
+The following example uses a BufferedReader that wraps a FileReader to append text to an existing file:
+
+1 package net.codejava.io;
+2  
+3 import java.io.BufferedWriter;
+4 import java.io.FileWriter;
+5 import java.io.IOException;
+6  
+7 /**
+8 * This program demonstrates how to write characters to a text file
+9 * using a BufferedReader for efficiency.
+10 * @author www.codejava.net
+11 *
+12 */
+13 public class TextFileWritingExample2 {
+14 
+15    public static void main(String[] args) {
+16        try {
+17            FileWriter writer = new FileWriter("MyFile.txt", true);
+18            BufferedWriter bufferedWriter = new BufferedWriter(writer);
+19 
+20            bufferedWriter.write("Hello World");
+21            bufferedWriter.newLine();
+22            bufferedWriter.write("See You Again!");
+23 
+24            bufferedWriter.close();
+25        } catch (IOException e) {
+26            e.printStackTrace();
+27        }
+28 
+29    }
+30 
+31 }
+This is the preferred way to write to text file because the BufferedReader provides efficient way for writing character streams.
+And the following example specifies specific character encoding (UTF-16) when writing to the file:
+
+1 package net.codejava.io;
+2  
+3 import java.io.BufferedWriter;
+4 import java.io.FileOutputStream;
+5 import java.io.IOException;
+6 import java.io.OutputStreamWriter;
+7  
+8 /**
+9 * This program demonstrates how to write characters to a text file using
+10 * a specified charset.
+11 * @author www.codejava.net
+12 *
+13 */
+14 public class TextFileWritingExample3 {
+15 
+16    public static void main(String[] args) {
+17        try {
+18            FileOutputStream outputStream = new FileOutputStream("MyFile.txt");
+19            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-16");
+20            BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
+21             
+22            bufferedWriter.write("Xin chào");
+23            bufferedWriter.newLine();
+24            bufferedWriter.write("Hẹn gặp lại!");
+25             
+26            bufferedWriter.close();
+27        } catch (IOException e) {
+28            e.printStackTrace();
+29        }
+30         
+31    }
+32 }
+This program writes some Unicode string (Vietnamese) to the specified text file.
+NOTE: From Java 7, you can use try-with-resources statement to simplify the code of opening and closing the reader/writer. For example:
+
+1 try (FileReader reader = new FileReader("MyFile.txt")) {
+2    int character;
+3  
+4     while ((character = reader.read()) != -1) {
+5         System.out.print((char) character);
+6     }
+7 } catch (IOException e) {
+8     e.printStackTrace();
+9 }

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="#dffefa">
+
+        <TextView
+            android:id="@+id/tv_push_receive_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="받는 단말 쪽 기능"
+            android:textSize="30dp" />
+
+        <ScrollView
+            android:id="@+id/sv_push_output"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/tv_push_output_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="#fef0d4">
+
+        <TextView
+            android:id="@+id/tv_push_send_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="보내는 쪽 기능"
+            android:textSize="30dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btn_push_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전송" />
+
+            <EditText
+                android:id="@+id/et_push_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="공지사항입니다." />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:background="#eddbfe">
+
+        <ScrollView
+            android:id="@+id/sv_push_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/tv_push_log"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </ScrollView>
+    </LinearLayout>
+
+</LinearLayout>

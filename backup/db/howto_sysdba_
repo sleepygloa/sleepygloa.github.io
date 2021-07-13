@@ -1,0 +1,60 @@
+여기서 java401$!은 오라클 설치시 설정했던 sys암호이다.
+각자가 설치했을 당시 설정했던 비밀번호로 바꿔서 작성하면 된다.
+
+--오라클 서버에 접속
+   1) 첫번째 방법
+       sqlplus
+   2) 두번째 방법 - 웹브라우저를 통한 접속
+       http://컴퓨터명:5560/isqlplus
+
+
+
+오라클 관리자(sys) 로그인 접속방법 1(암호 알떄)
+cmd > sqlplus sys/"java401%!" as sysdba => 특수문자 비번이기때문에 쌍땀표줌.
+
+오라클 관리자(sys) 로그인 접속방법 2(암호모를떄)
+cmd > sqlplus / as sysdba
+
+오라클 사용자 확인방법
+sql > SELECT username FROM DBA_USERS;
+
+사용자암호변경(변경가능한사람 : 사용자(나), sys, systme)
+sql>ALTER USER scott IDENTIFIED BY "java401$!"; => scott 부분을 사용자 이름EX)HR 과같이 바꾸면 해당 사용자 비번 바뀜
+
+scott 사용자로 로그인
+sql>CONN scott/"java401$!"
+	=>기본적으로 락이 설정되어 로그인 불가능
+
+sys 계정 로그인
+sql>CONN sys/"java401$!"as sysdba
+
+scott의 락 해제
+sql> ALTER USER scott ACCOUNT UNLOCK; => sys나 system으로만 해제 가능하다.
+
+scott 사용자로 로그인
+sql> CONN scott/"java401$!"
+
+sql> SELECT * FROM tabs;
+
+사용자 추가(sys 계정을 접속한 상태에서)
+sql> CREATE USER 사용자명 IDENTIFIED BY "암호";
+sql> CREATE USER sky IDENTIFIED BY "java401$!";
+
+사용자추가 확인
+sql > SELECT username FROM DBA_USERS;
+
+sql> CONN sky/"java401$!"
+	권한 없어 접속 불가
+
+sys 계정으로 conn => 권한없이 접속하면 접속이 풀리므로 다시 sys로 conn
+sq> CONN sys/"java401$!" as sysdba;
+
+conn(접속) 및 테이블스페이스를 사용 할 수 있는 권한 부여
+sql> GRANT CONNECT, RESOURCE TO 사용자명;
+sql> GRANT CONNECT, RESOURCE TO sky;
+
+다시 접속
+sql> CONN sky/"java401$!"
+
+
+출처: http://tibang.tistory.com/entry/오라클-접속-방법 [T없이맑은날]

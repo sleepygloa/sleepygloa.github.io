@@ -1,0 +1,715 @@
+JS
+
+    function fnServiceReportExcelDownload() {
+    	///ctrl/call/obstacle/receipt/serviceReportExcel, rcptSeq
+    	var rowId = $preventiveCheckListGrid.jqGrid('getGridParam','selrow');
+    	var checkSeq = $preventiveCheckListGrid.jqGrid('getCell',rowId,'CHECK_SEQ');
+    	if (typeof checkSeq === 'undefined') {
+    		alert("선택 된 항목이 없습니다.");
+    		
+    		return;
+    	}
+    	console.log("checkSeq : "+checkSeq);
+    	var data = {
+    			checkSeq : checkSeq
+    	};
+    	
+		App.prcsStart();
+		var jsonData = JSON.stringify(data);
+		//console.log("jsonData" + jsonData);
+		var request = new XMLHttpRequest();   // new HttpRequest instance 
+		request.open("POST", "/ctrl/preventiveCheck/preventiveCheckList/serviceReportExcel", true);
+		request.responseType = 'blob';
+		request.setRequestHeader("Content-Type", "application/json");
+		request.onload = function(e) {
+			App.prcsEnd();
+			 if (this.status === 200) {
+				 var filename = "";
+			        var disposition = request.getResponseHeader('Content-Disposition');
+			        if (disposition && disposition.indexOf('attachment') !== -1) {
+			            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+			            var matches = filenameRegex.exec(disposition);
+			            if (matches != null && matches[1]) {
+			            	filename = decodeURIComponent(matches[1].replace(/['"]/g, ''));
+			            }
+			        }
+		        var blob = this.response;
+		        if(window.navigator.msSaveOrOpenBlob) {
+		            window.navigator.msSaveBlob(blob, filename);
+		        }
+		        else{
+		        	 var URL = window.URL || window.webkitURL;
+		             var downloadUrl = URL.createObjectURL(blob);
+
+		             if (filename) {
+		                 // use HTML5 a[download] attribute to specify filename
+		                 var a = document.createElement("a");
+		                 // safari doesn't support this yet
+		                 if (typeof a.download === 'undefined') {
+		                     window.location = downloadUrl;
+		                 } else {
+		                     a.href = downloadUrl;
+		                     a.download = filename;
+		                     document.body.appendChild(a);
+		                     a.click();
+		                 }
+		             } else {
+		                 window.location = downloadUrl;
+		             }
+
+		             setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+		         }
+		     }
+		 };
+		request.send(jsonData);
+
+    }
+    
+    
+    
+    
+    cTRL
+    
+    	@RequestMapping("/serviceReportExcel")
+	public Params serviceReportExcel (HttpServletResponse response, Params inParams, HttpServletRequest request) {
+		LOG.debug("serviceReportExcel ----------->");
+		
+		Params outParams = ParamsFactory.createOutParams(inParams);
+		
+		outParams = preventiveCheckListService.viewReport(inParams);
+	//	LOG.debug("serviceReportExcel:"+outParams);
+		try {
+			ExcelServiceReport esr = new ExcelServiceReport();
+			esr.preventiveCheckListServiceReportExcelDownload(response, request, outParams);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		LOG.debug("serviceReportExcel <-----------");
+		return outParams;
+	}
+  
+  
+  
+  SVCE
+
+	@SuppressWarnings({ "deprecation", "resource" })
+	public void preventiveCheckListServiceReportExcelDownload(HttpServletResponse response,  HttpServletRequest request, Params inParams) throws Exception {
+		ApplicationContext appContext = new FileSystemXmlApplicationContext();
+
+		LOG.debug("inParams : " + inParams);
+		int SERVICE_REPORT = 1;
+		int sheetNo = 1;
+		try {
+			Resource resource = appContext.getResource(Config.getString("excelTempLoc.preventiveCheck")); // excelTempLoc.preventiveCheck
+			String filePath = resource.getFile().getAbsolutePath();
+			FileInputStream fis = new FileInputStream(filePath);
+			XSSFWorkbook wb = new XSSFWorkbook(fis);
+			XSSFSheet sheet = wb.getSheetAt(SERVICE_REPORT);
+			fis.close();
+			
+			ExcelBasicUtils excelBasicUtils = new ExcelBasicUtils();
+			DataTable dt = new CommDataTable();
+			dt = inParams.getDataTable("dt_grid");
+
+			//브랜드명 
+			String brndNm = (String)dt.get(0).getVal("BRND_NM");
+			excelBasicUtils.setCellValue(wb, sheetNo, 1, 3, Cell.CELL_TYPE_STRING, brndNm, 3);
+			
+			//점포명
+			String strNm = (String)dt.get(0).getVal("STR_NM");
+			excelBasicUtils.setCellValue(wb, sheetNo, 1, 10, Cell.CELL_TYPE_STRING, strNm, 6);
+
+			//점검일자
+			excelBasicUtils.setCellValue(wb, sheetNo, 1, 20, Cell.CELL_TYPE_STRING, (String)dt.get(0).getVal("CHECK_DT"), 3);
+			
+			//파트너사(유지보수사)
+			String aspCompNm = dt.get(0).getString("ASP_COMP_NM");
+			excelBasicUtils.setCellValue(wb, sheetNo, 1, 27 , Cell.CELL_TYPE_STRING, aspCompNm, 3);
+			
+			if(dt.get(0).getVal("MNG_SIGN_PATH") != null && !dt.get(0).getVal("MNG_SIGN_PATH").equals("")){
+			//서명
+			excelBasicUtils.drawXImageCell(sheet, wb, 4, 20, true, (String)dt.get(0).getVal("MNG_SIGN_PATH"));
+			LOG.debug("dd");
+			}
+			
+			if(dt.get(0).getVal("ENGR_SIGN_PATH") != null && !dt.get(0).getVal("ENGR_SIGN_PATH").equals("")){
+			//서명
+			excelBasicUtils.drawXImageCell(sheet, wb, 4, 27, true, (String)dt.get(0).getVal("ENGR_SIGN_PATH"));
+			LOG.debug("dd");
+			}
+			int rowStartCount  = 8;
+			for(DataRow dr : dt){
+				LOG.debug(rowStartCount);
+				//고객사
+				excelBasicUtils.setCellValue(wb, sheetNo, rowStartCount, 0, Cell.CELL_TYPE_STRING, (String)dr.getVal("COMP_NM"), 2);
+
+				//브랜드
+				excelBasicUtils.setCellValue(wb, sheetNo, rowStartCount, 2, Cell.CELL_TYPE_STRING, (String)dr.getVal("BRND_NM"), 2);
+
+				//점포명
+				excelBasicUtils.setCellValue(wb, sheetNo, rowStartCount, 4, Cell.CELL_TYPE_STRING, (String)dr.getVal("STR_NM"), 2);
+
+				//제품범주
+				excelBasicUtils.setCellValue(wb, sheetNo, rowStartCount, 6, Cell.CELL_TYPE_STRING, (String)dr.getVal("PRD_TYPE_LV1"), 2);
+				
+				//제품군
+				excelBasicUtils.setCellValue(wb, sheetNo, rowStartCount, 8, Cell.CELL_TYPE_STRING, (String)dr.getVal("PRD_TYPE_LV2"), 2);
+
+				//제조사
+				excelBasicUtils.setCellValue(wb, sheetNo, rowStartCount, 10, Cell.CELL_TYPE_STRING, (String)dr.getVal("PRD_TYPE_LV3"), 2);
+
+				//모델명
+				excelBasicUtils.setCellValue(wb, sheetNo, rowStartCount, 12, Cell.CELL_TYPE_STRING, (String)dr.getVal("PRD_NM"), 2);
+				
+				//SPEC
+				excelBasicUtils.setCellValue(wb, sheetNo, rowStartCount, 14, Cell.CELL_TYPE_STRING, (String)dr.getVal("PRD_SPEC"), 2);
+				
+				//시리얼
+				excelBasicUtils.setCellValue(wb, sheetNo, rowStartCount, 16, Cell.CELL_TYPE_STRING, (String)dr.getVal("AST_SERIAL"), 3);
+				
+				//정상유무
+				excelBasicUtils.setCellValue(wb, sheetNo, rowStartCount, 19, Cell.CELL_TYPE_STRING, (String)dr.getVal("OBS_YN"), 2);
+				
+				//POS번호
+				excelBasicUtils.setCellValue(wb, sheetNo, rowStartCount, 21, Cell.CELL_TYPE_STRING, (String)dr.getVal("AST_TYPE2"), 2);
+				
+				//위치
+				excelBasicUtils.setCellValue(wb, sheetNo, rowStartCount, 23, Cell.CELL_TYPE_STRING, (String)dr.getVal("AST_TYPE1"), 3);
+				
+				//메모
+				excelBasicUtils.setCellValue(wb, sheetNo, rowStartCount, 26, Cell.CELL_TYPE_STRING, (String)dr.getVal("OBS_MEMO"), 5);
+				
+				rowStartCount = rowStartCount + 1;
+			}
+			
+			String date = new SimpleDateFormat("yyyyMMddhhmmssSSS").format(new Date());
+			ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+	        wb.write(outByteStream);
+			response.reset();
+//			application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+//			response.setContentType("application/vnd.ms-excel; charset=utf-8");
+
+			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			response.setHeader("Accept-Ranges", "bytes");
+			response.setHeader("Content-Transfer-Encoding", "binary");
+	        String fileName = URLEncoder.encode("예방점검서비스리포트_" + date + ".xlsx", "UTF-8").replaceAll("\\+", "%20");
+	        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\";");
+	        
+	        byte [] outArray = outByteStream.toByteArray();
+	        response.setContentLength(outArray.length);
+	        response.setStatus(200);
+	        response.setHeader("Expires:", "0"); // eliminates browser caching
+	        OutputStream outStream = response.getOutputStream();
+	        outStream.write(outArray);
+	        outStream.flush();
+		} catch (Exception e) {
+	        response.sendError(400, e.toString());
+			e.printStackTrace();
+		}
+	}
+  
+  
+  
+  UTIL
+  
+
+package vertexid.paragon.comm.util.excelForm;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.ClientAnchor.AnchorType;
+import org.apache.poi.ss.usermodel.Comment;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.RichTextString;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
+import org.apache.poi.xssf.usermodel.XSSFCreationHelper;
+import org.apache.poi.xssf.usermodel.XSSFDrawing;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+
+public class ExcelBasicUtils {
+
+	private static final Log LOG = LogFactory.getLog(ExcelBasicUtils.class);
+
+	public  final int CHECK_NULL_CELL = 100;
+
+	private  final String EXCEL_ENCODING = "EUC-KR";
+	
+	private  String OS = System.getProperty("os.name").toLowerCase();
+
+
+	public  int getRowPos(Workbook wb, int sheetIndex, String title, int titleBeginColIndex) {
+		LOG.debug("getRowPos ----------->");
+		
+		int nullCount = 0;
+		
+		int pos = -1;
+		
+		for(int rowIndex = 0; nullCount < CHECK_NULL_CELL ; rowIndex++) {
+			String tempStrFirstCell = getCellString(wb, sheetIndex, rowIndex, titleBeginColIndex);
+			LOG.debug("tempStrFirstCell ---> "+tempStrFirstCell);
+			String tempStrSecondCell = getCellString(wb, sheetIndex, rowIndex, titleBeginColIndex+1);
+			LOG.debug("tempStrSecondCell ---> "+tempStrSecondCell);
+			
+			if (tempStrFirstCell == null && tempStrSecondCell == null) {
+				nullCount ++;
+			}
+			else {
+				if (tempStrFirstCell != null && tempStrFirstCell.length() > 0 & tempStrFirstCell.indexOf(title) >= 0) {
+					pos = rowIndex;
+					break;
+				}
+				if (tempStrSecondCell != null && tempStrSecondCell.length() > 0 & tempStrSecondCell.indexOf(title) >= 0) {
+					pos = rowIndex;
+					break;
+				}
+			}
+		}
+		LOG.debug("getRowPos <-----------");
+		return pos;
+	}
+	
+
+	public  String getCellString(Workbook wb, int sheetIndex, int rowIndex, int colIndex) {
+		LOG.debug("getCellString ----------->");
+		String retStr = null;
+		Sheet sheet = wb.getSheetAt(sheetIndex);
+		Row row = sheet.getRow(rowIndex);
+		
+		if (row != null) {
+			Cell cell = row.getCell(colIndex);
+			if (cell != null) {
+				int cellType = cell.getCellType();
+				switch(cellType) {
+				case Cell.CELL_TYPE_BOOLEAN:
+				case Cell.CELL_TYPE_FORMULA:
+				case Cell.CELL_TYPE_STRING:
+					cell.setCellType(Cell.CELL_TYPE_STRING);
+					retStr = cell.getStringCellValue();
+					
+					break;
+				case Cell.CELL_TYPE_NUMERIC:
+					
+					break;
+					
+				case Cell.CELL_TYPE_BLANK:
+					break;
+				default :
+					break;
+				}
+			}
+		}
+		
+		LOG.debug("getCellString <-----------");
+		return retStr;
+	}
+
+
+	public  boolean isCopyRow(Workbook wb, int sheetNo, int rowIndex, int colIndex) {
+		LOG.debug("isCopyRow ----------->");
+		boolean bRet = true;
+		String noStr = getCellString(wb, sheetNo, rowIndex, colIndex);
+		LOG.debug("isCopyRow [noStr] -----------> "+noStr);
+		if(noStr != null){
+			bRet = false;
+		}
+		LOG.debug("isCopyRow <-----------");
+		return bRet;
+	}
+
+
+	public  void copyRow(Workbook workbook, Sheet workSheet, int sourceRowNum, int destinationRowNum) {
+		LOG.debug("copyRow ----------->");
+		Row newRow = workSheet.getRow(destinationRowNum);
+		Row sourceRow = workSheet.getRow(sourceRowNum);
+		LOG.debug("newRow is Null ? "+(newRow == null));
+		LOG.debug("sourceRow is Null ? "+(sourceRow == null));
+		LOG.debug("copy Row init!! ----------->");
+		if (newRow != null) {
+			workSheet.shiftRows(destinationRowNum, workSheet.getLastRowNum(), 1);
+			LOG.debug("new Row is not null ----------->");		
+		}
+		else {
+			newRow = workSheet.createRow(destinationRowNum);
+			LOG.debug("new Row is null ----------->");		
+		}
+		
+		for (int i = 0; i < sourceRow.getLastCellNum(); i++) {
+			LOG.debug("for Index -----------> "+i);		
+
+			Cell oldCell = sourceRow.getCell(i);
+			Cell newCell = newRow.createCell(i);
+			
+			if (oldCell == null) {
+				newCell = null;
+				
+				continue;
+			}
+
+			newRow.setHeight(sourceRow.getHeight());
+			CellStyle newCellStyle = workbook.createCellStyle();
+			newCellStyle.cloneStyleFrom(oldCell.getCellStyle());
+			newCell.setCellStyle(newCellStyle);
+			
+			if (oldCell.getCellComment() != null) {
+				newCell.setCellComment(oldCell.getCellComment());
+			}
+			
+			if (oldCell.getHyperlink() != null) {
+				newCell.setHyperlink(oldCell.getHyperlink());
+			}
+			
+			
+			switch (oldCell.getCellType()) {
+			case Cell.CELL_TYPE_BLANK:
+				break;
+				
+			case Cell.CELL_TYPE_BOOLEAN:
+				newCell.setCellValue(oldCell.getBooleanCellValue());
+				break;
+				
+			case Cell.CELL_TYPE_ERROR:
+				newCell.setCellErrorValue(oldCell.getErrorCellValue());
+				break;
+				
+			case Cell.CELL_TYPE_FORMULA:
+				newCell.setCellFormula(oldCell.getCellFormula());
+				break;
+				
+			case Cell.CELL_TYPE_NUMERIC:
+				newCell.setCellValue(oldCell.getNumericCellValue());
+				break;
+				
+			case Cell.CELL_TYPE_STRING:
+				newCell.setCellValue(oldCell.getStringCellValue());
+				
+			default:
+				break;
+			}
+		}
+		
+//		for (int i = 0; i < workSheet.getNumMergedRegions(); i++) {
+//			LOG.debug("getNumMergedRegions Index -----------> "+ i);		
+//			CellRangeAddress cellRangeAddress = workSheet.getMergedRegion(i);
+//			LOG.debug("cellRangeAddress.getFirstRow() ------ "+cellRangeAddress.getFirstRow());
+//			LOG.debug("cellRangeAddress.getFirstColumn() ------ "+cellRangeAddress.getFirstColumn());
+//			LOG.debug("cellRangeAddress.getLastColumn() ------ "+cellRangeAddress.getLastColumn());
+//			
+//			if (cellRangeAddress.getFirstRow() == sourceRow.getRowNum()) {
+//				CellRangeAddress newCellRangeAddress = new CellRangeAddress(newRow.getRowNum(), 
+//						(newRow.getRowNum() + (cellRangeAddress.getLastRow() - cellRangeAddress.getFirstRow())), 
+//						cellRangeAddress.getFirstColumn(), 
+//						cellRangeAddress.getLastColumn());
+//				
+//				workSheet.addMergedRegion(newCellRangeAddress);
+//			}
+//		}
+		LOG.debug("copyRow <-----------");
+	}
+	
+
+	public  void addMergedRegion(Sheet sheet, int beginRowIndex, int endRowIndex, int beginColIndex, int endColIndex) {
+		sheet.addMergedRegion(new CellRangeAddress(beginRowIndex, endRowIndex, beginColIndex, endColIndex));
+	}
+	
+
+	public  void setCellValue(Workbook wb, int sheetIndex, int rowIndex, int colIndex, int cellType, String text, int addColIndex) {
+		LOG.debug("setCellValue ----------->");
+		LOG.debug("text -----------> "+text);
+		
+		Sheet sheet = wb.getSheetAt(sheetIndex);
+//		Row oldRow = sheet.getRow(rowIndex-1);
+//		Row newRow = sheet.getRow(rowIndex);
+//		newRow.setHeight(oldRow.getHeight());
+//		Cell oldCell = oldRow.getCell(colIndex);
+//		CellStyle newCellStyle = wb.createCellStyle();
+//		newCellStyle.cloneStyleFrom(oldCell.getCellStyle());
+//		newCellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+//		newCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+//		newCellStyle.setBorderLeft(CellStyle.BORDER_THIN);
+//		if (newRow.getFirstCellNum() == colIndex) {
+//			newCellStyle.setBorderLeft(CellStyle.BORDER_MEDIUM);
+//		}
+//		newCellStyle.setBorderRight(CellStyle.BORDER_THIN);
+//		newCellStyle.setBorderTop(CellStyle.BORDER_THIN);
+//		
+//		if(sheet.getLastRowNum() == rowIndex) {
+//			newCellStyle.setBorderBottom(CellStyle.BORDER_MEDIUM);
+//		}
+		Cell cell = getCell(sheet, rowIndex, colIndex);
+		
+		LOG.debug("cell is NULL? -----------> "+(cell == null));
+		cell.setCellType(cellType);
+		cell.setCellValue(text);
+//		cell.setCellStyle(newCellStyle);
+//		for(int i = 0; i < addColIndex; i++) {
+//			int newColIndex = i + colIndex + 1;
+//			Cell mergeCell = getCell(sheet, rowIndex, newColIndex);
+//			if (newRow.getLastCellNum() == newColIndex) {
+//				newCellStyle.setBorderRight(CellStyle.BORDER_MEDIUM);
+//			}
+//			mergeCell.setCellStyle(newCellStyle);
+//		}
+		LOG.debug("setCellValue <-----------");
+	}
+	
+	public  void setCellValue(Workbook wb, int sheetIndex, int rowIndex, int colIndex, int cellType, String text) {
+		setCellValue(wb, sheetIndex, rowIndex, colIndex, cellType, text, 1);
+	}
+	
+
+	public  void setCellValue(XSSFWorkbook wb, int sheetIndex, int rowIndex, int colIndex, int cellType, String text, int addColIndex) {
+		LOG.debug("setCellValue ----------->");
+		LOG.debug("text -----------> "+text);
+		
+		XSSFSheet sheet = wb.getSheetAt(sheetIndex);
+		XSSFCell cell = getCell(sheet, rowIndex, colIndex);
+		
+		LOG.debug("cell is NULL? -----------> "+(cell == null));
+		cell.setCellType(cellType);
+		cell.setCellValue(text);
+		LOG.debug("setCellValue <-----------");
+	}
+	
+	public  void setCellValue(XSSFWorkbook wb, int sheetIndex, int rowIndex, int colIndex, int cellType, String text) {
+		setCellValue(wb, sheetIndex, rowIndex, colIndex, cellType, text, 1);
+	}
+	
+
+	public  void setCellComment(Workbook wb, int sheetIndex, int rowIndex, int colIndex, String commentContent) {
+		LOG.debug("setCellComment ----------->");
+		Sheet sheet = wb.getSheetAt(sheetIndex);
+		Cell cell = getCell(sheet, rowIndex, colIndex);
+		
+		Comment comment = cell.getCellComment();
+		CreationHelper factory = wb.getCreationHelper();
+		if (comment == null) {
+			Drawing drawing = sheet.createDrawingPatriarch();
+			ClientAnchor anchor = factory.createClientAnchor();
+			anchor.setCol1(cell.getColumnIndex());
+			anchor.setCol2(cell.getColumnIndex() + 2);
+			anchor.setRow1(cell.getRowIndex());
+			anchor.setRow2(cell.getRowIndex() + 2);
+			comment = drawing.createCellComment(anchor);
+		}
+		
+		RichTextString richTextString = factory.createRichTextString(commentContent);
+		LOG.debug("richTextString ------> "+richTextString);
+		comment.setString(richTextString);
+		cell.setCellComment(comment);
+		LOG.debug("setCellComment <-----------");
+	}
+	
+
+	public  void umMergedRow(Sheet sheet, int titleRowPosition) {
+		for (int i = sheet.getNumMergedRegions() - 1; i >= 0; i--) {
+			CellRangeAddress region = sheet.getMergedRegion(i);
+			Row firstRow = sheet.getRow(region.getFirstRow());
+			if (firstRow.getRowNum() == titleRowPosition) {
+				sheet.removeMergedRegion(i);
+			}
+		}
+	}
+	
+
+	public  void setMaxColWidth (String dataStr, HashMap<Integer, Integer> colWidthMap, int mapIndex) {
+		LOG.debug("setMaxColWidth ----------->");
+		byte[] dataStrByte = null;
+		try {
+			dataStrByte = dataStr.getBytes(EXCEL_ENCODING);
+			Integer curColWidth = dataStrByte.length * 255;
+			Integer maxColWidth = colWidthMap.get(mapIndex);
+			LOG.debug("curColWidth -----> "+curColWidth);
+			LOG.debug("maxColWidth -----> "+maxColWidth);
+			
+			if (maxColWidth == null) {
+				maxColWidth = curColWidth;
+				colWidthMap.put(mapIndex, curColWidth);
+			}
+			
+			if (curColWidth > maxColWidth) {
+				colWidthMap.put(mapIndex, curColWidth);
+			}
+		} catch (Exception e) {
+			
+		}
+		LOG.debug("setMaxColWidth <-----------");
+	}
+
+	public  Cell getCell(Sheet sheet, int row, int col) {
+		LOG.debug("getCell ----------->");
+		Row sheetRow = sheet.getRow(row);
+		LOG.debug("getCell [sheetRow is Null? ]<----------- "+(sheetRow == null));
+		if (sheetRow == null) {
+			sheetRow = sheet.createRow(row);
+		}
+		Cell cell = sheetRow.getCell(col);
+		LOG.debug("getCell [cell is Null? ]<----------- "+(cell == null));
+		if (cell == null) {
+			cell = sheetRow.createCell(col);
+		}
+		LOG.debug("getCell <-----------");
+		return cell;
+	}
+
+
+	public  XSSFCell getCell(XSSFSheet sheet, int row, int col) {
+		LOG.debug("getCell ----------->");
+		XSSFRow sheetRow = sheet.getRow(row);
+		LOG.debug("getCell [sheetRow is Null? ]<----------- "+(sheetRow == null));
+		if (sheetRow == null) {
+			sheetRow = sheet.createRow(row);
+		}
+		XSSFCell cell = sheetRow.getCell(col);
+		LOG.debug("getCell [cell is Null? ]<----------- "+(cell == null));
+		if (cell == null) {
+			cell = sheetRow.createCell(col);
+		}
+		LOG.debug("getCell <-----------");
+		return cell;
+	}
+
+	public  void drawImageCell(Sheet sheet, Workbook wb, int startColIndex, int startRowIndex, boolean isPreventiveCheck, String filePath) throws IOException {
+		LOG.debug("drawImageCell ----------->");
+		
+		final Drawing drawing = sheet.createDrawingPatriarch();
+		ClientAnchor anchor = new HSSFClientAnchor();
+		anchor.setDx1(1);
+		anchor.setDx2(0);
+		anchor.setDy1(1);
+		anchor.setDy2(255);
+		anchor.setCol1(startColIndex);
+		anchor.setCol2(startColIndex + 2);
+		anchor.setRow1(startRowIndex);
+		anchor.setRow2(startRowIndex);
+		
+		anchor.setAnchorType(AnchorType.MOVE_AND_RESIZE);
+		
+//		if (OS.indexOf("win") >= 0) {
+//			filePath.replaceAll("/", "\\");
+//		}
+		
+		drawing.createPicture(anchor, loadPicture(filePath, wb));
+		LOG.debug("drawImageCell <-----------");
+	}
+	
+
+	public  void drawXImageCell(XSSFSheet sheet, XSSFWorkbook wb, int startRowIndex, int startColIndex,  boolean isPreventiveCheck, String filePath) throws IOException {
+		LOG.debug("drawImageCell ----------->");
+		
+		final XSSFDrawing drawing = sheet.createDrawingPatriarch();
+		XSSFCreationHelper helper = wb.getCreationHelper();
+		XSSFClientAnchor anchor = helper.createClientAnchor();
+		
+		anchor.setDx1(1);
+		anchor.setDx2(0);
+		anchor.setDy1(1);
+		anchor.setDy2(255);
+		anchor.setCol1(startColIndex);
+		anchor.setCol2(startColIndex+4); //4칸
+		anchor.setRow1(startRowIndex);
+		anchor.setRow2(startRowIndex+2); //2칸
+		
+		anchor.setAnchorType(AnchorType.MOVE_AND_RESIZE);
+		
+		drawing.createPicture(anchor, loadXPicture(filePath, wb));
+		LOG.debug("drawImageCell <-----------");
+	}
+	
+
+	private  int loadPicture(String filePath, Workbook wb) throws IOException {
+		LOG.debug("loadPicture ----------->");
+		LOG.debug("loadPicture [filePath]-----------> "+filePath);
+		int pictureIndex;
+
+		FileInputStream fis = null;
+		ByteArrayOutputStream bos = null;
+		
+		try {
+
+			if(OS.indexOf("win") >= 0){
+				 String dirPath =filePath.replace("upload", "uploadupload");
+				 String separatorPath =  dirPath.replace("/", "//");
+				 String FullPath = "C:"+separatorPath;
+				 fis = new FileInputStream(FullPath);
+
+			}else{
+				fis = new FileInputStream(filePath);			
+			}
+			bos = new ByteArrayOutputStream();
+
+			int c;
+			while ((c=fis.read()) != -1) {
+				bos.write(c);
+			}
+			
+			pictureIndex = wb.addPicture(bos.toByteArray(), Workbook.PICTURE_TYPE_PNG);
+		} finally {
+			
+			if (fis != null) fis.close();
+			if (bos != null) bos.close();
+		}
+		
+		LOG.debug("loadPicture <-----------");
+		return pictureIndex;
+	}
+	
+
+	private  int loadXPicture(String filePath, XSSFWorkbook wb) throws IOException {
+		LOG.debug("loadPicture ----------->");
+		LOG.debug("loadPicture [filePath]-----------> "+filePath);
+		int pictureIndex;
+
+		FileInputStream fis = null;
+		ByteArrayOutputStream bos = null;
+		
+		try {
+
+			if(OS.indexOf("win") >= 0){
+				 String dirPath =filePath.replace("upload", "uploadupload");
+				 String separatorPath =  dirPath.replace("/", "//");
+				 String FullPath = "C:"+separatorPath;
+				 fis = new FileInputStream(FullPath);
+
+			}else{
+				fis = new FileInputStream(filePath);			
+			}
+			bos = new ByteArrayOutputStream();
+
+			int c;
+			while ((c=fis.read()) != -1) {
+				bos.write(c);
+			}
+			
+			pictureIndex = wb.addPicture(bos.toByteArray(), XSSFWorkbook.PICTURE_TYPE_PNG);
+		} finally {
+			
+			if (fis != null) fis.close();
+			if (bos != null) bos.close();
+		}
+		
+		LOG.debug("loadPicture <-----------");
+		return pictureIndex;
+	}
+	
+}

@@ -1,0 +1,9 @@
+1. download file
+2. setting
+
+
+
+3. cmd > sqlplus sys/"password" as sysdba
+
+alter user scott identified tiger
+

@@ -1,0 +1,57 @@
+	function fnTouchGrid($this){
+		dupTouchId = $this.getGridParam( "selrow" );   
+		
+		var lastRowData = $this.getRowData(dupTouchId);
+		var lastModCheck = lastRowData.MOD_CHECK;
+		
+		//처음 -> 수정
+		if(modCount == 0){
+			$this.jqGrid('editRow', dupTouchId, true, 'clientArray');
+			modCount = 1;
+			backTouchId = dupTouchId;
+			modVal = $this.getRow('','OBS_YN','')+', '+$this.getRow('','OBS_MEMO',''); 
+			return false;
+		}
+		//수정 -> 저장(변경 있음과 변경없음)
+		if(modCount == 1){
+			modVal2 = $this.getRow('','OBS_YN','')+', '+$this.getRow('','OBS_MEMO',''); 
+			
+			if(modVal != modVal2){ //저장(데이터변경시)
+				$this.jqGrid('saveRow', dupTouchId, false, 'clientArray');
+				$this.jqGrid('setCell', dupTouchId, 'MOD_CHECK', '<i class="fa fa-repeat" />');
+				$this.jqGrid('setCell', dupTouchId, 'MOD_FLAG', 'UPDATE');
+				touchId = dupTouchId;
+				modCount = 2;
+				return false;
+			}else{ //수정 -> 행초기화(변경없음)
+				if(touchId == '' || touchId == dupTouchId){ //변경없이저장, 초기화
+					$this.jqGrid('restoreRow', dupTouchId, false);
+					fnCheckValInit();
+					return false;
+				}else{ //수정모드에서 다른 쎌 더블클릭(기존수정->초기화, 다른행 수정모드)
+					$this.jqGrid('restoreRow', backTouchId, false);
+					$this.jqGrid('editRow', dupTouchId, false, 'clientArray');
+					modCount = 1;
+					return false;
+				}
+
+			}
+		}
+		console.log(dupTouchId);
+		
+		if(modCount == 2){
+				if(touchId == dupTouchId){ //저장모드(recycle)인 행 더블클릭
+					$('tr[id='+dupTouchId+'] > td[aria-describedby=preventiveCheckGrid_MOD_CHECK]').empty();
+					$('tr[id='+dupTouchId+'] > td[aria-describedby=preventiveCheckGrid_MOD_FLAG]').empty();
+					$this.jqGrid('editRow', dupTouchId, false, 'clientArray');
+					modCount = 1;
+					return false;
+				}else{ //저장모드아닌 행 더블클릭
+					$this.jqGrid('saveRow', backTouchId, false, 'clientArray');
+					fnCheckValInit();
+					modCount = 0;
+					fnTouchGrid($preventiveCheckGrid);
+					return false;
+				}	
+		}
+	}

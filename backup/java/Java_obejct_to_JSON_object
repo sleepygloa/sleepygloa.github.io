@@ -1,0 +1,32 @@
+Differences from Jackson 1.x
+Most of the APIs still maintains the same method name and signature, just the packaging is different.
+Jackson 1.x – org.codehaus.jackson.map
+Jackson 2.x – com.fasterxml.jackson.databind
+
+---------
+
+# 1 Convert Java object to JSON, writeValue(...)
+
+
+ObjectMapper mapper = new ObjectMapper();
+Staff obj = new Staff();
+
+//Object to JSON in file
+mapper.writeValue(new File("c:\\file.json"), obj);
+
+//Object to JSON in String
+String jsonInString = mapper.writeValueAsString(obj);
+
+# 2 Convert JSON to Java object, readValue(...)
+
+ObjectMapper mapper = new ObjectMapper();
+String jsonInString = "{'name' : 'mkyong'}";
+
+//JSON from file to Object
+Staff obj = mapper.readValue(new File("c:\\file.json"), Staff.class);
+
+//JSON from URL to Object
+Staff obj = mapper.readValue(new URL("http://mkyong.com/api/staff.json"), Staff.class);
+
+//JSON from String to Object
+Staff obj = mapper.readValue(jsonInString, Staff.class);

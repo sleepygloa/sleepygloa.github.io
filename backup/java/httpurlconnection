@@ -1,0 +1,16 @@
+//                //서버와 통신, PDF 읽기
+//                HttpURLConnection connection = null;
+//                URL url = new URL(serverPdfPath);
+//                connection = (HttpURLConnection)url.openConnection();
+//
+//                connection.setRequestMethod("GET");
+//                connection.setRequestProperty("Content-Type", "application/pdf");
+//                connection.setRequestProperty("Content-Language", "UTF-8");
+//
+//                connection.setUseCaches(false);
+//                connection.setDoOutput(true);
+//                connection.setDoInput(true);
+//
+//                InputStream is = connection.getInputStream();
+
+//                printStart(printer, pdfPath, is);

@@ -220,8 +220,6 @@ class Solution {
 }
 ```
 
-[![결과](/assets/imgs/codetest/1.noncompletemarathon/3.othersuccess.png)](/assets/imgs/imgs/codetest/1.noncompletemarathon/3.othersuccess.png)
-
 
 ### 검토
 - getOrDefault 부분의 결과 비교를 어떻게 할지 생각이 안나서 찍어봤다.

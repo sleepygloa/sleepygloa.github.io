@@ -1,0 +1,72 @@
+	public Params saveMenuAuth(Params inParams) {
+		Params outParam = ParamsFactory.createOutParams(inParams);
+		String authGroupSeq = inParams.getString("authGroupSeq");
+		String s_userId = inParams.getString("s_userId");
+		int cnt = 0;
+		
+		// 권한 사용자 등록
+		DataTable userAuthDt = inParams.getDataTable("dt_userauth");
+		cnt = getSqlManager().delete("AuthService.deleteUserAuth", authGroupSeq);
+		for (DataRow userDr :userAuthDt) {
+			userDr.setParam("authGroupSeq", authGroupSeq);
+			userDr.setParam("s_userId", s_userId);
+			getSqlManager().insert("AuthService.insertUserAuth",userDr);
+		}
+		outParam.setMsgCd("MSG_COM_SUC_007", new Object[]{cnt});
+		
+		// 권한 YN 등록
+		DataTable menuAuthDt =  inParams.getDataTable("dt_menuauth");
+		DataTable columnsDt =  getSqlManager().selectDataTable("AuthService.getAuthColunms");
+		DataTable saveDt = new CommDataTable();
+		for (DataRow menuDr :menuAuthDt) {
+			for (DataRow colDr :columnsDt) {
+				DataRow saveDr = new CommDataRow();
+				String authCd = colDr.getString("CODE_CD");
+				saveDr.setParam("authCd", authCd);
+				saveDr.setParam("authYn", menuDr.getParam(CommUtil.strCamel(authCd))); 
+				saveDr.setParam("menuSeq", menuDr.getParam("menuSeq"));
+				saveDr.setParam("authGroupSeq", authGroupSeq);
+				saveDr.setParam("userId", s_userId);
+				saveDt.add(saveDr);
+				//cnt += getSqlManager().update("AuthService.saveMenuAuth",colDr);
+			}
+		}
+		Map<String, DataTable> map = new HashMap<>();
+		map.put("dt_save", saveDt);
+//		LOG.debug("dt_save : " + saveDt);
+		cnt = getSqlManager().update("AuthService.saveMenuAuth", map);
+		return outParam;
+	}
+  
+  	<update id="saveMenuAuth" > 
+	
+		INSERT /* [AuthService.query][saveMenuAuth][권한 메뉴저장][Kim Jin Ho][2016-09-13] */
+		  INTO TB_PARAGON_AUTH(
+			   AUTH_GROUP_SEQ
+			 , MENU_SEQ
+			 , AUTH_CD
+			 , AUTH_YN
+			 , IN_USER_ID
+			 , IN_DT
+			 , UP_USER_ID
+		)
+		VALUES
+	<foreach collection="dt_save" item="dr_save"  separator=",">
+		(
+			   #{dr_save.authGroupSeq}
+			 , #{dr_save.menuSeq}
+			 , #{dr_save.authCd}
+			 , #{dr_save.authYn}
+			 , #{dr_save.userId}
+			 , now()
+			 , #{dr_save.userId} 		
+		)
+	</foreach>
+		 ON DUPLICATE KEY UPDATE
+<!-- 			   AUTH_YN     = #{authYn} -->
+<!-- 			 , UP_USER_ID = #{s_userId} -->
+			   AUTH_YN     = VALUES(AUTH_YN)
+			 , UP_USER_ID = VALUES(UP_USER_ID)
+
+	</update>
+  

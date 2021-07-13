@@ -1,0 +1,67 @@
+File 객체를 통하여 파일에 데이터를 입력을 할 수 있다. 이 때 파일에 이미 데이터가 있다면 해당 데이터 이후로 새로 입력하는 값이 입력되는 것이
+아닌 기존의 데이터가 지워지고 새로운 데이터를 덮어쓰게 된다. 로그 기록 등을 위해서는 기존의 내용 뒤에 계속해서 이어서 쓸 수 있어야 하는데, 
+다음과 같은 방법으로 처리해줄 수 있다.
+
+1. RandomAccessFile 클래스를 이용
+2. FileWriter 객체 생성 시, 생성자를 통하여 옵션 전달
+
+간단한 코드를 통해 살펴보자
+  1 public class Append
+  2 {
+  3     public static void main(String args[])
+  4     {
+  5         File f= new File(“d:\\append.txt”);
+  6         RandomAccessFile rf= null;
+  7
+  8         if(!f.exists())
+  9         {
+ 10             try{
+ 11                 f.createNewFile();
+ 12
+ 13                 PrintWriter pw= new PrintWriter(new BufferedWriter(new FileWriter(f)));
+ 14                 pw.print(“something written in file”);
+ 15                 pw.flush();
+ 16
+ 17                 pw.close();
+ 18             }catch(Exception e){
+ 19                 e.printStackTrace();
+ 20             }
+ 21         }
+ 22
+ 23         try{
+ 24             PrintWriter pww= new PrintWriter(new BufferedWriter(new FileWriter(f, true)));
+ 25             pww.write(“\r\n”);
+ 26             pww.write(“by printwriter”);
+ 27             pww.flush();
+ 28
+ 29             pww.close();
+ 30         }catch(Exception e){
+ 31             e.printStackTrace();
+ 32         }
+ 33
+ 34         try{
+ 35             rf= new RandomAccessFile(f, “rw”);
+ 36             rf.seek(rf.length());
+ 37             rf.writeBytes(“\r\n”);
+ 38             rf.writeBytes(“new string!!!”);
+ 39
+ 40             rf.close();
+ 41         }catch(Exception e){
+ 42             e.printStackTrace();
+ 43         }
+ 44     }
+ 45 }
+ 
+ 
+ 8~21 : 지정한 경로에 파일이 존재하지 않을 경우 새로이 파일을 만들고, (이미 데이터가 들어있다는 조건을 만들기위해) ‘something written in file’
+ 이라는 문장을 입력한다.
+
+24~32 : 2번째 방법인 FileWriter 생성 시, 생성자를 통하여 옵션을 전달해주는 부분이다. 24줄에 보면 new FileWriter([File 객체], true) 로
+FileWriter 객체를 생성하고 있는데, 이 때 2번째 파라미터인 ‘true’ 가 append를 할 것인지 여부를 설정해준다. true로 설정하면 해당 FileWriter로
+출력하는 것은 기존의 데이터 이후에 덧붙여지게 된다.
+
+34~43 : 1번째 방법인 RandomAccessFile 클래스를 이용한 방법이다. 35줄에서 접근할 File 객체와 접근 모드 
+(여기서는 rw, 즉 읽기와 쓰기를 한다는 것)를 이용하여 객체를 만든다. RandomAccessFile은 말 그대로 파일 바이트 줄(line)에서
+처음부터만이 아닌 어느 곳에서든 접근을 할 수 있다. 36줄을 보이는 seek 이란 메소드에 접근하고 싶은 곳의 x번째 순번을 전해주면 (.seek(x))
+해당 위치로 바로 접근을 할 수 있다. 즉, 파일에 있는 데이터의 제일 마지막으로 접근할 수 있다면 여기서부터 새로운 데이터를 입력할 수 있어
+결과적으로는 기존의 데이터에 이어서 새로운 데이터를 입력할 수 있게되는 것이다.

@@ -1,0 +1,34 @@
+한줄씩 저장하는 공간 3개 만드시고
+
+루프 돌면서 한줄씩 저장합니다.
+
+마지막 줄에서 멈추면 저장된것이 마지막 3줄이 됩니다.
+
+코드까지 대충 짠다면.
+
+String[] readLine = ... 저도 초보라 문법을 까묵었네요.;;; 아무튼 배열 3개( readLine[0],readLine[1],readLine[2] 만드시구요.;;;; 
+int i = 0;
+
+while ((readLine[(i%3)] = br.readLine()) != null){
+i++;
+}
+
+이렇게 하면 될줄 알았더니 마지막 null이 들어와서 비교한후에 반복문을 탈출할 공간도 있어야 하는군요. 그래서 배열은 마지막 null이 들어올 곳까지 4개 만드시고 루프 돌리면 됩니다.
+
+String 배열 4개 readLine[0],readLine[1],readLine[2],readLine[3] 만드시구요. 
+int i = 0;
+
+while ((readLine[(i%4)] = br.readLine()) != null){
+i++;
+}
+이렇게 하면 while 조건문에서의 readLine의 []안의 숫자가 0~3을 반복하게 되구요.
+다 끝난 후엔 readLine[ (i-1)%4 ]가 마지막줄
+readLine[ (i-2)%4 ]가 마지막에서 두번째
+readLine[ (i-3)%4 ]가 마지막에서 세번째 줄이 될겁니다.
+
+
+
+
+RandomAccessFile read_file = new RandomAccessFile(filename, "r"); 
+long str_length = read_file.length(); 
+read_file.seek(start_point);

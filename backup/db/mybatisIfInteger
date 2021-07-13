@@ -1,0 +1,74 @@
+마이바티스는 동적 쿼리문 생성에 사용되는 <if /> 구성 요소를 제공합니다. <if /> 구성 요소는 인자로 전달된 파라미터 값과 기준 값을 비교하여 참인 경우에 구성 요소 사이의 조건절을 추가합니다. 식(항식)은 test 속성에 정의됩니다.
+
+식(항식)에는 OGNL 표현식을 사용할 수 있으며, 크게 기본 자료형 비교, 참조 자료형 비교, 그리고 문자열 비교에 사용됩니다. 사용되는 예를 살펴보면, 아래와 같습니다.
+
+1. 기본 자료형 비교
+    1) 프로퍼티 속성 값과 기준 값이 동일한 경우.
+       <if test="value == 1"></if>
+        <if test="value eq 1"></if>
+
+    2) 프로퍼티 속성 값과 기준 값이 동일하지 않는 경우.
+         <if test="value != 1"></if>
+         <if test="value neq 1"></if>
+
+    3) 프로퍼티 속성 값이 기준 값 보다 큰 경우. 
+         <if test="value > 1"></if>
+         <if test="value gt 1"></if>
+
+    4) 프로퍼티 속성 값이 기준 값 보다 크거나 같은 경우.
+         <if test="value >= 1"></if>
+         <if test="value gte 1"></if>
+
+    5) 프로퍼티 속성 값이 기준 값 보다 작은 경우.
+         <if test="value lt 1"></if>
+         <if test="value < 1"></if> ('<' XML 특수 문자로 사용 불가능.)
+
+    6) 프로퍼티 속성 값이 기준 값 보다 작거나 같은 경우.
+         <if test="value lte 1"></if>
+         <if test="value <= 1"></if> ('<' XML 특수 문자로 사용 불가능.)
+
+
+
+2. 참조 자료형 비교
+    1) 프로퍼티 속성 값이 널인 경우.
+        <if test="value == null"></if>
+        <if test="value eq null"></if>
+
+    2) 프로퍼티 속성 값이 널이 아닌 경우.
+        <if test="value != null"></if>
+        <if test="value neq null"></if>
+
+    3) 프로퍼티 속성 값이 널 또는 빈 문자인 경우.
+        <if test="value == null or value == ''">/if>
+        <if test="value eq null or value eq ''"></if>
+
+    4) 프로퍼티 속성 값이 널이 아니고 빈 문자열이 아닌 경우.
+        <if test="value != null and value != ''"></if>
+        <if test="value neq null and value neq ''"></if>
+
+
+
+3. 문자열 비교
+    1) 프로퍼티 속성 값이 기준 한 자리 문자열과 같은 경우.
+        <if test="value == 'a'.toString()">
+        <if test="value eq 'a'.toString()">
+        <if test='value == "a"'>
+
+    2) 프로퍼티 속성 값이 기준 한 자리 문자열과 다른 경우.
+        <if test="value != 'a'.toString()">
+        <if test="value neq 'a'.toString()">
+        <if test='value != "a"'>
+
+    3) 프로퍼티 속성 값이 기준 한 자리 이상 문자열과 같은 경우.
+        <if test="value == 'abc'">
+        <if test="value eq 'abc'">
+        <if test='value == "abc"'>
+
+    4) 프로퍼티 속성 값이 기준 한 자리 이상 문자열과 다른 경우.
+        <if test="value != 'abc'">
+        <if test="value neq 'abc'">
+        <if test='value != "abc"'>
+
+
+
+출처: http://madnix.tistory.com/entry/마이바티스는-동적-쿼리문-생성에-사용되는-if-구성-요소를-제공 [NExT맨 - 코드와 친숙해지자!]

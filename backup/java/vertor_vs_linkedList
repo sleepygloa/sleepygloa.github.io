@@ -1,0 +1,98 @@
+mport java.util.*; 
+
+public class VectorLinkedListTest { 
+      public static void main(String args[]) { 
+            Vector v = new Vector(1000000); 
+            LinkedList ll = new LinkedList(); 
+
+            System.out.println("= 순차적으로 추가하기 ="); 
+            System.out.println("Vector :"+add1(v)); 
+            System.out.println("LinkedList :"+add1(ll)); 
+
+            System.out.println(); 
+            System.out.println("= 중간에 추가하기 ="); 
+            System.out.println("Vector :"+add2(v)); 
+            System.out.println("LinkedList :"+add2(ll)); 
+
+            System.out.println(); 
+            System.out.println("= 중간에서 삭제하기 ="); 
+            System.out.println("Vector :"+remove2(v)); 
+            System.out.println("LinkedList :"+remove2(ll)); 
+
+            System.out.println(); 
+            System.out.println("= 순차적으로 삭제하기 ="); 
+            System.out.println("Vector :"+remove1(v)); 
+            System.out.println("LinkedList :"+remove1(ll)); 
+      } 
+
+      public static long add1(List list) { 
+            long start = System.currentTimeMillis(); 
+            for(int i=0; i<100000;i++) list.add(i+""); 
+            long end = System.currentTimeMillis(); 
+            return end - start; 
+      } 
+
+      public static long add2(List list) { 
+            long start = System.currentTimeMillis(); 
+            for(int i=0; i<1000;i++) list.add(500, "X"); 
+            long end = System.currentTimeMillis(); 
+            return end - start; 
+      } 
+
+      public static long remove1(List list) { 
+            long start = System.currentTimeMillis(); 
+            for(int i=list.size()-1; i > 0;i--) list.remove(i); 
+            long end = System.currentTimeMillis(); 
+            return end - start; 
+      } 
+
+      public static long remove2(List list) { 
+            long start = System.currentTimeMillis(); 
+            for(int i=0; i<1000;i++) list.remove(i); 
+            long end = System.currentTimeMillis(); 
+            return end - start; 
+      } 
+} 
+
+/* 
+---------- java ---------- 
+= 순차적으로 추가하기 = 
+Vector :591 
+LinkedList :721 
+
+= 중간에 추가하기 = 
+Vector :3465 
+LinkedList :10 
+
+= 중간에서 삭제하기 = 
+Vector :3415 
+LinkedList :10 
+
+= 순차적으로 삭제하기 = 
+Vector :10 
+LinkedList :50 
+
+Output completed (8 sec consumed) - Normal Termination 
+*/ 
+
+
+순차적인 작업에는 Vector가 빠르지만, 데이터의 중간삽입또는 제거에는 LinkedList가 훨씬 빠르다. Vector의 경우, 중간에 추가또는 삭제하면 
+빈공간을 채우기 위해 복사작업이 필요하다. 반면에 LinkedList는 단순히 링크만 연결을 변경하면 되므로 거의 시간이 걸리지 않는다.
+Vector는 많은 양의 데이터를 담고 읽어오는데는 적합하지만, 변경작업이 필요한 경우(특히 중간작업)에는 적합하지 않음을 알 수 있다. 
+이런 경우 LinkedList를 사용하는 것이 좋다.
+
+또는 이러한 각 클래스의 특징을 이용해서 순차적으로 받을때는 Vector를 사용하고 추가삭제작업을 할때는 LinkedList를 
+사용하는 사용하면 좋은 작업효율을 얻을 수 있을 것이다.
+Vector v = new Vector(1000000); 
+for(int i=0; i<100000;i++) list.add(i+""); 
+
+LinkedList al = new LinkedList(v); 
+for(int i=0; i<1000;i++) list.add(500, "X"); 
+
+
+
+
+
+
+
+

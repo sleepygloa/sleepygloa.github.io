@@ -1,0 +1,8 @@
+$("li.active").siblings().click(function () {
+    // trigger the datepicker
+    $('.date').datepicker('hide');
+});
+$("li.active").live("click focusout", function (e) {
+    // trigger the datepicker
+    $('.date').datepicker('hide');
+});

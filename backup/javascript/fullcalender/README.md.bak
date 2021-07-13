@@ -1,0 +1,127 @@
+# fullcalender 사용하기
+## 세팅
+<link rel='stylesheet' href='fullcalendar/fullcalendar.css' />
+<script src='lib/jquery.min.js'></script>
+<script src='lib/moment.min.js'></script>
+<script src='fullcalendar/fullcalendar.js'></script>
+
+## 코드시작하기
+$(document).ready(function() {
+    // page is now ready, initialize the calendar...
+    // 이곳에 초기화 코드를 넣어준다
+    $('#calendar').fullCalendar({
+        // put your options and callbacks here
+    })
+});
+
+## 코드시작하기2
+<div id='calendar'></div>
+
+### 간단한코드들
+#### 주말(토일)을 없앤다. 
+  weekends: false 
+#### 클릭 시 알람을 띄운다. 
+  dayClick: function() {
+	alert('a day has been clicked!');
+  }
+#### Calender 의 헤더부분에 버튼과 월, 주, 일 별로 달력을 변경하는 버튼을 만든다.
+    customButtons: {// 버튼
+        myCustomButton: {
+            text: 'custom!',
+            click: function() {
+                alert('clicked the custom button!');
+            }
+        }
+    },
+    header: {
+        left: 'prev,next today myCustomButton',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay'
+    }
+img 링크 
+
+#### 전월로가기, 다음월로가기 및 전년으로가기, 앞년으로가기
+header : { left : 
+'prev, next, prevYear, nextYear'  //이부분에 추가하면된다.
+}
+
+####
+firstDay (월의 첫뻔째날) : Integer, default : 0 (sun), 1(mon).... 
+isRTL : Boelean, default :  false; (달력을 왼쪽에서 오른쪽으로 읽기, true : 오른쪽에서 왼쪽으로)
+weekends : Boolean, default : true; (달력에 토일을 포함할지, 포함한다)
+hiddenDays: [] (숨길 column(요일)을 숨긴다. 표시숫자는 default 값에 따른다. 0(sun)...
+fixedWeekCount : true (일반적으로 표시될 달력에 주(record, 행)수를 정함, true : 6, false: 4 또는 5)
+weekNumbers : true (년단위의 주 수를 왼쪽에 따로 컬럼으로 나타낼지를 정함.)
+weekNumbersWithinDays : false (주수를 따로 컬럼으로 표시할지, 달력안 왼쪽상단에 표시할지를 정함)
+weekNumberCalculation : "local" (default), "ISO", or a function (주 번호를 계산하는 방법을 설정)
+businessHours: {
+    // days of week. an array of zero-based day of week integers (0=Sunday)
+    dow: [ 1, 2, 3, 4 ], // Monday - Thursday
+
+    start: '10:00', // a start time (10am in this example)
+    end: '18:00', // an end time (6pm in this example)
+}
+: 업무시간, 일과시간을 정함. 이것을 쓰게되면 일과시간외의 grid가 표시가 된다. 시간의 내용은 따로 공부하고
+시간은 이런식으로 표현 할 수 있다.
+"23:59"       // hours/minutes
+"23:59:59"    // hours/minutes/seconds
+"1.23:59:59"  // days/hours/minutes/seconds
+{ days:1, hours:23, minutes:59 } // an object
+showNonCurrentDates : true (달력에 포함하지않는 일을 블럭 처리하지않고 보여 줄수 있다.)
+height: 650 (달력의 높이를 지정해줍니다. option으로 parent는 달력의 부모요소와 높이가 같게되고, auto는 유연성을 가지게된다.
+contentHeight: 600 (내용의 높이일듯)
+aspectRatio: 2 (가로대세로비이다. 세로기준으로 가로의 길이가 배율로 정해진다.)
+handleWindowResize : true (창크기가 변경될때 달력의 내용크기도 자동으로 변경될지 여부를 결정)
+windowResizeDelay : 100 (창크기가 너무 자주 변경되는 것을 막기위해 딜레이시간이 존재)
+eventLimit: true, // for all non-agenda views
+views: {
+agenda: {
+    eventLimit: 6 // adjust to 6 only for agendaWeek/agendaDay
+}
+} (하루에 표시되는 이벤트의 수를 정함. 6보다 클때 +7 이런식으로 표현됨)
+
+eventLimitClick (위의 eventLimit 을 클릭 했을 때의 이벤트를 결정한다)
+"popover" (the default)
+해당 날의 전체 이벤트 목록과 함께 셀 위에 사각형 패널을 표시합니다.
+"week"
+머리글의보기에 따라 결정되는 주보기로 이동합니다.
+"day"
+머리글의보기에 따라 하루보기로 이동합니다.
+view name
+사용 가능한 뷰의 리터럴 문자열 이름입니다
+function
+임의 코드 실행을위한 콜백 함수..
+function( cellInfo, jsEvent ) (cellInfo 셸의 정보를 포함한 객체)
+date - 당일의 일시
+dayEl - 요일 셀의 jQuery 요소
+moreEl - "more"링크를위한 jQuery 요소
+segs - 지정된 날의 모든 이벤트 「segment」객체의 배열
+hiddenSegs - 이전에 표시되지 않았던 세그먼트 객체 만의 배열
+jsEvent는 클릭에 대한 기본 JavaScript 이벤트를 보유합니다.
+
+
+### view 설정하기
+    header: {
+        center: 'month,agendaFourDay' // buttons for switching between views
+    },
+    views: {
+        agendaFourDay: {
+            type: 'agenda',
+            duration: { days: 4 },
+            buttonText: '4 day'
+        }
+    }
+
+//이렇게 설정하면 agendaFourDay 처럼 변수를 지정하고 변수를 받아올수도 있다.
+
+#### agenda option
+allDaySlot : true (내용중 all-day 체크된 내용은 하루종일 상단에 표시되도록 한다)
+allDayText : 'all-day' (하루종일 체크된 제목을 나타낸다)
+slotDuration : 00:30:00 (기본으로 시간 칸에 표현될 시간을 나타낸다)
+slotLabelFormat : h(:mm)a (일정 목록보기의 세로 축에 표시 될 시간 텍스트를 결정합니다.)
+slotLabelInterval : 00:00:00 (시간 축에 슬롯의 날짜 / 시간을 표시하는 텍스트가 표시되는 빈도를 결정합니다. 시간단위인듯)
+snapDuration : 00:30:00 (끌린 이벤트일정이 내려앉을 기준을 맞춘다)
+scrollTime : 06:00:00 (6시간, 스크롤따운할때 보여지는 시간의 간격)
+minTime : 00:00:00 (스크롤 막대가 끝까지 스크롤 된 경우에도 표시 할 시작 시간을 결정합니다.)
+maxTime : 24:00:00 (스크롤 막대가 끝까지 되었을대 종료될 시각)
+

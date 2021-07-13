@@ -1,0 +1,17 @@
+        //바로 운영체제 pdf파일 열기
+//        File pdfFile = new File( pdfPath );
+//
+//        if ( !pdfFile.exists())
+//               throw new Exception( pdfPath + " is not exists." );
+//
+//        if ( Desktop.isDesktopSupported()) {
+//               try {
+//                     Desktop.getDesktop().open(pdfFile);
+//
+//              } catch ( IOException e) {
+//                     throw new Exception( "Openning " + pdfPath + " is failed.", e.getCause());
+//
+//              }
+//
+//       } else {
+//               throw new Exception( "Openning " + pdfPath + " is not supported in this desktop.");

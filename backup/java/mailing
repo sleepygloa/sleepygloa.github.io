@@ -1,0 +1,199 @@
+1. jsp
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<body>
+	<div>
+		<ol class="breadcrumb pull-right"></ol>
+		<h1 class="page-header"></h1>
+	</div>
+
+	<div class="search-form clearfix">
+		<form action="" class="form-inline" onsubmit="return false;">
+			<div class="search-controls non-icon">
+				<div class="form-gruop m-r-10">
+					<div class="input-group input-group-sm">
+						<span class="span-info input-group-addon">조회일시</span>
+						<div class="input-group input-daterange" id="systemProInfoDateForm">
+							<input type="text" name="start" id="systemProInfoStartSearch" class="form-control" placeholder="시작일">
+							<span class="input-group-addon">~</span>
+							<input type="text" name="end" id="systemProInfoEndSearch" class="form-control" placeholder="종료일">
+						</div>
+					</div>
+					<div class="input-group input-group-sm">
+						<span class="span-info input-group-addon">사용자 이름</span>
+						<input type="text" name="searchUserName" id="systemProInfoUserNameSearch" class="form-control input-sm">
+					</div>
+					<div class="input-group input-group-sm">
+						<span class="span-info input-group-addon">메뉴 명</span>
+						<input type="text" name="searchProName" id="systemProInfoProNameSearch" class="form-control input-sm">
+					</div>
+				</div>
+			</div>
+			<div class="search-button-group">
+				<button type="button" id="systemProInfoSearchBtn" class="btn btn-sm btn-primary m-r-5">
+					<i class="fa fa-search"> 검색</i>
+				</button>
+				<button type="button" id="systemProInfoSendMail" class="btn btn-sm btn-primary m-r-5">
+					<i class="fa fa-search">메일전송</i>
+				</button>
+			</div>
+		</form>
+	</div>
+	<div class="grid-wrapper">
+		<table id="systemProInfoGrid"></table>
+		<div id="systemProInfoGridNavi"></div>
+	</div>
+	<script src="/js/views/settings/system/system_log_pro.js"></script>
+</body>
+</html>
+
+
+
+
+
+2.js
+
+var LogProApp = function (){
+	"use strict";
+	
+	var $systemProInfoGrid = $('#systemProInfoGrid');
+	
+	return {
+		init: function() {
+			// 메뉴 사용 내역 버튼 이벤트
+			fnListProInfoEvents();
+
+			// 메뉴 사용 내역 Grid 생성
+			fnListProInfo();
+		}
+	};
+	
+	// 메뉴 사용 내역 버튼 이벤트
+	function fnListProInfoEvents(){
+		
+		$("#systemProInfoProNameSearch, #systemProInfoUserNameSearch").enterEvent({
+			callBack:function(value){
+				var data = {
+						proNm : $('#systemProInfoProNameSearch').val(),
+						userNm: $('#systemProInfoUserNameSearch').val(),
+						startDate: $('#systemProInfoStartSearch').val(),
+						endDate: $('#systemProInfoEndSearch').val()
+				};
+				$systemProInfoGrid.paragonGridSearch(data);
+			}
+		});
+		
+		$('#systemProInfoSearchBtn').click(function (){
+			fnSearchListProInfo();
+		});
+		
+		$('#systemProInfoDateForm').datepicker({todayHighlight: true, autoclose: true, clearBtn:true});
+		$('#systemProInfoStartSearch').val(Util.LocalDate());
+		$('#systemProInfoEndSearch').val(Util.LocalDate());
+		
+		$('#systemProInfoSendMail').click(function (){
+			$.ajax({
+				url:"/ctrl/setting/log/sendMail",
+				type: "POST"
+			});
+		});
+	}
+
+	function fnSearchListProInfo(){
+		var data = {
+				proNm : $('#systemProInfoProNameSearch').val(),
+				userNm: $('#systemProInfoUserNameSearch').val(),
+				startDate: $('#systemProInfoStartSearch').val(),
+				endDate: $('#systemProInfoEndSearch').val()
+		};
+		
+		$systemProInfoGrid.paragonGridSearch(data);
+	}
+	
+	// 메뉴 사용 내역 Grid 생성
+	function fnListProInfo(){
+		
+		var data = {
+				proNm : $('#systemProInfoProNameSearch').val(),
+				userNm: $('#systemProInfoUserNameSearch').val(),
+				startDate: $('#systemProInfoStartSearch').val(),
+				endDate: $('#systemProInfoEndSearch').val()
+		};
+
+		$systemProInfoGrid.paragonGrid({
+			url: '/ctrl/setting/log/getProList',
+			componentId: "CP0004",
+			rowEditable:false,
+			postData: data,
+			colNames: [
+			          "사용자이름  "
+			          , "사용일시    "
+			          , "메뉴명"
+			          , "접속 IP     "
+			          , "내용"
+			],
+			colModel: [
+			           {editable: false, name:"USER_NM", hidden: false, align: 'center'}
+			           , {editable: false, name:"LP_DT", hidden: false, align: 'center'}
+			           , {editable: false, name:"MENU_NM", hidden: false, align: 'center', sortable:false}
+			           , {editable: false, name:"CONNECT_IP", hidden: false, align: 'center', sortable:false}
+			           , {editable: false, name:"LP_CONTENT", hidden: false, sortable:false}
+			],
+			pager: "#systemProInfoGridNavi",
+			caption: "메뉴사용내역"
+		});
+	}
+}();
+
+$(document).ready(function () {
+	LogProApp.init();
+});
+
+
+3.
+public class SendMailUtils {
+
+	private static final Log LOG = LogFactory.getLog(SendMailUtils.class);
+	
+	
+
+	public static void sendEmail(Session session, String toEmail, String fromEmail, String subject, String body) {
+		
+		try {
+			MimeMessage msg = new MimeMessage(session);
+			//SET Message Header
+			msg.addHeader("Content-type", "text/html; charset=UTF-8");
+			msg.addHeader("format", "flowed");
+			msg.addHeader("Content-Transfer-Encoding", "8bit");
+			
+			msg.setFrom(new InternetAddress(fromEmail));
+			
+			msg.setSubject(subject, "UTF-8");
+			msg.setText(body, "UTF-8");
+			
+			msg.setSentDate(new Date());
+			
+			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+//			msg.setRecipients(Message.RecipientType.TO, new InternetAddress(toEmail));		//여러 email을 전송 할 때 필요!
+			
+			LOG.debug("Message is Ready!");
+			
+			Transport.send(msg);
+			
+			LOG.debug("Message Send OK");
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			
+			if (e instanceof SendFailedException) {
+				SendFailedException sfex = (SendFailedException)e;
+				Address[] invalidAddress = sfex.getInvalidAddresses();
+				if (invalidAddress != null) {
+					for (int i = 0; i < invalidAddress.length; i++){
+						LOG.debug("Invalid Address "+i+" ["+invalidAddress[i]+"]");
+					}
+				}
+			}
+		}
+	}
+}

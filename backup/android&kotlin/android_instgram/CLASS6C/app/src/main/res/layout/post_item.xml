@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_img"
+        android:background="#424242"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        >
+
+        <CheckBox
+            android:button="@drawable/like_button"
+            android:id="@+id/cb_like"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <!--<ImageView-->
+            <!--android:background="#d50000"-->
+            <!--android:id="@+id/iv_like"-->
+            <!--android:layout_width="24dp"-->
+            <!--android:layout_height="24dp" />-->
+
+        <TextView
+            android:id="@+id/tv_likeCount"
+            android:layout_marginLeft="8dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/cb_like"
+            android:text="1234"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:background="#a4bd13"
+            android:id="@+id/iv_share"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+
+    </RelativeLayout>
+
+    <View
+        android:background="#efefef"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <LinearLayout
+        android:padding="8dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textColor="#6200ea"
+            android:text="ansta_"
+            android:id="@+id/tv_userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginLeft="8dp"
+            android:text="불꽃놀이했어요"
+            android:id="@+id/tv_postText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,97 @@
+/* 카드섹션 영역 */
+.main_card_wrap{padding:3em 0;text-align:center;}
+.main_card_content{position:relative;}
+
+
+
+/* 카드섹션 메인 글자 영역 */
+.card_title_wrap{width:100%;margin-bottom: 5em;}
+.card_title{color:#425366}
+
+/* 카드 영역 */
+.card_content_wrap{width:100%;}
+.card_content_title{position:relative;color:#11aabe}
+.card_content_title::before{position:absolute;top:-20px;left:50%;transform:translateX(-50%);display:block;width:80px;border-top:1px solid #11aabe;content:''}
+.offer__function__section{display:block;padding-top:2em;padding-bottom:2em;border:1px solid #ccc;border-radius:3px} /* 카드 기본 테두리 이미지 */
+
+/* 카드 마우스오버시 이벤트 */
+@media screen and (min-width:768px){
+	.scalable{position:relative;box-shadow:2px 2px 4px 0 rgba(0,0,0,.3);cursor:pointer}
+	.scalable:hover{top:-10px;box-shadow:4px 4px 8px 0 rgba(0,0,0,.3)}
+	.scalable:active{top:0;background:#d4eff3;box-shadow:none}
+}
+
+/* 카드섹션 내 div영역 */
+.card_icon{width:60px;height:60px;margin:0 auto 20px}
+.card_icon.ux-heatmap{background:url(/css/img/ux_heatmap_icon.png) no-repeat}
+.card_icon.reporting-heatmap{background:url(/css/img/reporting_heatmap_icon.png) no-repeat}
+.card_icon.comparing-referrers{background:url(/css/img/comparing_referrers_icon.png) no-repeat}
+.card_icon.user-heatmap{background:url(/css/img/analytics_icon.png) no-repeat}
+.card_icon.gaze-heatmap{background:url(/css/img/gaze_motion_icon.png) no-repeat}
+.card_icon.segmenting-cta{background:url(/css/img/cta_icon.png) no-repeat}
+.offer__function__section .tool__section__desc{display:block;margin-left:auto;margin-right:auto;width:90%;text-align:center;-ms-word-break:keep-all;word-break:keep-all}
+
+
+------------------------
+<!-- 메인 주요기능 : 카드 섹션? 영역 -->
+<div class="main_card_wrap row">
+    <div class="main_card_content">
+        <div class="card_title_wrap">
+            <h3 class="card_title">와우! 간편한 기능!</h3>
+        </div>
+
+	    <div class="card_content_wrap">
+	            <h4 class="card_content_title">새로운 점주는 언제나 환영이지!!</h4>
+	            <div class="row">
+	                <div class="col-xs-12-12 col-sm-6-12 col-md-4-12">
+	                    <a class="offer__function__section scalable"  href="">
+	                        <div class="card_icon ux-heatmap"></div>
+	                        <h6 class=" minor">UX Heatmap</h6>
+	                        <p class="tool__section__desc">사용자의 UX결과를 히트맵 형태로<br/>한눈에 볼 수 있습니다.</p>
+	                        <span class="goProduct">더 알아보기 &gt;</span>
+	                    </a>
+	                </div>
+	                <div class="col-xs-12-12 col-sm-6-12 col-md-4-12 ">
+	                    <a class="offer__function__section scalable" href="">
+	                        <div class="card_icon reporting-heatmap"></div>
+	                        <h6 class=" minor">Reporting Heatmap</h6>
+	                        <p class="tool__section__desc">히트맵 분석 결과와 이슈를 자동으로<br/>요약하고 정리 해드립니다.</p>
+	                        <span class="goProduct">더 알아보기 &gt;</span>
+	                    </a>
+	                </div>
+	                <div class="col-xs-12-12 col-sm-6-12 col-md-4-12 ">
+	                    <a class="offer__function__section scalable" href="">
+	                        <div class="card_icon comparing-referrers"></div>
+	                        <h6 class=" minor">Comparing as Referrers</h6>
+	                        <p class="tool__section__desc">유입 경로에 따라 달라지는 UX를<br/>직접 비교해 볼 수 있습니다.</p>
+	                        <span class="goProduct">더 알아보기 &gt;</span>
+	                    </a>
+	                </div>
+	                <div class="col-xs-12-12 col-sm-6-12 col-md-4-12 ">
+	                    <a class="offer__function__section scalable" href="">
+	                        <div class="card_icon user-heatmap"></div>
+	                        <h6 class=" minor">User Analytics</h6>
+	                        <p class="tool__section__desc">뷰저블을 설치하셨다면 사용자 지표도<br/>실시간으로 볼 수 있습니다.</p>
+	                        <span class="goProduct">더 알아보기 &gt;</span>
+	                    </a>
+	                </div>
+	                <div class="col-xs-12-12 col-sm-6-12 col-md-4-12 ">
+	                    <a class="offer__function__section scalable" href="">
+	                        <div class="card_icon gaze-heatmap"></div>
+	                        <h6 class=" minor">Gaze Heatmap</h6>
+	                        <p class="tool__section__desc">사용자들의 전반적인 사용 흐름을<br/>시각적으로 제공합니다.</p>
+	                        <span class="goProduct">더 알아보기 &gt;</span>
+	                    </a>
+	                </div>
+	                <div class="col-xs-12-12 col-sm-6-12 col-md-4-12 ">
+	                    <a class="offer__function__section scalable" href="">
+	                        <div class="card_icon segmenting-cta"></div>
+	                        <h6 class=" minor">Segmenting as CTA</h6>
+	                        <p class="tool__section__desc">특정 버튼이나 클릭 요소를 어떤 유형의</br> 사용자들이 선택했는지 알 수 있습니다.</p>
+	                        <span class="goProduct">더 알아보기 &gt;</span>
+	                    </a>
+	                </div>
+	            </div>
+		</div>
+    </div>	
+</div>

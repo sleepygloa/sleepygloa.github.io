@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_keypad_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_keypad_number"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="number"
+            />
+        <EditText
+            android:id="@+id/et_keypad_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:inputType="number"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_keypad_number_signed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_keypad_number_signed"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="numberSigned"
+            />
+        <EditText
+            android:id="@+id/et_keypad_number_signed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:inputType="numberSigned"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_keypad_number_decimal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_keypad_number_decimal"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="number"
+            />
+        <EditText
+            android:id="@+id/et_keypad_number_decimal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:inputType="numberDecimal"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_keypad_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_keypad_text"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="number"
+            />
+        <EditText
+            android:id="@+id/et_keypad_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:inputType="text"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_keypad_textPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_keypad_textPassword"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="number"
+            />
+        <EditText
+            android:id="@+id/et_keypad_textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:inputType="textPassword"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_keypadt_text_email_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_keypad_text_email_address"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="number"
+            />
+        <EditText
+            android:id="@+id/et_keypad_text_email_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:inputType="textEmailAddress"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_keypad_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_keypad_phone"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="number"
+            />
+        <EditText
+            android:id="@+id/et_keypad_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:inputType="phone"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_keypad_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_keypad_time"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="number"
+            />
+        <EditText
+            android:id="@+id/et_keypad_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:inputType="time"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_keypad_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_keypad_date"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="number"
+            />
+        <EditText
+            android:id="@+id/et_keypad_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:inputType="date"
+            />
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

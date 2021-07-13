@@ -1,0 +1,72 @@
+WITH CCC AS (
+                 SELECT 1 AS LV
+                      , A.MENU
+			          , A.UPMENU
+			          , A.MENUNM
+			          , A.MENUTP
+			          , A.ORD
+			          , A.URL
+			          , A.BIZ
+                      , CONVERT(NVARCHAR(1000), '/' + CONCAT(A.ORD, A.MENU) ) AS SORT
+			       FROM SY_MENU A
+			      WHERE A.USEYN  = 'Y'
+			        AND A.BIZ    = #{biz}
+                    AND A.UPMENU = 1
+              UNION ALL
+                 SELECT LV + 1 AS LV
+                      , A.MENU
+			          , A.UPMENU
+			          , A.MENUNM
+			          , A.MENUTP
+			          , A.ORD
+			          , A.URL
+			          , A.BIZ
+                      , CONVERT(NVARCHAR(1000), CCC.SORT + '/' + CONCAT(A.ORD, A.MENU) ) AS  SORT  
+			       FROM SY_MENU A
+                      , CCC CCC
+			      WHERE A.USEYN  = 'Y'
+			        AND A.BIZ    = #{biz}
+                    AND CCC.MENU = A.UPMENU
+               )
+    SELECT CASE
+		        WHEN A.LV = 1 THEN A.MENUNM2 + ' > ' + A.MENUNM
+			    WHEN A.LV = 2 THEN A.MENUNM3 + ' > ' + A.MENUNM2 + ' > ' + A.MENUNM
+		        WHEN A.LV = 3 THEN B.MENUNM  + ' > ' + A.MENUNM3 + ' > ' + A.MENUNM2 + ' > ' + A.MENUNM
+                WHEN A.LV = 4 THEN B.MENUNM  + ' > ' + A.MENUNM3 + ' > ' + A.MENUNM2 + ' > ' + A.MENUNM
+		        ELSE ''
+		    END NEVIMENUNM
+	       , A.*
+	  FROM (SELECT A.*
+                 , B.MENUNM AS MENUNM3
+	             , B.UPMENU AS UPMENU3
+	          FROM (SELECT A.*
+	                     , B.MENUNM AS MENUNM2
+	                     , B.UPMENU AS UPMENU2
+	                  FROM (
+                            SELECT CCC.*
+                                  , Y.INQYN		/*조회여부*/
+                                  , Y.RGSYN		/*등록여부*/
+                                  , Y.UPDYN		/*수정여부*/
+                                  , Y.DELYN		/*삭제여부*/
+                                  , Y.PRTYN		/*인쇄여부*/
+                                  , Y.EXCYN		/*실행여부*/
+                               FROM CCC CCC
+                                  , SY_AUTHXUSER X
+                                  , SY_AUTHXMENU Y
+                              WHERE CCC.BIZ   = X.BIZ 
+                                AND CCC.BIZ   = Y.BIZ
+                                AND CCC.MENU  = Y.MENU
+                                AND X.AUTH    = Y.AUTH
+                                AND X.USERID  = #{userid}
+                          ) A 
+                LEFT JOIN SY_MENU B 
+                       ON A.UPMENU = B.MENU
+			          AND A.BIZ = B.BIZ 
+                    ) A 
+           LEFT JOIN SY_MENU B 
+                  ON A.UPMENU2 = B.MENU
+			     AND A.BIZ = B.BIZ 
+            ) A 
+    LEFT JOIN SY_MENU B 
+           ON A.UPMENU3 = B.MENU
+	      AND A.BIZ = B.BIZ

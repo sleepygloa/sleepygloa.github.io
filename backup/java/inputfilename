@@ -1,0 +1,2 @@
+			var fileValue = $("#file_0").val().split("\\");
+			var fileName = fileValue[fileValue.length-1]; // 파일명

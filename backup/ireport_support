@@ -1,0 +1,20 @@
+1. PDF 변환시에 선택한 column이 DB에서 출력한 영문명그대로 영문으로 보임
+--> 한글로 변환
+
+ 1) 해당 패키지안에 있는 iTextAsian.jar 을 받는다.
+ 2) Ireport -> option -> classpaths-> add Jar -> iTextAsian.jar 선택 -> reloadable -> OK
+ 3) option -> fonts -> iTextAsian.jar 선택 -> ok
+
+ 4) 한글로 보여줄 내용들을 선택후 -> properties 에 아래 부분의
+  (1) font name (2) pdf font name is now deprecated (3) pdf embedded 체크 (4) pdf encoding  uniks-ucs2-h korea 선택
+  
+ 5) 출력 값들은 이렇게하면 한글로 표시되고 라벨등은 직접 한글을 입력 할 수 있다
+  
+2. 값이 NULL 인 경우 NULL로 표시되는 현상
+--> 빈칸으로 표시
+ 
+ 1) 해당 값을 선택한 후 Properties에서 blank when null을 체크한다
+ 
+ 
+3. 일부 제목등 글자가 PDF에서 안보이는 현상
+ 1) 인코딩 제대로 하니까 표현됨

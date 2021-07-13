@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/btn_multimedia_video_record_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="180dp"
+        android:layout_gravity="center"
+        android:text="녹화"
+        />
+    <Button
+        android:id="@+id/btn_multimedia_video_record_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="180dp"
+        android:layout_gravity="center"
+        android:text="녹화중지"
+        />
+    <Button
+        android:id="@+id/btn_multimedia_video_record_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="180dp"
+        android:layout_gravity="center"
+        android:text="재생"
+        />
+    <Button
+        android:id="@+id/btn_multimedia_video_record_stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="180dp"
+        android:layout_gravity="center"
+        android:text="재생중지"
+        />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/fl_multimedia_video_record"
+        />
+
+</LinearLayout>

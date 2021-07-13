@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>캔바스 샘플#4. 마우스 이벤트</title>
+</head>
+<body>
+https://blog.naver.com/ephraimdrlee 
+/ 크레이의 세컨드라이프 탐구생활 네이버 블로그<br/>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+// 기본 초기화
+var init=false;
+var myCanvas;
+var Context;
+var Circles=new Array();
+
+// 초기화
+function Init()
+{
+	if(init==false)
+	{
+		myCanvas=document.getElementById("MyCanvas");
+		Context=myCanvas.getContext("2d");
+		
+		init=true;
+	}
+}
+
+function Run()
+{
+	for(i=0;i<Circles.length;++i)
+	{
+		Circles[i].size=Circles[i].size * 1.05;
+		Circles[i].lifetime--;
+		if(Circles[i].lifetime<=0)
+			Circles.splice(i,1);
+	}
+	onDraw();
+	$("#debug").text(Circles.length);
+}
+
+// mousedown 이벤트 ( 캔바스 내 )
+function onMouseDown(x, y)
+{
+	var obj=new Object();
+	obj.x=x;
+	obj.y=y;
+	obj.size=5;
+	obj.lifetime=100;
+	Circles.push(obj);
+}
+
+// draw 이벤트
+function onDraw()
+{
+	if(init==false)return;
+	Context.strokeStyle="#000";
+	Context.lineWidth=1;
+	Context.strokeRect(0, 0, myCanvas.width-1, myCanvas.height-1);
+	Context.fillStyle="#fcfcfc";
+	Context.fillRect(1, 1, myCanvas.width-2, myCanvas.height-2);
+	for(i=0;i<Circles.length;++i)
+	{
+		Context.beginPath();
+		Context.strokeStyle=
+			'rgba(0,0,0,' + Circles[i].lifetime/100 + ')';
+		Context.lineWidth=1;
+		Context.arc(
+			Circles[i].x,		// 가로좌표
+			Circles[i].y,		// 세로좌표
+			Circles[i].size,	// 원 크기
+			0,				// 원호의 시작
+			Math.PI * 2		// 원호의 끝
+		);
+		Context.closePath();
+		Context.stroke();
+	}
+}
+
+$(document).ready(function(){
+	Init();
+	setInterval(Run, 20);
+	$("#MyCanvas").mousedown(function(){
+		// 웹페이지에서 캔버스 시작 위치를 차감한 x, y좌표
+		// 캔버스 내부의 좌표로 계산된다
+		var x=event.x - $("#MyCanvas").offset().left;
+		var y=event.y - $("#MyCanvas").offset().top;
+		
+		onMouseDown(x, y);
+	});
+});
+
+</script>
+
+<canvas id="MyCanvas" width=800 height=600>
+Canvas is not supported.
+</canvas>
+<span id=debug></span>
+</body>
+</html>

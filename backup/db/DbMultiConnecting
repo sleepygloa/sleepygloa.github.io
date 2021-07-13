@@ -1,0 +1,178 @@
+일단 3개의 DB를 동시에 연결해 보도록 하겠습니다. 
+
+src/main/resources 에 properties 폴더를 만들고 db-context-dev.properties 파일을 만듭니다. 
+
+ 
+
+MS_driverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+MS_userName=id
+
+MS_passWord=passwd
+
+MS_url=jdbc:sqlserver://localhost;databaseName=dbname
+
+MS_maxActive=10
+
+MS_maxIdle=8
+
+ 
+
+ORA_driverClassName=oracle.jdbc.driver.OracleDriver
+
+ORA_userName=id
+
+ORA_passWord=password
+
+ORA_url=jdbc:oracle:thin:@localhost:dbname
+
+ORA_maxActive=10
+
+ORA_maxIdle=8
+
+ 
+
+MY_driverClassName=com.mysql.jdbc.Driver
+
+MY_userName=id
+
+MY_passWord=password
+
+MY_url=jdbc:mysql://localhost:3306/dbname
+
+MY_maxActive=10
+
+MY_maxIdle=8
+
+ 
+
+이렇게 해서 연결 할껀데 그전에 pom에 추가할게 있습니다. 
+
+ 
+
+  <!-- mysql -->
+  <dependency>
+
+   <groupId>mysql</groupId>
+
+   <artifactId>mysql-connector-java</artifactId>
+
+   <version>5.1.18</version> 
+
+  </dependency>
+
+
+  <!-- Oracle -->
+  <dependency>
+   <groupId>ojdbc</groupId>
+   <artifactId>ojdbc</artifactId>
+   <version>14</version>
+  </dependency>
+  
+  <!-- MSSQL -->
+  <dependency>
+   <groupId>com.microsoft.sqlserver.jdbc</groupId>
+   <artifactId>sqljdbc</artifactId>
+   <version>4.0</version>
+  </dependency>
+
+!!!!!!!! 제가 쓰는건 nexus server 를 이용해서 했기 때문에 유사한걸 가지고 오세요. 
+
+ 
+
+ 
+
+이제 root-context.xml 파일을 엽니다. 어디있는지는 아시죠? 
+
+beans 에 util을 쓸거라고 등록 합니다. 
+
+ xmlns:util="http://www.springframework.org/schema/util"
+
+이렇게 하면 당연히 schemalocation 에 등록해주세요. /spring-util.xsd 입니다. 
+
+ <util:properties id="dbContext" location="classpath:properties/db-context-dev.properties" /> 
+이렇게 하면 파일을 가지고 옵니다. 
+
+아래쪽에 bean을 등록합니다.
+ <bean id="dataSourceOracle" class="org.apache.commons.dbcp.BasicDataSource">
+  <property name="driverClassName" value="#{dbContext.ORA_driverClassName}" />
+  <property name="username" value="#{dbContext.ORA_userName}" />
+  <property name="password" value="#{dbContext.ORA_passWord}" />
+  <property name="url" value="#{dbContext.ORA_url}" />
+  <property name="initialSize" value="0" />
+  <property name="maxActive" value="#{dbContext.ORA_maxActive}" />
+  <property name="minIdle" value="0" />
+  <property name="maxIdle" value="#{dbContext.ORA_maxIdle}" />
+  <property name="maxWait" value="10000" />
+  <property name="validationQuery" value="SELECT 1 FROM DUAL" />
+  <property name="validationQueryTimeout" value="-1" />
+  <property name="testOnBorrow" value="true" />
+  <property name="testOnReturn" value="false" />
+  <property name="timeBetweenEvictionRunsMillis" value="1800000" />
+  <property name="numTestsPerEvictionRun" value="3" />
+  <property name="minEvictableIdleTimeMillis" value="60000" />
+  <property name="testWhileIdle" value="true" />
+  <property name="removeAbandoned" value="true" />
+  <property name="removeAbandonedTimeout" value="60" />
+  <property name="logAbandoned" value="false" />
+  <property name="defaultReadOnly" value="true" />
+ </bean>
+
+ <bean id="dataSourceMysql" class="org.apache.commons.dbcp.BasicDataSource">
+  <property name="driverClassName" value="#{dbContext.MY_driverClassName}" />
+  <property name="username" value="#{dbContext.MY_userName}" />
+  <property name="password" value="#{dbContext.MY_passWord}" />
+  <property name="url" value="#{dbContext.MY_url}" />
+  <property name="initialSize" value="0" />
+  <property name="maxActive" value="#{dbContext.MY_maxActive}" />
+  <property name="minIdle" value="0" />
+  <property name="maxIdle" value="#{dbContext.MY_maxIdle}" />
+  <property name="maxWait" value="10000" />
+  <property name="validationQuery" value="SELECT 1" />
+  <property name="validationQueryTimeout" value="-1" />
+  <property name="testOnBorrow" value="true" />
+  <property name="testOnReturn" value="false" />
+  <property name="timeBetweenEvictionRunsMillis" value="1800000" />
+  <property name="numTestsPerEvictionRun" value="3" />
+  <property name="minEvictableIdleTimeMillis" value="60000" />
+  <property name="testWhileIdle" value="true" />
+  <property name="removeAbandoned" value="true" />
+  <property name="removeAbandonedTimeout" value="60" />
+  <property name="logAbandoned" value="false" />
+ </bean>
+ 
+ <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+  <property name="driverClassName" value="#{dbContext.MS_driverClassName}" />
+  <property name="username" value="#{dbContext.MS_userName}" />
+  <property name="password" value="#{dbContext.MS_passWord}" />
+  <property name="url" value="#{dbContext.MS_url}" />
+  <property name="initialSize" value="0" />
+  <property name="maxActive" value="#{dbContext.MS_maxActive}" />
+  <property name="minIdle" value="0" />
+  <property name="maxIdle" value="#{dbContext.MS_maxIdle}" />
+  <property name="maxWait" value="10000" />
+  <property name="validationQuery" value="SELECT 1" />
+  <property name="validationQueryTimeout" value="-1" />
+  <property name="testOnBorrow" value="true" />
+  <property name="testOnReturn" value="false" />
+  <property name="timeBetweenEvictionRunsMillis" value="1800000" />
+  <property name="numTestsPerEvictionRun" value="3" />
+  <property name="minEvictableIdleTimeMillis" value="60000" />
+  <property name="testWhileIdle" value="true" />
+  <property name="removeAbandoned" value="true" />
+  <property name="removeAbandonedTimeout" value="60" />
+  <property name="logAbandoned" value="false" />
+  <property name="defaultTransactionIsolation" value="1" />
+ </bean>
+
+이때 org.apache.commons.dbcp.BasicDataSource 에러가 납니다. 
+
+  <dependency>
+   <groupId>commons-dbcp</groupId>
+   <artifactId>commons-dbcp</artifactId>
+   <version>1.4</version>
+  </dependency>
+ 
+
+pom에 추가해 주세요. 
+[출처] 2. DB연결 설정 (oracle, mssql, mysql )|작성자 삼디업종종사자

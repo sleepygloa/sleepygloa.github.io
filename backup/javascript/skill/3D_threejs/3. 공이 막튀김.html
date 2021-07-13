@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>캔바스 샘플#3</title>
+</head>
+<body>
+https://blog.naver.com/ephraimdrlee 
+/ 크레이의 세컨드라이프 탐구생활 네이버 블로그<br/>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+// 기본 초기화
+var init=false;
+var myCanvas;
+var Context;
+
+// 공의 갯수
+var ball_max =1;
+var balls=Array();
+var ball_image = new Image();
+
+// 초기화
+function Init()
+{
+	if(init==false)
+	{
+		myCanvas=document.getElementById("MyCanvas");
+		Context=myCanvas.getContext("2d");
+		ball_image.src = "https://i.imgur.com/wPPFCbU.png";
+		for(i=0;i<ball_max;++i)
+		{
+			var obj=new Object();
+			obj.x=Math.random()*myCanvas.width;
+			obj.y=Math.random()*myCanvas.height;
+			obj.size=Math.random()*32+16;
+			obj.xdir=Math.random()*16+3;
+			obj.ydir=Math.random()*16+3;
+			balls.push(obj);
+		}
+		init=true;
+	}
+}
+
+function Run()
+{
+	for(i=0;i<ball_max;++i)
+	{
+		balls[i].x+=balls[i].xdir;
+		if(balls[i].x<balls[i].size/2)
+		{
+			balls[i].x=balls[i].size/2;
+			balls[i].xdir=-balls[i].xdir;
+		}
+		if(balls[i].x>myCanvas.width-balls[i].size/2)
+		{
+			balls[i].x=myCanvas.width-balls[i].size/2;
+			balls[i].xdir=-balls[i].xdir;
+		}
+		balls[i].y+=balls[i].ydir;
+		if(balls[i].y<balls[i].size/2)
+		{
+			balls[i].y=balls[i].size/2;
+			balls[i].ydir=-balls[i].ydir;
+		}
+		if(balls[i].y>myCanvas.height-balls[i].size/2)
+		{
+			balls[i].y=myCanvas.height-balls[i].size/2;
+			balls[i].ydir=-balls[i].ydir;
+		}
+	}
+	onDraw();
+}
+
+// draw 이벤트
+function onDraw()
+{
+	if(init==false)return;
+	Context.strokeStyle="#000";
+	Context.lineWidth=1;
+	Context.strokeRect(0, 0, myCanvas.width-1, myCanvas.height-1);
+	Context.fillStyle="#fcfcfc";
+	Context.fillRect(1, 1, myCanvas.width-2, myCanvas.height-2);
+	for(i=0;i<ball_max;++i)
+	{
+		Context.drawImage(ball_image, 
+			balls[i].x-balls[i].size/2, 
+			balls[i].y-balls[i].size/2,
+			balls[i].size,
+			balls[i].size
+		);
+	}
+	Context.filter = "none";
+}
+
+$(document).ready(function(){
+	Init();
+	setInterval(Run, 20);
+});
+</script>
+
+<canvas id="MyCanvas" width=800 height=600>
+Canvas is not supported.
+</canvas>
+
+</body>
+</html>

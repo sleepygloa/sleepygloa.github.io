@@ -1,0 +1,43 @@
+# script
+
+$(document).ready(function(){
+	$("#franchiseeSelect").change(function(){
+		var b_key =$(this).children("option:selected").val();
+        $.ajax({
+        	url: "franchiseeSelect.do",
+        	type:"post",
+        	data:{b_key:b_key},
+        	success:function(data){
+        		window.location="bossErpMain.do";
+        	}
+        });
+})
+})
+
+------
+
+# jsp 1
+
+				<select id="franchiseeSelect" class="flist">
+				</select>
+        
+# jsp 2
+
+<option>가맹점 선택</option>
+<c:forEach var="list" items="${flist}">
+<option value="${list.b_key}">${list.b_name}</option>					
+</c:forEach>
+
+# BEAN (java)
+
+	@RequestMapping("franchiseeSelect.do")
+	public String franchiseeSelect(HttpSession session, String b_key){
+		
+		if(session.getAttribute(b_key) != null){
+			session.removeAttribute("b_key");
+		}
+		session.setAttribute("b_key", b_key);
+		
+		return "sidemenu";
+				
+	}

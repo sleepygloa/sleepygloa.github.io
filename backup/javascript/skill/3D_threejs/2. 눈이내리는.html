@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>캔바스 샘플#2</title>
+</head>
+<body>
+               
+<br/>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+// 기본 초기화
+var init=false;
+var myCanvas;
+var Context;
+
+// 떨어질 눈의 갯수
+var snow_max = 150;
+var snow=Array();
+
+// 초기화
+function Init()
+{
+	if(init==false)
+	{
+		myCanvas=document.getElementById("MyCanvas");
+		Context=myCanvas.getContext("2d");
+		for(i=0;i<snow_max;++i)
+		{
+			var obj=new Object();
+			obj.x=Math.random()*myCanvas.width;
+			obj.y=Math.random()*myCanvas.height;
+			obj.size=Math.sqrt(Math.random()*100)+1;
+			obj.alpha=Math.random();
+			snow.push(obj);
+		}
+		init=true;
+	}
+}
+
+// draw 이벤트
+function onDraw()
+{
+	if(init==false)return;
+	Context.fillStyle="#000";
+	Context.fillRect(0, 0, myCanvas.width-1, myCanvas.height-1);
+	for(i=0;i<snow_max;++i)
+	{
+		Context.beginPath();	// 
+		Context.moveTo(snow[i].x, snow[i].y);
+		Context.fillStyle = // 채울색상, 투명도
+			'rgba(255,255,255,' + snow[i].alpha + ')';
+		Context.arc(
+			snow[i].x,		// 가로좌표
+			snow[i].y,		// 세로좌표
+			snow[i].size,	// 원 크기
+			0,				// 원호의 시작
+			Math.PI * 2		// 원호의 끝
+		);
+		Context.closePath();
+		Context.fill();
+	}
+	Context.filter = "none";
+}
+
+function Run()
+{
+	for(i=0;i<snow_max;++i)
+	{
+		snow[i].y+=snow[i].size*0.2;
+		if(snow[i].y>=myCanvas.height)snow[i].y=-10;
+	}
+	onDraw();
+}
+
+$(document).ready(function(){
+	Init();
+	setInterval(Run, 20);
+});
+</script>
+
+<canvas id="MyCanvas" width=800 height=600>
+Canvas is not supported.
+</canvas>
+
+</body>
+</html>

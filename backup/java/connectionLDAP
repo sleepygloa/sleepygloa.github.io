@@ -1,0 +1,76 @@
+String base = "DC=GLOBAL,DC=ECOLAB,DC=CORP";
+        //String dn = "uid=" + username + "," + base;
+        String ldapURL = "LDAP://URL";
+        boolean ldapChk = false;
+
+        String userId = (String) inParams.getParam("userIdE");
+        String userPwd = (String) inParams.getParam("userPwdE");
+
+
+        // Setup environment for authenticating
+        Hashtable<String, String> environment = new Hashtable<String, String>();
+        environment.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+        environment.put(Context.PROVIDER_URL, ldapURL);
+        environment.put(Context.SECURITY_AUTHENTICATION, "simple");
+        environment.put(Context.SECURITY_PRINCIPAL, userId);
+        environment.put(Context.SECURITY_CREDENTIALS, userPwd);
+
+        try {
+            DirContext authContext = new InitialDirContext(environment);
+
+            LdapContext ctx = new InitialLdapContext(environment, null);
+            System.out.println("Active Directory Connection: CONNECTED");
+            // 아래는 Active Directory에서 발생한 에러처리 입니다.
+            // user is authenticated
+            ldapChk = true;
+            outParams.setParam("ldapChk", ldapChk);
+        }catch(AuthenticationException e){
+
+            System.out.println("catch==============");
+            String msg = e.getMessage();
+
+              if (msg.indexOf("data 525") > 0) {
+                   outParams.setMsgCd("MSG_COM_ERR_077");//사용자를 찾을 수 없습니다.
+
+                } else if (msg.indexOf("data 773") > 0) {
+                    outParams.setMsgCd("MSG_COM_ERR_078");
+//                    System.out.println("사용자는 암호를 재설정해야합니다.");
+
+                } else if (msg.indexOf("data 52e") > 0) {
+                    outParams.setMsgCd("MSG_COM_ERR_083");
+//                    System.out.println("LDAP 비밀번호와 일치하지 않습니다..");
+
+                } else if (msg.indexOf("data 533") > 0) {
+                    outParams.setMsgCd("MSG_COM_ERR_080");
+//                    System.out.println("입력한 ID는 비활성화 상태 입니다.");
+
+                } else if(msg.indexOf("data 532") > 0){
+                    outParams.setMsgCd("MSG_COM_ERR_081");
+//                    System.out.println("암호가 만료되었습니다.");
+
+                } else if(msg.indexOf("data 701") > 0){
+                    outParams.setMsgCd("MSG_COM_ERR_083");
+//                    System.out.println("AD에서 계정이 만료됨");
+
+                }
+                else {
+
+                    System.out.println("정상!");
+
+                }
+              ldapChk = false;
+              outParams.setParam("ldapChk", ldapChk);
+
+            }
+
+     // 이 부분은 Active Directory와 JAVA가 연결 되지 않을 때의 예외처리입니다. 연결이 안되면 FAILED를 출력합니다.
+
+        catch(Exception nex){
+
+            System.out.println("Active Directory Connection: FAILED");
+//            MSG_LGN_ERR_120
+
+
+            nex.printStackTrace();
+
+        }

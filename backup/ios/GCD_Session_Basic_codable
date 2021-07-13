@@ -1,0 +1,148 @@
+//
+//  Url_Session_Basic.swift
+//  GCD_Basic_01
+//
+//  Created by seonho Kim on 2020/12/28.
+//
+
+import Foundation
+import UIKit
+
+
+let urlString = "https://itunes.apply.com/search?media=music&entity=song&term=Gdragon"
+let url =  URL(string: urlString)
+
+//url?.absoluteString //"https://itunes.apply.com/search?media=music&entity=song&term=Gdragon"
+//url?.scheme //https
+//url?.host //itunes.apply.com/
+//url?.path // /search
+//url?.query // media=music&entity=song&term=Gdragon
+//url?.baseURL nil
+
+
+let baseUrl = URL(string: "https://itunes.apply.com")
+let relativeUrl = URL(string : "search?media=music&entity=song&term=Gdragon", relativeTo: baseUrl)
+
+//relativeUrl?.absoluteString
+//relativeUrl?.scheme
+//relativeUrl?.host
+//relativeUrl?.path
+//relativeUrl?.query
+//relativeUrl?.baseURL
+
+
+//var urlComponents = URLComponents(string: "https://itunes.apply.com/search?media=music&entity=song")
+//var queryItem = URLQueryItem(name: "term", value: "지드래곤")
+//urlComponents?.queryItems?.append(queryItem)
+//urlComponents?.url
+//urlComponents?.string
+//urlComponents?.queryItems
+
+
+
+let config = URLSessionConfiguration.default
+let session = URLSession(configuration: config)
+
+//URLSessionTask
+// - dataTask
+// - uploadTask
+// - downloadTask
+
+var urlComponents = URLComponents(string: "https://itunes.apply.com/search?media=music&entity=song")!
+var queryItem = URLQueryItem(name: "term", value: "지드래곤")
+urlComponents.queryItems?.append(queryItem)
+let requestURL = urlComponents.url!
+
+struct Response: Codable{
+    let resultCount:Int
+    let results: [Track]
+}
+
+struct Track : Codable{
+    let title: String
+    let artistName: String
+    let thumbnail: String
+    
+    //변수명 변경
+    enum CodingKeys : String, CodingKeys{
+        
+        case title = "trackName"
+        case artistName = "artistName"
+        case thumbnail = "artworkUrl30"
+    }
+    
+//    init?(json: [String:Any]){
+//        guard let title = json["trackName"] as? String,
+//           let artistName = json["artistName"] as? String,
+//           let thumbnail = json["artworkUrl30"] as? String else{
+//            return nil
+//        }
+//        self.title = title
+//        self.artistName = artistName
+//        self.thumbnail = thumbnail
+//    }
+}
+func parse(data: Data ) -> [Track]? {
+    //파싱
+    do {
+        let decoder = JSONDecoder()
+        let response = try decoder.decode(Response.self, from: data)
+        let trackList = response.results
+//        let trackList = try decoder.decode([Track].self, from:data)
+        return trackList
+    } catch let error {
+        print("----> error : \(error)")
+        return nil
+    }
+    
+//    do {
+//        let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+//        var parsedTrackList : [Track] = []
+////        if let dictionary = json
+//        if let dictionary = jsonObject as? [String: Any], let tracks = dictionary["results"] as? [[String: Any]] {
+//
+//            parsedTrackList = tracks.compactMap{ Track(json: $0)}
+//
+////            tracks.forEach({ (track: [String: Any]) in
+////                if let title = track["trackName"] as? String,
+////                   let artistName = track["artistName"] as? String,
+////                   let thumbnail = track["thumbnail"] as? String{
+////
+////                    let track = Track(title:title, artistName: artistName, thumbnail: thumbnail)
+////                    parsedTrackList.append(track)
+////                }
+////                print("-----> title: \(title), artist: \(artistName), thumbnail: \(thumbnail)")
+////            })
+//
+//        }
+//
+//        return parsedTrackList
+////        print("------> result : \(jsonObject)")
+//
+//    }catch let error{
+//        print("------> Error : \(error.localizedDescription)")
+//        return nil
+//    }
+}
+var trackList: [Track] = []
+
+let dataTask = session.dataTask(with: requestURL){ (data, response, error) in
+    // Client-side Error
+    guard error == nil else {return}
+    
+    // Server-side Error
+    guard let statusCode = (response as? HTTPURLResponse)?.statusCode else{return}
+    let successRange = 200..<300
+    
+    // serverside error handle
+    guard successRange.contains(statusCode) else{ return }
+    
+    guard let resultData = data else { return }
+    print("----> Result Data : \(resultData)")
+
+    trackList = parse(data: resultData) ?? []
+    print("----> total tracks count: \(trackList.count)")
+
+}
+
+dataTask.resume()

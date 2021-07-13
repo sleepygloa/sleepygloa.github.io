@@ -1,0 +1,48 @@
+# 1. JSP & JS
+
+var toasts = new Toast('info','toast-top-full-width',
+		"<div><label class=\"toast-title\">"+event.title+"님!</label><span class=\"toast-message\">일정을  ["+event.start.format()+" ~ "+event.end.format()+"] 로 변경하겠습니까?</div> <div><button class=\"ghost-btn\" onClick=\"revert()\">닫기</button></div><div><button class=\"ghost-btn\" "+
+				"onClick=\"moveConfirm(\'{&quot;start&quot;:&quot;"+event.start.format()+"&quot;,&quot;end&quot;:&quot;"+event.end.format()+"&quot;}\')\">확인</button></div> ");
+
+# 2. JS Process
+
+function moveConfirm(date){
+	var date = date;
+	
+	$.ajax({
+		url: "employeeCalenderEventDrop.do",
+    	type:"post",
+    	data:{date:date},
+    	dataType : "json",
+    	success:function(data){
+    		history.go(0);
+    	},
+    	fail:function(){
+    		history.go(0);
+    	}
+	})
+  
+# 3. BEAN
+@RequestMapping("employeeCalenderEventDrop.do")
+	public String employeeCalenderEventDrop(Model model, String date){
+		
+		String check = "";
+		try{
+			
+			JSONParser Jparser = new JSONParser();
+			
+			JSONObject JObject = (JSONObject)Jparser.parse(date);
+			String start = (String)JObject.get("start");
+			String end =  (String)JObject.get("end");		
+			
+				
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return check;
+	}
+  
+  # 4. result(console)
+start: 2017-06-06 10:00:00
+end: 2017-06-08 15:00:00

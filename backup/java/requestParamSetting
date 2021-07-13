@@ -1,0 +1,46 @@
+1. json
+2. multipart
+
+
+    if (contentType.contains("application/json")) {
+          webRequest.setAttribute("contentType", "application/json", 0);
+          StringBuilder jsonText = new StringBuilder();
+          String line = null;
+          ObjectMapper mapper = new ObjectMapper();
+          try {
+                BufferedReader reader = req.getReader();
+                while ((line = reader.readLine()) != null) {
+                  jsonText.append(line);
+                }
+
+                String jsonTxt = jsonText.toString();
+                if ("".equals(jsonTxt)) {
+                }else {
+                    Map<String, Object> jsonMap = (Map<String, Object>)mapper.readValue(jsonTxt, new TypeReference<Map<String, Object>>() {});
+                    for (Iterator<Map.Entry<String, Object>> i = jsonMap.entrySet().iterator(); i.hasNext();) {
+                      Map.Entry<String, Object> e = (Map.Entry)i.next();
+                      String jsonKey = (String)e.getKey();
+                      Object jsonValue = e.getValue();
+
+                      commParams.setParam(jsonKey, jsonValue);
+                    }
+                }
+          }
+          catch (Exception e)
+          {
+            e.printStackTrace();
+          }
+    } else if (isMultipart)
+    {
+      MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest)req;
+      Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
+
+      commParams.setFileable(true);
+      while (iterator.hasNext()) {
+        String fileKey = (String)iterator.next();
+        List<MultipartFile> listM = multipartHttpServletRequest.getFiles(fileKey);
+        if (!listM.isEmpty()) {
+          commParams.setParam(fileKey, listM);
+        }
+      }
+    }

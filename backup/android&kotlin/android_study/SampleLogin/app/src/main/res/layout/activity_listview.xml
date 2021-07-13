@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffeeeeee">
+
+    <LinearLayout
+        android:id="@+id/ll_listview_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/ll_listview_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="추가"
+            />
+
+        <EditText
+            android:id="@+id/et_listview_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="name"/>
+
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/gv_listview_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/ll_listview_list"
+        android:background="#ffeeeeee"
+        android:numColumns="2"
+        android:horizontalSpacing="8dp"
+        android:verticalSpacing="8dp"
+        android:layout_margin="8dp" />
+
+    <!--<ListView
+        android:id="@+id/lv_listview_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />-->
+
+</RelativeLayout>

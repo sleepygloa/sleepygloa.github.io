@@ -1,0 +1,2 @@
+/Users/seonhokim/dev/workspace/study/unity/unit5_3d_study/Community/obj/Debug/Assembly-CSharp.csprojResolveAssemblyReference.cache
+/Users/seonhokim/dev/workspace/study/unity/unit5_3d_study/Community/obj/Debug/Assembly-CSharp.csproj.CoreCompileInputs.cache

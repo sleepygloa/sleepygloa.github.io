@@ -1,0 +1,114 @@
+# JS
+
+$(document).ready(function() {
+   		  //현재년월일
+   		  var date = new Date();
+   		  var d= date.getDate();
+   		  var m = date.getMonth();
+   		  var y = date.getFullYear();
+   		  
+   		  getEvent();
+   		});
+   		
+   		function getEvent(){
+   			var id = $('#id').val();
+   			$.post('employeeCalenderList.do', createCalenderDateResult);
+   		}
+   		************************************************
+   		function createCalenderDateResult(resp){
+   			var result = $.parseJSON(resp),
+   			eventData = "";
+	   		eventData = result;
+
+   			calendarEvent(eventData);
+   		}
+   		************************************************
+      collback'name resp, resp is list object
+      ************************************************
+   		function calendarEvent(eventData){
+   		  var calendar = $('#calendar').fullCalendar({
+   		  header: {
+   		    left : 'prev, next today', //이전, 다음, 오늘
+   		    center : 'title', //중앙 타이틀
+   		    right: 'month, agendaWeek, agendaDay'
+   		  },
+   		  allDayText: '시간', //주간, 월간
+   		  axisFormat: 'tt hh', //주간, 월간
+   		  monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+   		  monthNamesShort : ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+   		  dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'],
+   		  dayNameShort:['일','월','화','수','목','금','토'],
+   		  buttonText:{
+   			  prev: '이전달',
+   			  next: '다음달',
+   			  prevYear: '전년',
+   			  nextYear: '내년',
+   			  today: '오늘',
+   			  month: '월간',
+   			  week: '주간',
+   			  day: '일간'
+   		  },
+   		  
+   		  selectable: true,
+   		  selectHelper:true,
+   		  eventClick: function(calEvent, jsEvent, view){
+   			if(title != null){
+				calendar.fullCalendar('renderEvent',{
+					title: title,
+					start: start,
+					end: end
+				})
+				calender.fullCalendar('unselect');
+			}
+   			  return false;
+   		  },
+   		  select:function(start,end){
+			window.open("employeeCalenderInsert.do?start="+start+"&end="+end,"",
+	 		"width=450, height=300,status=no,toolbar=no,directories=no,location=no,scrollbars=no, resizable=no")
+	   		
+
+   		  },
+   		  editable:true,
+   		  eventLimit:true,
+   		  events:eventData
+	})
+}
+    
+    
+    ------------------------------
+# bean
+	//알바생 일정 JSON으로 불러오기 AJAX
+	@RequestMapping("employeeCalenderList.do")
+	public ModelAndView employeeCalenderList(HttpSession session, Model model, BossEmployeeManageDataDTO beDTO){
+		ModelAndView mv = new ModelAndView();
+		List list = new ArrayList();
+		
+		String id = (String)session.getAttribute("loginId");
+		
+		try{
+			ObjectMapper mapper = new ObjectMapper();
+			
+			String b_id = (String)sqlMap.queryForObject("erpEmp.getEidBid", id);
+			list = (List)sqlMap.queryForList("erpEmp.getCalenderWorkTimeList", b_id);
+			
+			String jsonList = mapper.writeValueAsString(list);
+			System.out.println(jsonList);
+			
+			mv.setViewName("/bossERP/employeeManage/employeeCalenderJSON");
+			//굳이 ModelAndView를 사용했다. String으로 반환해도되는데
+			model.addAttribute("jsonList", jsonList);
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return mv;
+			
+	}
+  
+ ---------------------------------------------
+ 
+# jsp
+
+${jsonList}
+
+

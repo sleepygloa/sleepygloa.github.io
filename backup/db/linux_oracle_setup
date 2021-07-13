@@ -1,0 +1,718 @@
+## centos7 + oracle 11g r2 setup 
+
+
+*** 시작하기전에
+1. TUI환경에서 설치를 한다면 어려움을 겪을 수있으니 GUI환경을 설치하면서 진행해보자
+
+  # yum -y groups install "GNOME Desktop" 
+  # reboot 
+
+  재시작을하면 됩니다그러나...오류가뜹니다
+
+  license not accepted 라고뜨는데이때 잘보면항목중
+  1번항목만보입니다. 1번을누르면다시 1,2번 항목이보이는데 2번을눌러 라이센스승낙을 누릅시다
+
+  # startx 
+
+  ***
+  11g 설치에서는 /u01 디렉터리를 만들어서 사용하는 것으로 하고
+  10g 설치에서는 설치 전에 미리 파티션으로 잡아놓은 /Database 디렉터리를 사용하도록 한다.
+  (*10g 설치는 OCP시험이 합격하고나면 정리해봐야 할 듯하다. 지금 다니는 회사에서 사용하는 방식은
+  미리 마운트해놓은 /Database를 사용하는 방식이다. 시험공부를 하고 있는 중이라... 혹시라도 모를 오답을 찍을 수도 있는
+  사태를 미연에 방지하기 위해서..)
+
+  # reboot
+***
+2. GUI환경을 설치하고나니 용량이 부족해집니다. 30 GB 로 설정한다음 설치를 진행합시다.
+20GB 중 실제 용량은 18GB 정도되는데 설치하려고하면 이미 17GB 를 사용하고 있어서 할 수가 없어요 
+
+---------------------------------------------------------------------------------
+## 오라클 설치시 필요한 패키지 설치
+
+http://docs.oracle.com/cd/E11882_01/install.112/e47689/pre_install.htm#LADBI1111
+를 방문해서 Checking the Software Requirements 클릭> Pacakge Requirements 클릭> Oracle Database Package Requirements for Linux x86-64 클릭해서 해당 링크로 이동하면 리눅스 버전별로 필요한 라이브러리가 명시되어 있다. 나의 경우 설치한 OS가 CentOS7 이므로 이에 준하는 OS인 Red Hat Enterprise Linux7을 찾아서 설치하면 된다. 
+
+CentOS7에서 오라클을 구동할 경우 필요한 패키지는 아래와 같다
+binutils-2.23.52.0.1-12.el7.x86_64 
+compat-libcap1-1.10-3.el7.x86_64 
+compat-libstdc++-33-3.2.3-71.el7.i686
+compat-libstdc++-33-3.2.3-71.el7.x86_64
+gcc-4.8.2-3.el7.x86_64 
+gcc-c++-4.8.2-3.el7.x86_64 
+glibc-2.17-36.el7.i686 
+glibc-2.17-36.el7.x86_64 
+glibc-devel-2.17-36.el7.i686 
+glibc-devel-2.17-36.el7.x86_64 
+ksh
+libaio-0.3.109-9.el7.i686 
+libaio-0.3.109-9.el7.x86_64 
+libaio-devel-0.3.109-9.el7.i686 
+libaio-devel-0.3.109-9.el7.x86_64 
+libgcc-4.8.2-3.el7.i686 
+libgcc-4.8.2-3.el7.x86_64 
+libstdc++-4.8.2-3.el7.i686 
+libstdc++-4.8.2-3.el7.x86_64 
+libstdc++-devel-4.8.2-3.el7.i686 
+libstdc++-devel-4.8.2-3.el7.x86_64 
+libXi-1.7.2-1.el7.i686 
+libXi-1.7.2-1.el7.x86_64 
+libXtst-1.2.2-1.el7.i686 
+libXtst-1.2.2-1.el7.x86_64 
+make-3.82-19.el7.x86_64 
+sysstat-10.1.5-1.el7.x86_64 
+
+여기에 추가해서 Oracle ODBC Drivers항목을 참조해보면 unixODBC 라이브러리도 설치해야한다고 나와 있다. CentOS7 에서 필요한 unixODBC 라이브러리는 아래와 같다
+unixODBC-2.3.1-6.el7.x86_64 or later
+unixODBC-2.3.1-6.el7.i686 or later
+unixODBC-devel-2.3.1-6.el7.x86_64 or later
+unixODBC-devel-2.3.1-6.el7.i686 or later
+
+
+이 항목들을 일일이 아래의 명령을 통해 실제로 설치되어 있는지 확인할 수도 있으나...
+[root@localhost ~]# rpm -qa | grep compat-libcap1-1
+compat-libcap1-1.10-7.el7.x86_64
+
+,,,
+
+아래와 명령을 통해 한번에 수행해서 필요한 항목을 확인할 수 있다.
+rpm -q --qf '%{NAME}-%{VERSION}-%{RELEASE}(%{ARCH})\n' binutils \
+
+
+각각의 패키지를 yum으로 설치한다.
+-- yum에 등록된 패키지 이름 확인
+[root@localhost ~]# yum search compat-libstdc++
+-- 설치
+[root@localhost ~]# yum install compat-libstdc++-33.x86_64 
+와 같은 방식으로 나머지 패키지를 모두 설치한다.
+
+---------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+### user 생성 
+
+그룹/사용자 관리 계획
+관리 계정 : oracle11(uid : 1100)
+관리 그룹 : dba(GID : 900), oper(GID :910), asmadmin(GID:920), oinstall (GID:1000)
+
+***
+1. [root@localhost ~]# cat /etc/passwd | grep [사용자계정이름]
+사용자계정이름:x:1000:1000:soongu:/home/사용자계정이름:/bin/bash
+
+2. [root@localhost ~]# cat /etc/group | grep [사용자계정이름]
+사용자계정이름:x:1000:사용자계정이름
+
+- 적당한 그룹이 있는지 확인한다
+3. [root@localhost ~]# cat /etc/group | grep 3939 (3939는 임의의번호)
+
+- gid와 uid를 3939로 변경
+4. [root@localhost ~]# groupmod -g 3939 seonho
+5. [root@localhost ~]# cat /etc/passwd | grep seonho
+seonho:x:1000:3939:soongu:/home/seonho:/bin/bash
+
+6. [root@localhost ~]# usermod -u 3939 seonho 
+7. [root@localhost ~]# cat /etc/passwd | grep seonho
+seonho:x:3939:3939:soongu:/home/seonho:/bin/bash
+
+(ERROR : userid is not in the sudoers file. This incident will be reported.)
+(sudoers파일은 sudo명령어에 대한 설정을 다루는 파일이고 이곳에 sudo명령어를 사용할 수 있는 계정을 지정할수 있습니다. 
+그 외에도 여러가지 설정에 대한 부분이 있으며 /etc/sudoers 에 위치하고 있습니다. 기
+본으로 지정된 내용을 보면 root   ALL=(ALL) ALL 이라는 부분이 있는데 
+이 설정이 root 유저가 sudo명령어를 사용할 수 있도록 하는 부분입니다. )
+
+해결법
+1). 재부팅을 하여 복구 모드로 접속한 다음 su 명령어를 쳐서 root 로 접속한다
+2). chomod u+w /etc/sudoers 파일에 쓰기권한을 부여한다
+3). 적당한위치 root ALL=(ALL) ALL 밑에 사용자 계정으로 똑같이 추가
+3). 사용자계정 ALL=(ALL) ALL
+4). :wq
+5). 쓰기 권한을 부여 했던 파일에 권한을 제거한다. chmod u-w /etc/sudoers
+6). reboot
+
+(ERROR : process uid)
+(이 오류는이미 이 아이디 계정으로사용 중이기 때문에 uid를 바꿀 수 없다는 메세지입니다.
+자세히 생각해보면 로그아웃 한다음 root계정으로 바로접속 후 원하는 계정의 uid를 바꾸면 되겠습니다)
+
+- 사용자생성
+8. [root@localhost ~]# groupadd -g 900 dba
+9. [root@localhost ~]# groupadd -g 910 oper
+10. [root@localhost ~]# groupadd -g 920 asmadmin
+11. [root@localhost ~]# groupadd -g 1005 oinstall
+12. [root@localhost ~]# useradd -g oinstall -G dba oracle
+13. [root@localhost ~]# passwd oracle
+
+******
+
+yum install oracle-rdbms-server-11gR2-preinstall (이거안됨) 
+
+yum update
+
+14. Add the following lines to the "/etc/security/limits.conf" file.
+
+oracle              soft    nproc   16384
+oracle              hard    nproc   16384
+oracle              soft    nofile  4096
+oracle              hard    nofile  65536
+oracle              soft    stack   10240
+
+
+
+
+15. mkdir -p /u01/app/oracle/product/11.2.0/db_1
+16. chown -R oracle:oinstall /u01
+17. chmod -R 775 /u01
+
+## wget 설치
+yum install wget
+
+## Java 설치
+wget http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.tar.gz
+18. wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.tar.gz
+
+
+19. ls (패키지가 다운로드 되었는지 확인)
+20. cp jdk-8u144-linux-x64.tar.gz /opt
+21. cd /opt
+22. tar zxvf jdk-8u144-linux-x64.tar.gz
+
+(압축파일해제시 압축 파일 확장자가 tar 또는 tar.gz 일 것입니다.
+tar 는 xvf 옵션, tar.gz 는 zxvf 옵션을 사용해야한다.)
+(또 Java 를 설치시 Oracle 사이트에서 cookie-accept 를 했느냐이다.
+이걸 하지 않고 wget을 이용하여 java를 다운 받고 설치하면 압축파일이 깨지는 오류가 날 것이다.)
+
+23. cd jdk1.8.0.144/
+24. update-alternatives --install /usr/bin/java java /opt/jdk1.8.0.144/bin/java 2
+25 .update-alternatives --config java
+방금 설치한 java 번호 누르고 엔터
+
+-- alternatives 명령을 이용해 javac, jar 명령어 패스 (command path)를 설정
+( set up javac,jar commands path using alternatives commands)
+
+26. [root@localhost jdk1.7.0_79]# update-alternatives --install /usr/bin/jar jar /opt/jdk1.7.0_79/bin/jar 3
+27. [root@localhost jdk1.7.0_79]# update-alternatives --install /usr/bin/javac javac /opt/jdk1.7.0_79/bin/javac 3
+28. [root@localhost jdk1.7.0_79]# update-alternatives --set jar /opt/jdk1.7.0_79/bin/jar
+29. [root@localhost jdk1.7.0_79]# update-alternatives --set javac /opt/jdk1.7.0_79/bin/javac
+30. [root@localhost jdk1.7.0_79]# java -version
+java version "1.8.0.144"
+Java(TM) SE Runtime Environment (build 1.7.0_79-b15)
+Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)
+
+##  환경변수 설정
+31. [root@localhost jdk1.7.0_79]# vim ~/.bash_profile
+
+#JAVA PATH Setup
+32. export JAVA_HOME=/opt/jdk1.7.0_79
+33. export JRE_HOME=/opt/jdk1.7.0_79/jre
+34. export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+## export PATH=$PATH:/opt/jdk1.7.0_79/bin:/opt/jdk1.7.0_79/jre/bin
+
+을 쓰고 [esc] 키를 누루고 난 후 :wq 입력후 터미널로 복귀
+
+35. [root@localhost jdk1.7.0_79]# source ~/.bash_profile
+
+
+## .bash_profile 설정
+
+36. [root@localhost ~]# vim /u01/oracle11/.bash_profile 
+
+#JAVA PATH Setup
+export JAVA_HOME=/opt/jdk1.7.0_79
+export JRE_HOME=/opt/jdk1.7.0_79/jre서
+export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+## export PATH=$PATH:/opt/jdk1.7.0_79/bin:/opt/jdk1.7.0_79/jre/bin
+
+#ORACLE Setup
+export TMP=/tmp
+export TMPDIR=/$TMP
+export ORALCE_OWNER=oracle11
+
+### ORACLE 11g home directory
+export ORACLE_BASE=/u01/app
+export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/db_1
+export ORACLE_HOME_LISTENER=$ORACLE_HOME/bin/lsnrctl
+export ORACLE_SID=ORCL
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib
+export PATH=$ORACLE_HOME/bin:$PATH
+
+
+## 커널 및 자원 제한 설정
+
+e47689.pdf - 84page를 참고하면 Configuring Kernel Parameters for Linux라는 Chapter가 있는데 이곳에서 권장하는 기준으로 커널의 세팅을 바꿔준다. 확인해야 하는 커널 파라미터가 적혀있는 파일들은 아래와 같다.
+/proc/sys/kernel/sem
+/proc/sys/kernel/shmall
+/proc/sys/kernel/shmax
+/proc/sys/kernel/shmmni
+/proc/sys/fs/file-max
+/proc/sys/fs/aio-max-nr
+/proc/sys/net/ipv4/ip_local_port_range
+/proc/sys/net/core/rmem_default
+/proc/sys/net/core/rmem_max
+/proc/sys/net/core/wmem_default
+/proc/sys/net/core/wmem_max
+
+오라클 11g 권장값
+fs.aio-max-nr = 1048576
+fs.file-max = 6815744
+kernel.shmall = 2097152
+kernel.shmmax = 4294967295
+kernel.shmmni = 4096
+kernel.sem = 250 32000 100 128
+net.ipv4.ip_local_port_range = 9000 65500
+net.core.rmem_default = 262144
+net.core.rmem_max = 4194304
+net.core.wmem_default = 262144
+net.core.wmem_max = 1048576
+
+#cat /proc/sys/kernel/sem 
+
+
+[root@localhost ~]# vim /etc/sysctl.conf 제일끝에 아래 내용을 추가한다
+
+kernel.sem = 250 32000 100 128
+fs.file-max = 6815744
+net.ipv4.ip_local_port_range = 9000 65500
+net.core.rmem_default = 262144
+net.core.rmem_max = 4194304
+net.core.wmem_default = 262144
+net.core.wmem_max = 1048576
+
+
+수정 완료 후 아래 명령 수행, 명령어를치면 변경된 내용이 출력된다
+[root@localhost ~]# /sbin/sysctl -p
+
+sudo vi /usr/lib/sysctl.d/00-system.conf
+아래의 줄들을 주석 처리한다.
+
+# Disable netfilter on bridges.
+#net.bridge.bridge-nf-call-ip6tables = 0
+#net.bridge.bridge-nf-call-iptables = 0
+#net.bridge.bridge-nf-call-arptables = 0
+
+sudo vi /etc/sysctl.conf
+다음 내용을 끝에 추가한다.
+
+
+net.ipv4.ip_local_port_range = 9000 65500
+fs.file-max = 6815744
+kernel.shmall = 10523004
+kernel.shmmax = 6465333657
+kernel.shmmni = 4096
+kernel.sem = 250 32000 100 128
+net.core.rmem_default=262144
+net.core.wmem_default=262144
+net.core.rmem_max=4194304
+net.core.wmem_max=1048576
+fs.aio-max-nr = 1048576
+
+
+
+
+
+
+
+
+
+wget --no-check-certificate -v -c --tries=2 -O linux.x64_11gR2_database_1of2.zip --user=oracle_login_email@whatever.com --password=oracle_password http://download.oracle.com/otn/linux/oracle11g/R2/linux.x64_11gR2_database_1of2.zip
+wget --no-check-certificate -v -c --tries=2 -O linux.x64_11gR2_database_2of2.zip --user=oracle_login_email@whatever.com --password=oracle_password http://download.oracle.com/otn/linux/oracle11g/R2/linux.x64_11gR2_database_2of2.zip
+
+
+111. 다운로드한 오라클 DB파일을 oracle계정으로 옮긴다
+scp ./linux.x64_11gR2_database_*.zip oracle@domain:/home/oracle
+(domain에는 해당 주소를 입력 예를 들면 localhost)
+
+112. 오라클계정으로 접속한다.
+ssh oracle@localhost (enter)
+passwd (enter)
+
+113. 홈 디렉토리로 복사한 집파일 2개를 압축을 푼다.
+unzip linux ~~~~ 1of2
+unzip linux ~~~~ 2of2
+
+114. 설치파일실행하기 (압축해제는 홈디렉토리의 /database 폴더 안에 되었을 것이다
+./database/runInstaller (enter)
+
+(한글이 깨져서 나온다면, centos 설치시 한글을 지정해서 그렇다 그러니 이렇게 설정해주자)
+vim ~/.bash_profile (의 제일 아래줄에)
+export LANG=C (:wq)
+
+./database/runInstaller -jreLoc /usr/lib/jvm/jre
+
+115. 설치중
+1) 이메일 입력하지 않고 체크해제 (다음)
+2) install database software only (체크)(다음)
+3) single instance database install (선택)(다음)
+4) 필요한 언어 추가 (다음)
+5) enterprise edition (선택) (다음)
+6) 설치경로확인
+/u01/app/oracle
+/u01/app/oracle/11.2.0/dbhome_1
+7) 설치중 발생하는 오류 2개 해결법
+ 7-1) 이때부터는 터미널을 2개 열고 진행하는 것이 편하다
+
+진행에 필요한 패키지 설치: 관리자 계정으로진행
+sudo yum install glibc-static.x86_64 glibc-static.i686
+
+파일수정:오라클 계정으로 진행
+cd /u01/app/oracle/product/11.2.0/dbhome_1/ctx/lib
+vim ins_ctx.mk
+
+아래문구를 그아래문구로 바꾸자
+ctxhx: $(CTXHXOBJ)
+    $(LINK_CTXHX) $(CTXHXOBJ) $(INSO_LINK)
+-----------------------
+ctxhx: $(CTXHXOBJ)
+    -static $(LINK_CTXHX) $(CTXHXOBJ) $(INSO_LINK) /usr/lib64/stdc.a
+
+재시도
+
+7-2) 두번째 오류
+cd /u01/app/oracle/product/11.2.0/dbhome_1/sysman/lib
+vi ins_emagent.mk
+
+아래문구를 그아래문구로 바꾸자
+$(SYSMANBIN) emdctl:
+    $(MK_EMAGENT_NMECTL)
+------------------------
+$(SYSMANBIN) emdctl:
+    $(MK_EMAGENT_NMECTL) -lnnz11
+    
+재시도
+excute configuration scripts 창이 뜬다면 ok로 빠져나가자 (표시되는 리스트 파일을 루트 권한으로 실행해야한다는 메세지이다)
+
+설치완료(종료)를 누르지는 않고 120번을 진행하자
+
+120. 루트로 접속한 터미널로 위에 발생한 메세지창의 리스트를 실행시켜주자
+
+root
+
+/u01/app/oraInventory/orainstRoot.sh --> 엔터 
+/u01/app/oracle/product/11.2.0/dbhome_1/root/sh  --> 엔터
+
+설치 종료(아까 완료누르지않았던 완료를 누르자)
+
+121. 환경변수 추가
+vim ~/.bash_profile
+
+export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/dbhome_1
+export PATH=$PATH:$ORACLE_HOME/bin
+
+source ~/.bash_profile
+-----파일내용------
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/.local/bin:$HOME/bin
+
+export PATH
+
+export JAVA_HOME=/opt/jdk1.8.0.144
+export JRE_HOME=/opt/jdk1.8.0.144/jre
+export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+##export PATH=$PATH:/opt/jdk1.8.0.144/bin:/opt/jdk1.8.0.144/jre/bin
+
+#ORACLE Setup
+export TMP=/tmp
+export TMPDIR=/$TMP
+
+###ORACLE 11g home directory
+export ORACLE_BASE=/u01/app
+export ORACLE_HOME=$ORACLE_BASE/oracle/product/11.2.0/dbhome_1
+export ORACLE_OWNER=oracle
+export ORACLE_TERM=xterm
+export NLS_LANG=AMERICAN_AMERICA.KO16KSC5601;
+export THREADS_FLAG=native
+export TEMPDIR=/tmp
+export EDITOR=vim
+export PATH=$PATH:$ORACLE_HOME/bin
+------------------
+이런식으로 정리될거이다
+
+
+121. 리스너 설치
+터미널을 오라클계정으로 접속한다음 프로그램을 실행시키자
+netca 엔터
+
+listener configuration -> add -> listener name : LISTENER --> protocol setting 다음 --> 포트기본값 사용 : 1521 
+--> 리스너를 추가로 설치 ? no -->  다음다음 종료
+
+122. DB 설정
+리스너와 똑같이 터미널을 오라클계정으로 접속한다음 프로그램을 실행시킨다
+dbca 엔터
+(next = 다음) (편의상이렇게하겠다)
+
+next -> create database -> general purpose or transaction processing 
+--> global database name : orcl (<- *.ora file 에서 service name 으로 사용한다)
+    SID : orcl
+여기 두개는 접속시 사용할 방법과 이름?을 정하는 것이다
+--> enterprise manager , next --> use the same administrative passwd for All accounts
+passwd : 설정
+--> next next
+--> memory, size, charset 설정하는부분에서 다음을 누르던 원하는 방향으로 세팅하자  (charset)
+use unicode click
+national character set : UTF8
+Default Language : Korean
+Default : Korea
+--> nextnextnextnext --> 설치완료
+
+123. 환경변수 추가
+vim ~/.bash_profile
+export ORACLE_SID=orcl
+
+source ~/.bash_profile
+-----파일내용------
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/.local/bin:$HOME/bin
+
+export PATH
+
+export JAVA_HOME=/opt/jdk1.8.0.144
+export JRE_HOME=/opt/jdk1.8.0.144/jre
+export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+##export PATH=$PATH:/opt/jdk1.8.0.144/bin:/opt/jdk1.8.0.144/jre/bin
+
+#ORACLE Setup
+export TMP=/tmp
+export TMPDIR=/$TMP
+
+###ORACLE 11g home directory
+export ORACLE_BASE=/u01/app
+export ORACLE_HOME=$ORACLE_BASE/oracle/product/11.2.0/dbhome_1
+export ORACLE_OWNER=oracle
+export ORACLE_TERM=xterm
+export NLS_LANG=AMERICAN_AMERICA.KO16KSC5601;
+export THREADS_FLAG=native
+export TEMPDIR=/tmp
+export EDITOR=vim
+export PATH=$PATH:$ORACLE_HOME/bin
+------------------
+
+## 오라클 자동실행 설정하기
+
+오라클 계정으로
+vim /etc/oratab
+
+아래의 파일을 그아래처럼 바꾸자
+orcl:/usr/oracle/app/product/11.2.0/dbhome_1:N
+----
+orcl:/usr/oracle/app/product/11.2.0/dbhome_1:Y
+
+관리자 계정으로
+아래파일에 내용을 추가핮 (파일이없을 수도 있으니 만들어서 추가해주자)
+-----
+#!/bin/bash
+# oracle: Start/Stop Oracle Database 11g R2
+#
+# chkconfig: 345 90 10
+# description: The Oracle Database is an Object-Relational Database Management System.
+#
+# processname: oracle
+ 
+. /etc/rc.d/init.d/functions
+ 
+LOCKFILE=/var/lock/subsys/oracle
+ORACLE_HOME=/usr/oracle/app/product/11.2.0/dbhome_1
+ORACLE_USER=oracle
+ 
+case "$1" in
+'start')
+    if [ -f $LOCKFILE ]; then
+        echo $0 already running.
+        exit 1
+    fi
+    echo -n $"Starting Oracle Database:"
+    su - $ORACLE_USER -c "$ORACLE_HOME/bin/lsnrctl start"
+    su - $ORACLE_USER -c "$ORACLE_HOME/bin/dbstart $ORACLE_HOME"
+    su - $ORACLE_USER -c "$ORACLE_HOME/bin/emctl start dbconsole"
+    touch $LOCKFILE
+    ;;
+'stop')
+    if [ ! -f $LOCKFILE ]; then
+        echo $0 already stopping.
+        exit 1
+    fi
+    echo -n $"Stopping Oracle Database:"
+    su - $ORACLE_USER -c "$ORACLE_HOME/bin/lsnrctl stop"
+    su - $ORACLE_USER -c "$ORACLE_HOME/bin/dbshut"
+    su - $ORACLE_USER -c "$ORACLE_HOME/bin/emctl stop dbconsole"
+    rm -f $LOCKFILE
+    ;;
+'restart')
+    $0 stop
+    $0 start
+    ;;
+'status')
+    if [ -f $LOCKFILE ]; then
+        echo $0 started.
+    else
+        echo $0 stopped.
+    fi
+    ;;
+*)
+    echo "Usage: $0 [start|stop|status]"
+    exit 1
+esac
+ 
+exit 0
+# End of file
+-----
+
+다음을 실행시키자
+sudo chmod 755 /etc/rc.d/init.d/oracle
+sudo chkconfig --add oracle
+sudo chkconfig oracle on
+
+### 방화벽 끄기
+systemctl status firewalld
+sudo systemctl stop firewalld
+sudo systemctl disable firewalld
+
+### 리스너 포트 열기
+systemctl status firewalld
+netstat -tulpn | grep LISTEN
+sudo firewall-cmd --zone=public --add-port=1521/tcp --permanent
+sudo firewall-cmd --reload
+
+reboot
+
+# 테이블 스페이스 설정하기, tablespace setting
+테이블스페이스는 오라클 아이디생성을 하고 연결을 할때 사용한다.
+
+테이블스페이스 목록보기 (tablespace)
+SELECT TABLESPACE_NAME, STATUS, CONTENTS FROM DBA_TABLESPACES;
+
+테이블스페이스 파일목록보기
+SELECT FILE_NAME, TABLESPACE_NAME, BYTES, STATUS FROM DBA_DATA_FILES;
+
+테이블스페이스 용량보기
+SELECT TABLESPACE_NAME, BYTES, BLOCKS FROM DBA_FREE_SPACE;
+
+테이블스페이스 삭제
+DROP TABLESPACE tablespace-name
+INCLUDING CONTENTS AND DATAFILES
+CASCADE CONSTRAINTS;
+
+테이블스페이스생성 : 여기에 보이는 파일경로는 각기 설치한 경로마다 다르다. 
+경로에보이는 data, temp폴더는 만들어주지않으니 생성한다음 진행하자
+CREATE TABLESPACE tablespace-name_data
+DATAFILE '/u01/app/oracle/oradata/orcl/data/file_name.dbf'
+SIZE 100M
+AUTOEXTEND ON NEXT 10M MAXSIZE UNLIMITED;
+
+CREATE TEMPORARY TABLESPACE tablespace-name_temp
+TEMPFILE '/u01/app/oracle/oradata/orcl/temp/file_name.dbf'
+SIZE 50M
+AUTOEXTEND ON NEXT 5M MAXSIZE UNLIMITED;
+
+# 오라클 유저 관리 (oracle user manage)
+위에서 만든 테이블 스페이스정보를 입력하면서 아이디를 만든다.
+
+CREATE USER account-id IDENTIFIED BY account-password
+DEFAULT TABLESPACE tablespace-name_data
+TEMPORARY TABLESPACE tablespace-name_temp
+PROFILE DEFAULT
+QUOTA UNLIMITED ON tablespace-name_data
+ACCOUNT UNLOCK;
+
+흔히 알고있는 간단히 아이디 만들기
+CREATE USER account-id IDENTIFIED BY account-password;
+
+권한부여
+GRANT RESOURCE, CONNECT TO account-id;
+GRANT CREATE VIEW, CREATE SYNONYM TO account-id;
+
+권한 제거
+REVOKE RESOURCE, CONNECT FROM account-id;
+
+
+# TNS 접속 설정하기, 원격으로 오라클 접속, 외부에서 VMware DB 접속하기, SQLDeveloper 에서 접속하기
+윈도우 버전 오라클은 오라클 클라이언트 를 설치해주고 설정해주어 쉽게 진행할 수 있는데,
+Mac 버전은 일일이 다운받고 설정해주어야한다.
+
+### 리스너설치경로 
+http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html
+다운받아서 압축 해제한다음 아래 경로로 이동시켜 붙여넣어준다.
+/u01/app/oracle/product/11.2.0/dbhome_1/instantclient/
+
+### 환경변수 추가하기
+vim ~/.bash_profile
+
+export TNS_ADMIN=$ORACLE_HOME/network/admin
+export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib:/usr/local/lib
+
+source ~/.bash_profile
+
+reboot
+
+### ./sqlplus / as sysdba  접속 오류
+
+
+### TNS 접속시 발생하는 오류
+ORA-28001: the password has expired
+-> alter user 유저명 identified by 패스워드;
+
+ora 17176 locale not recognized
+-> 
+1. sqldeveolper 오른쪽 클릭
+2. 패키지 보기
+3. Contents/Resources/sqldeveloper/sqldeveloper/bin/sqldeveloper.conf
+4. 옵션 추가
+AddVMOption -Duser.language=ko
+AddVMOption -Duser.country=KR 
+
+oracle, listener 활성화 오류
+./sqlplus / as sysdba 엔터 
+startup
+show sga (로 실행되고있는지 확인)
+exit
+lnsrctl status
+lnsrctl start 리스너 가동
+
+The network adaptor could not establish the connection
+1. 로그인 설정 정보가 잘못 됬을때, 리스터의 tnsname.ora파일의 정보와 같아야한다.
+2. 방화벽문제
+3. 리스너가 가동중이지 않을때 
+
+sqlplus접속하여 db 가동이 되지 않을때 
+ORA-01078: failure in processing system parameters
+LRM-00109: could not open parameter file '/home/oracle/product/10.1.0/db_1/dbs/initORCL.ora'
+오류가 보인다면
+vim ~/.bash_profile에서
+ORACLE_SID=ORCL --> orcl 
+
+could not open parameter file "C:\Program\11.2.0\DBhome_1\Database\initorcl.ora"
+startup pfile='c:\\u01\\app\oracle\\product\\11.2.0\\dbhome_1\\dbs\\init.ora' (enter)
+
+
+
+
+
+
+
+
+
+
+출처: http://ending1.tistory.com/49 [내 맘대로]
+
+
+
+
+
+
+
+
+
+
+완료
+
+
+
+
+
+

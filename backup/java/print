@@ -1,0 +1,401 @@
+      1. find print device
+      2. find printing file
+      3. set print setting (print, tray ... etc)
+      4. run print
+      
+      
+      
+      
+      PrintService[] pservices = PrintServiceLookup.lookupPrintServices(null, null);
+
+        //Acquire Printer
+        PrintService printer = null;
+        for (PrintService serv: pservices) {
+            System.out.println(serv.toString()); //PRINTING YOUR PRINTER NAME
+            if (serv.getName().equals("PRINTER NAME")) {
+                printer = serv;
+            }
+        }
+
+        if (printer != null) {
+            System.out.println("Found!");
+
+            try{
+                File file = new File("경로");
+
+                //Open File
+                FileInputStream fis = new FileInputStream(file);
+
+                //Create Doc out of file, autosense filetype
+                Doc pdfDoc = new SimpleDoc(fis, DocFlavor.INPUT_STREAM.AUTOSENSE, null);
+
+                //Create job for printer
+                DocPrintJob printJob = printer.createPrintJob();
+
+                //Create AttributeSet
+                PrintRequestAttributeSet pset = new HashPrintRequestAttributeSet();
+
+                //Add MediaTray to AttributeSet
+                pset.add(MediaTray.TOP);
+
+                //Add Duplex Option to AttributeSet
+                pset.add(Sides.DUPLEX);
+
+                //Print using Doc and Attributes
+                printJob.print(pdfDoc, pset);
+
+                //Close File
+                fis.close();
+            }catch(FileNotFoundException e){
+                System.out.println("FileNotFoundException");
+            }catch(PrintException p){
+                System.out.println("PrintException");
+            }catch(IOException io){
+                System.out.println("IOException");
+            }
+
+
+        }
+
+
+
+
+--------------------------------
+//            File file = new File("C:\\Users\\seonho-gritis\\Downloads\\ibExItemLabelA4Report.pdf");
+//
+//            //Open File
+//            FileInputStream fis = new FileInputStream(file);
+//
+//            //Create Doc out of file, autosense filetype
+//            Doc pdfDoc = new SimpleDoc(fis, DocFlavor.INPUT_STREAM.AUTOSENSE, null);
+//
+//            //Create job for printer
+//            DocPrintJob printJob = printer.createPrintJob();
+//
+//            //Create AttributeSet
+//            PrintRequestAttributeSet pset = new HashPrintRequestAttributeSet();
+//
+//            //Add MediaTray to AttributeSet
+//            pset.add(MediaTray.TOP);
+//
+//            if (printer.isAttributeValueSupported(MediaSizeName.ISO_A4, null, null)){
+//                pset.add(MediaSizeName.ISO_A4);
+//            }
+//
+//            //Add Duplex Option to AttributeSet
+//            pset.add(Sides.DUPLEX);
+//
+//            //Print using Doc and Attributes
+//            printJob.print(pdfDoc, pset);
+//
+//            //Close File
+//            fis.close();
+//        }catch(PrintException p){
+//            Log.debug("PrintException");
+//            p.printStackTrace();
+//        }catch(ClassCastException cce){
+//            Log.debug("ClassCastException");
+//            cce.printStackTrace();
+//        }catch(IOException io){
+//            Log.debug("IOException");
+//            io.printStackTrace();
+//        }
+-------------------------
+    /**
+     * 입하검수 제품라벨 SIZE () 레포트 PDF 생성
+     * @throws JRException
+     *
+     * @Author KimSeonHo
+     * @Date 2018. 4. 2.
+     */
+    public Params createIbExItemLabelReport(HttpServletRequest req, HttpSession session, Params inParams, HttpServletResponse resp) throws Exception{
+        Params outParams = ParamsFactory.createParams(inParams);
+        Log.debug("createIbExItemLabelReport inParams start() json data:->>>>>>>>>>>>>>" + inParams);
+
+        List<DataRow> list = new ArrayList<DataRow>();
+        String reportCd = inParams.getString("reportCd");
+        String fileName = "ibExItemLabel"+reportCd+"Report";
+        String nullJpgFile = "";
+        //제품라벨 사이즈별 레포트 파일명 SETTING
+
+        int flag = 0;
+        int nullCheck = 0;
+        //Params Data를 Report가 인식가능한 Collection Data로 변경, 시간, 세션값 추가
+        for(DataRow dr : inParams.getDataTable("dt_data")){
+
+            String imgName = "c:\\WMS\\LABEL\\" + dr.getString("itemCd") + "_" +reportCd + ".jpg";
+
+            // 파일 존재 여부 판단
+            File f = new File(imgName);
+            if (!f.isFile()) {
+                flag = 1;
+                if(nullCheck != 0){
+                    nullJpgFile += ", ";
+                }
+                nullJpgFile += dr.getString("itemCd");
+                nullCheck++;
+                continue;
+            }
+            //검색조건
+            String bacodeCd = ""+(String)dr.getString("itemCd")
+                    +(String)dr.getString("lotId");
+            dr.setParam("imgName", imgName);
+            dr.setParam("bacodeCd", bacodeCd);
+
+            list.add(dr);
+        }
+
+        if(flag == 1){
+            outParams.setParam("ERROR_FILE", "제품코드 ["+nullJpgFile+"]의 라벨 사이즈" + reportCd + "인 파일이 존재하지않습니다.");
+          return outParams;
+        }
+
+        //앱경로 설정
+        String appPath = session.getServletContext().getRealPath("/");
+
+//        //프린터 설정
+//        PrintService[] pservices = PrintServiceLookup.lookupPrintServices(null, null);
+//        //Acquire Printer
+//
+//        PrintService printer = null;
+//        for (PrintService serv: pservices) {
+//            System.out.println(serv.toString()); //PRINTING YOUR PRINTER NAME
+//            if (serv.getName().equals("SINDOH D410 Series PCL")) {
+//                printer = serv;
+//            }
+//        }
+
+        //그리드 행당 출력하기 위해
+        for(int i = 0; i < list.size(); i++){
+            List<DataRow> list2 = new ArrayList<DataRow>();
+            for(int j = 0; j < list.get(i).getInt("printQty"); j++){
+                list2.add(list.get(i));
+            }
+
+            //Report JRXML -> JASPER -> PDF 파일 생성
+            Report report = new Report();
+            String pdfPath = report.reportToPdf(session, list2, fileName);
+//            String serverPdfPath = "http://27.125.1.227:8081"+pdfPath;
+
+            outParams.setParam("fileName", pdfPath);
+
+            System.out.println("Found! FileName is ' : "+ pdfPath);
+             printStart(appPath + pdfPath);
+
+        }
+
+        return outParams;
+    }
+
+    private void printStart(String pdfPath){
+        try{
+
+            pdfPath = pdfPath.replaceAll("//", "/");
+
+            String ip = "10.10.21.3";
+            int port = 9100;
+
+            Log.debug("소켓");
+
+            Socket sc = null;
+            InputStream in = null;
+            OutputStream out = null;
+            String content = null;
+
+            sc = new Socket(ip, port);
+            sc.isConnected();
+//            in = sc.getInputStream();
+            out = sc.getOutputStream();
+
+            PdfFileParser pfp = new PdfFileParser();
+            content = pfp.pdfFileParser(pdfPath);
+            Log.debug("파일경로 " + pdfPath);
+            StringBuffer sb = new StringBuffer();
+            sb.append(content);
+
+//            DataInputStream dis = new DataInputStream(in);
+            DataOutputStream dos = new DataOutputStream(out);
+//
+//            PDDocument document = null;
+//            document = PDDocument.load(new File(pdfPath));
+//            document.getClass();
+//
+//            if (!document.isEncrypted()) {
+//                PDFTextStripperByArea stripper = new PDFTextStripperByArea(); //?
+//                stripper.setSortByPosition(true); //?
+//                PDFTextStripper Tstripper = new PDFTextStripper(); //?
+//                content = Tstripper.getText(document); //?
+//            }
+//            PrintWriter pw = new PrintWriter(out);
+//            pw.println(sb);
+            dos.writeUTF(sb.toString());
+
+            dos.close();
+//            dis.close();
+            out.close();
+            sc.close();
+
+            boolean isOnPrinter1 = false;
+
+            SocketUtil socket = new SocketUtil();
+            HashMap<Integer, String> dataMap = new HashMap<Integer, String>();
+            Log.debug("접속");
+            try {
+                // 프린터 서버 접속
+                socket.connect(ip, port);
+
+                // 접속여부 확인
+                if (socket.isConnected()) {
+                    Log.debug("프린터 상태 요청");
+                    // 프린터 상태 요청
+                    socket.sendMessage(getZplHostStatus());
+                    dataMap = socket.receiveMessage(2);
+                    Log.debug("프린터 가능여부 처리");
+                    // 프린터 가능여부 처리
+                    isOnPrinter1 = checkPrintStatus(dataMap);
+
+                    //인쇄
+                    Log.debug("인쇄");
+                    if (isOnPrinter1) {
+
+                        try {
+
+                            // 프린터 접속 인경우 출력 처리
+                            if (socket.isConnected()) {
+                                socket.sendMessage(sb.toString());
+
+                            }
+                        } catch (Exception e) {
+                            Log.error("1번 프린터 라벨 출력 에러 : " + e.toString());
+                        } finally {
+                            socket.disconnect();
+                        }
+                    }
+
+                }else{
+                    Log.info("host = " + ip + ", port = " + port);
+                }
+            } catch (Exception e) {
+                Log.error("1번 프린터 에러 : " + e.toString());
+            } finally {
+            }
+        }catch(Exception e){
+            Log.debug("전체에러");
+        }
+
+        File file = new File(pdfPath);
+        Log.debug("삭제");
+        if( file.exists() ){
+            if(file.delete()){
+                System.out.println("파일삭제 성공");
+            }else{
+                System.out.println("파일삭제 실패");
+            }
+        }else{
+            System.out.println("파일이 존재하지 않습니다.");
+        }
+
+    }
+
+
+        public String getZplHostStatus() {
+
+            StringBuffer zplMessage = new StringBuffer();
+            zplMessage.append("~HS");
+            return zplMessage.toString();
+        }
+
+        private boolean checkPrintStatus(HashMap<Integer, String> dataMap) {
+            Log.debug("프린트상태 점검 : "+ dataMap.toString());
+            /*
+             *
+             * [1 Line] aaa = communication (interface) settings* > b = paper out flag (1 = paper out) > c = pause flag (1 = pause active) dddd = label length (value in number of dots)
+             * eee = number of formats in receive buffer > f = buffer full flag (1 = receive buffer full) g = communications diagnostic mode flag (1 = diagnostic mode active) h =
+             * partial format flag (1 = partial format in progress) iii = unused (always 000) j = corrupt RAM flag (1 = configuration data lost) k = temperature range (1 = under
+             * temperature) l = temperature range (1 = over temperature)
+             *
+             * [2 Line] mmm = function settings* n = unused > o = head up flag (1 = head in up position) ? p = ribbon out flag (1 = ribbon out) ? q = thermal transfer mode flag (1 =
+             * Thermal Transfer Mode selected) r = Print Mode 0 = Rewind 1 = Peel-Off 2 = Tear-Off 3 = Cutter 4 = Applicator s = print width mode t = label waiting flag (1 = label
+             * waiting in Peel-off Mode) uuuuuu uu = labels remaining in batch v = format while printing flag (always 1) www = number of graphic images stored in memory
+             */
+
+            boolean isOnCheck = true;
+
+            String[] rowData1 = dataMap.get(0).split(",");
+            String[] rowData2 = dataMap.get(1).split(",");
+            // String[] rowData3 = dataMap.get(2).split(",");
+
+            // 용지가 없는 경우
+            if ("1".equals(rowData1[1])) {
+                isOnCheck = false;
+                Log.debug("용지없음");
+            }
+
+            // 일시정지인 경우
+            if ("1".equals(rowData1[2])) {
+                isOnCheck = false;
+                Log.debug("일시정지");
+            }
+
+            // 메모리가 full 인 경우
+            if ("1".equals(rowData1[5])) {
+                isOnCheck = false;
+                Log.debug("메모리 full");
+            }
+
+            // 프린터가 열려있는경우
+            if ("1".equals(rowData2[2])) {
+                isOnCheck = false;
+                Log.debug("프린터 열려있음");
+            }
+            Log.info(("dataMap.get(0) = " + dataMap.get(0)));
+            Log.info(("dataMap.get(1) = " + dataMap.get(1)));
+            return isOnCheck;
+        }
+
+
+-----------------------------------
+
+
+   @RequestMapping("/createIbExItemLabelReportDownload")
+   public void createIbExItemLabelReportDownload(HttpServletRequest resq, HttpSession session,  HttpServletResponse resp) throws Exception{
+     ApplicationContext appContext = new FileSystemXmlApplicationContext();
+     String fileName = "ibExItemLabelA4Report.pdf";
+     String filePath = session.getServletContext().getRealPath("//resources//report//ibExItemLabelA4Report.pdf");
+     File file = new File(filePath);
+
+     Log.debug(fileName);Log.debug(filePath);
+     String userAgent = resq.getHeader("User-Agent");
+     boolean ie = userAgent.indexOf("MSIE") > -1 || userAgent.indexOf("rv:11") > -1;
+
+     if (ie) {
+      fileName = URLEncoder.encode(file.getName(), "utf-8");
+     } else {
+      fileName = new String(file.getName().getBytes("utf-8"),"iso-8859-1");
+     }
+
+     resp.setContentType("application/octet-stream");
+     resp.setHeader("Content-Disposition","attachment;filename=\"" +fileName+"\";");
+
+     FileInputStream fis=new FileInputStream(file);
+     BufferedInputStream bis=new BufferedInputStream(fis);
+     ServletOutputStream so=resp.getOutputStream();
+     BufferedOutputStream bos=new BufferedOutputStream(so);
+
+     try{
+         byte[] data=new byte[2048];
+         int input=0;
+         while((input=bis.read(data))!=-1){
+              bos.write(data,0,input);
+              bos.flush();
+         }
+
+     }catch(Exception e){
+
+     }finally{
+         if(bos!=null) bos.close();
+         if(bis!=null) bis.close();
+         if(so!=null) so.close();
+         if(fis!=null) fis.close();
+     }
+   }

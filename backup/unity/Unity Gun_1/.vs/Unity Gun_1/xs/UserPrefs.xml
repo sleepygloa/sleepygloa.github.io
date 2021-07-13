@@ -1,0 +1,18 @@
+﻿<Properties StartupConfiguration="{F0CCC104-B021-F4B4-0065-9E609C5363DF}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/02.Scripts/Enemy/EnemyHpBar.cs">
+    <Files>
+      <File FileName="Assets/02.Scripts/Common/SceneLoader.cs" Line="80" Column="2" />
+      <File FileName="Assets/02.Scripts/Enemy/EnermyFire.cs" Line="3" Column="10" />
+      <File FileName="Assets/Editor/FOVEditor.cs" Line="7" Column="32" />
+      <File FileName="Assets/02.Scripts/Common/GameManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/02.Scripts/Enemy/EnemyHpBar.cs" Line="37" Column="31" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

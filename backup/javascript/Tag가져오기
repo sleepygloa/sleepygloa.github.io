@@ -1,0 +1,23 @@
+
+
+태그내가져오기
+
+
+$('#id').html();
+
+태그밖부터가져오기(부모부터)
+	$.fn.outerHTML = function() {
+	    var el = $(this);
+	    if( !el[0] ) return "";
+	 
+	    if (el[0].outerHTML) {
+	        return el[0].outerHTML;
+	    } else {
+	        var content = el.wrap('<p/>').parent().html();
+	        el.unwrap();
+	        return content;
+	    }
+	}
+  
+  $('#id).outerHTML();
+  

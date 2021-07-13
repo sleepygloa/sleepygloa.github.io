@@ -1,0 +1,10 @@
+    function checkMobileDevice() {
+        var mobileKeyWords = new Array('Android', 'iPhone', 'iPod', 'BlackBerry', 'Windows CE', 'SAMSUNG', 'LG', 'MOT', 'SonyEricsson');
+        for (var info in mobileKeyWords) {
+            if (navigator.userAgent.match(mobileKeyWords[info]) != null) {
+                return true;
+
+            }
+        }
+        return false;
+    }

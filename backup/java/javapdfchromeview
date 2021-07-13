@@ -1,0 +1,7 @@
+        //자바에서 크롬으로 파일 띄우기
+//        ChromeOptions options = new ChromeOptions();
+//        Map<String,Object> preferences = new HashMap<>();
+//        preferences.put("pdfjs.disabled", true);
+//        options.setExperimentalOption("prefs", preferences);
+//        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+//        WebDriver driver=new ChromeDriver(options);

@@ -1,0 +1,765 @@
+JSP
+	<div id="check-signature-engr-pad" class="m-signature-pad">
+		<div class="col-md-12"><label class="form-group" style="font-size:1.5em;z-index:9999;">엔지니어 서명</label></div>
+		<div class="m-signature-pad--body">
+			<canvas></canvas>
+		</div>
+		<div class="m-signature-pad--footer text-right p-t-10">
+			<button type="button" id="signClearBtn" class="btn btn-success btn-sm  pull-left" data-action="clear"><i class="fa fa-eraser">지우기</i></button>
+			<button type="button" id="signCloseEngrBtn" class="btn btn-success btn-sm  pull-left m-l-15" data-action="close"><i class="fa fa-times">닫기</i></button>
+			<button type="button" id="signSaveEngrBtn" class="btn btn-success  btn-sm " data-action="save"><i class="fa fa-check">저장</i></button>
+		</div>
+	</div>
+	<div id="check-signature-mng-pad" class="m-signature-pad">
+		<div class="col-md-12"><label class="form-group" style="font-size:1.5em;z-index:9999;">점포담당자 서명</label></div>
+		<div class="m-signature-pad--body">
+			<canvas></canvas>
+		</div>
+		<div class="m-signature-pad--footer text-right p-t-10">
+			<button type="button" id="signClearBtn-mng" class="btn btn-success btn-sm  pull-left" data-action="clear"><i class="fa fa-eraser">지우기</i></button>
+			<button type="button" id="signCloseMngBtn" class="btn btn-success btn-sm  pull-left m-l-15" data-action="close"><i class="fa fa-times">닫기</i></button>
+			<button type="button" id="signSaveMngBtn" class="btn btn-success  btn-sm " data-action="save"><i class="fa fa-check">저장</i></button>
+		</div>
+	</div>
+	
+	<div class="search-form clearfix">
+			<div class="search-controls non-icon col-md-12" >
+				<!-- 예방점검 일시 -->
+				<div class="form-group col-md-p20">
+					<div class="input-group input-group-sm">
+						<span class="span-info  input-group-addon">예방점검일시</span>
+						<input type="text" class="form-control input-sm" id="preventiveCheckDateDt" >
+						<span class="input-group-addon p-5">
+                           <i class="fa fa-calendar" ></i>
+                       </span>						
+					</div>
+				</div>	
+				<div class="form-group col-md-p40 p-l-0">
+					<form>
+						<div class="input-group input-group-sm">
+							<span class="span-info  input-group-addon">파일업로드</span>
+							<input type="file" name="inputFile" class="form-control input-sm" id="preventiveCheckAddFile" ><!-- name명 고정 -->
+							<div class="input-group-btn">
+								<button type="button" id="preventiveCheckAddFileBtn" class="btn btn-default btn-sm btn-danger" ><span>업로드</span></button> 
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="form-group col-md-p10 p-l-0">
+						<div id='preventiveCheckViewEngrAfterSignNew'></div>
+						<button type="button" id="openEngrSignDialog" class="btn btn-sm btn-info">
+							<i class="fa fa-upload">엔지니어 서명 등록</i>
+						</button>
+				</div>
+				<div class="form-group col-md-p10 p-l-0">
+						<div id='preventiveCheckViewMngAfterSignNew'></div>
+						<button type="button" id="openMngSignDialog" class="btn btn-sm btn-info">
+							<i class="fa fa-upload">점포담당자 서명 등록</i>
+						</button>
+				</div>
+				<div class="form-group pull-right" >		
+					<button id="preventiveCheckDetailSaveBtn" type="button" class="btn btn-sm btn-primary" data-authRule="AUTH_NEW">
+						<i class="fa fa-plus"></i> 정검 완료
+					</button>
+				</div>	
+				<div id="preventiveCheckDetailSignFileNmView" class="input-group"></div>
+			</div>
+				
+	</div>	
+
+JS
+
+
+/** Copyright (c) 2017 VertexID RND, Inc.
+ * 
+ * Application Name : 예방점검[preventiveCheck]
+ * Program Code     : PC0700
+ * Description      :
+ * Revision History
+ * Author          	Date           		Description
+ * ------------		-------------		------------------
+ * MINE 김선호		2017. 11. 23. 		First Draft.        javascript
+ */
+var PreventiveCheckDetailApp = function () {
+	"use strict";
+	
+	/************************************************
+	 *전역 객체 선언부 (return 상위부분에 선언해야함)
+	 ************************************************/
+	
+	// [El]권역정보 그리드
+	var $preventiveCheckGrid = $("#preventiveCheckGrid");
+	// 서명 등록 시(Javscript 용) 필요.
+	// SignaturePad js가 로드 된 이 후 해당 Api를 불러야 오류가 나지 않음.
+	var canvas = $('#check-signature-engr-pad canvas')[0];
+	var sign = new SignaturePad(canvas, {
+		backgroundColor: 'rgb(255, 255, 255)'
+	});
+	var canvas2 = $('#check-signature-mng-pad canvas')[0];
+	var sign2 = new SignaturePad(canvas2, {
+		backgroundColor: 'rgb(255, 255, 255)'
+	});
+	var touchId = '';
+	var dupTouchId = '';
+	var backTouchId = '';
+	var dupTouchCheck = '';
+	var modCount = 0;
+	var modVal = '';
+	var modVal2 = '';
+
+	var obsFlagSelect;
+	var searchData; //검색조건 배열
+	
+	var compCd = '';
+	
+	//서명
+	$.fn.outerHTML = function() {
+	    var el = $(this);
+	    if( !el[0] ) return "";
+	 
+	    if (el[0].outerHTML) {
+	        return el[0].outerHTML;
+	    } else {
+	        var content = el.wrap('<p/>').parent().html();
+	        el.unwrap();
+	        return content;
+	    }
+	}
+	
+	var engrSignTag = $('#preventiveCheckViewEngrAfterSignNew + button').outerHTML();
+	var mngSignTag = $('#preventiveCheckViewMngAfterSignNew + button').outerHTML();
+	
+	return {
+        init: function () {
+        	
+        	//장애여부SELECTBOX
+        	fnObsFlagSelectBox();
+        	
+        	//예방점검 Event
+        	fnPreventiveCheckEvents();
+        	
+        	//예방점검 Grid생성
+        	fnListPreventiveCheck();
+
+        	//서명 Canvas 초기화
+        	fnCanvasInit();
+        	
+        	fnGetCompNameList(); //고객사
+        	
+	    }
+    };
+    
+    //[Fn] 이벤트 
+    function fnPreventiveCheckEvents(){
+    	
+    	//검색 버튼
+    	$("#preventiveCheckSearchBtn").click(function(){
+    		fnPreventiveCheckSearch();
+			modCount = 0;
+    	});
+    	
+    	//달력 폼
+		toDateSetEvent();
+	
+		// 엔지니어 서명 등록 버튼 이벤트
+		$(document).on('click', '#openEngrSignDialog', function(){
+			var signDivVal = $('#preventiveCheckViewEngrAfterSignNew').text().legnth;
+			if(signDivVal != undefined &&  signDivVal != 0){
+				if(confirm('기존 사인을 수정하시겠습니까?')){
+					$('#check-signature-engr-pad').show();
+					resizeCanvas();
+				}
+			}else{
+				$('#check-signature-engr-pad').show();
+				resizeCanvas();
+			}
+		});
+		// 점포담당자 서명 등록 버튼 이벤트
+		$(document).on('click', '#openMngSignDialog', function(){
+			var signDivVal = $('#preventiveCheckViewMngAfterSignNew').text().legnth;
+			console.log(signDivVal);
+			if(signDivVal != undefined &&  signDivVal != 0){
+				if(confirm('기존 사인을 수정하시겠습니까?')){
+					$('#check-signature-mng-pad').show();
+					resizeCanvas2();
+				}
+			}else{
+				$('#check-signature-mng-pad').show();
+				resizeCanvas2();
+			}
+		});
+		
+		//Browser Window Resize Event <-- Sign Canvas에 필요한 이벤트
+		$(window).on("resize", function(){
+			resizeCanvas();
+		});
+		
+		//엔지니어 서명 초기화
+		$("#signClearBtn").click(function () {
+			sign.clear();
+		});
+		
+		//담당자 서명 초기화
+		$("#signClearBtn-mng").click(function () {
+			sign2.clear();
+		});
+		
+		//엔지니어 서명 숨김
+		$("#signCloseEngrBtn").click(function () {
+			$('#check-signature-engr-pad').hide();
+		});
+		
+		//담당자 서명 숨김
+		$("#signCloseMngBtn").click(function () {
+			$('#check-signature-mng-pad').hide();
+		});
+		
+		//서명등록(엔지니어 서명완료)
+		$("#signSaveEngrBtn").click(function () {
+			if (sign.isEmpty()){
+				alert("사인이 되지 않았습니다.");
+				return false;
+			}
+			$('#preventiveCheckViewEngrAfterSignNew').empty();$('#openEngrSignDialog').remove();
+			$('#preventiveCheckViewEngrAfterSignNew').append(
+					'<input type="hidden" id="preventiveCheckViewEngrSignFlag" value="1" />'
+				+	'<button type="button" id="removeEngrSignDialog" class="btn btn-sm btn-error"><i class="fa fa-eraser">엔지니어 서명 등록취소</i></button>'
+				);
+    		$("#check-signature-engr-pad").hide();
+		});
+		
+		//서명등록(점포담당자 서명완료)
+		$("#signSaveMngBtn").click(function () {
+			if (sign2.isEmpty()){
+				alert("사인이 되지 않았습니다.");
+				return false;
+			}
+			$('#preventiveCheckViewMngAfterSignNew').empty();$('#openMngSignDialog').remove();
+			$('#preventiveCheckViewMngAfterSignNew').append(
+					'<input type="hidden" id="preventiveCheckViewMngSignFlag" value="1" />'
+				+	'<button type="button" id="removeMngSignDialog" class="btn btn-sm btn-error"><i class="fa fa-eraser">점포담당자 서명 등록취소</i></button>'
+				);
+    		$("#check-signature-mng-pad").hide();
+		});
+		
+		//서명취소(엔지니어 서명 취소)
+		$(document).on('click', '#removeEngrSignDialog', function(){
+			alert('엔지니어 서명이 취소되었습니다.');
+			$('#preventiveCheckViewEngrAfterSignNew').empty();
+			$('#preventiveCheckViewEngrAfterSignNew').append(engrSignTag);
+		});
+		
+		//서명취소(담당자 서명 취소)
+		$(document).on('click', '#removeMngSignDialog', function(){
+			alert('점포담당자 서명이 취소되었습니다.');
+			$('#preventiveCheckViewMngAfterSignNew').empty();
+			$('#preventiveCheckViewMngAfterSignNew').append(mngSignTag);
+		});
+		
+		//점검완료
+		$('#preventiveCheckDetailSaveBtn').click(function(){
+			if(confirm('정검은 완료하시겠습니까?')){
+				fnSaveGrid();
+			}
+		});
+		
+		//점검 취소(그리드 및 파일 및 서명 초기화)
+		$('#preventiveCheckDetailCancelBtn').click(function(){
+			$preventiveCheckGrid.paragonGridReload();
+			fnCheckValInit();
+		});
+		
+		//자산변경버튼 클릭
+		$('#preventiveCheckDetailModifyBtn').bind('click', function(){
+			fnAssetModify();
+		});
+		
+       	//브랜드 조회
+    	$("#preventiveCheckBrndNm").combobox();
+    	//고객사 선택시 브랜드 조회
+    	$("#preventiveCheckCompNm").change(function(){
+        	compCd = $(this).val();
+    		MMSUtil.fnMakeBrndCombo($("#preventiveCheckBrndNm"), $(this).val(), '', '선택');
+    	});
+    	
+       	//점포 조회
+    	$("#preventiveCheckStrNm").combobox();
+    	//고객사 및 브랜드 선택시 점포 조회
+    	$("#preventiveCheckBrndNm").change(function(){
+    		MMSUtil.fnMakeStrCombo($("#preventiveCheckStrNm"), compCd, $(this).val(), '선택');
+    	});
+    	
+    	//유의사항 팝업
+    	$('#preventiveCheckPop').click(function(){
+    		
+        	var	gridData = $preventiveCheckGrid.getRowData();
+    		if(gridData.length == 0){
+    			alert('점포를 검색해주세요');
+    			return false;
+    		}
+    		gridData = gridData[0].ASP_COMP_CD;
+    		
+    		fnPreventiveCheckView(gridData);
+    	});
+		
+    }
+    
+    function fnSaveGrid(){
+    	//그리드체크 확인
+//		var rowid= $preventiveCheckGrid.jqGrid('getGridParam','selrow');
+        var ids = $preventiveCheckGrid.jqGrid('getDataIDs'); //JQGrid INDEX값
+        $.each(ids, function (index, value) {  //row의 index와 JQGrid INDEX 비교
+        	var idx = value;
+        	$preventiveCheckGrid.jqGrid('saveRow', idx, false, 'clientArray');
+        	$preventiveCheckGrid.jqGrid('setCell', idx, 'MOD_CHECK', '<i class="fa fa-repeat" />');
+        	$preventiveCheckGrid.jqGrid('setCell', idx, 'MOD_FLAG', 'UPDATE');
+        });
+        
+		//첨부파일 업로드 확인
+//		if(!fnSaveFileUpload()){
+//			return false;
+//		}
+		
+		// 선택행 데이터
+		var date = new Date();
+		var today = date.getFullYear() + "_" + date.getMonth() + "_" + date.getDate();
+
+		var strNm = $preventiveCheckGrid.getRowData(1).STR_NM;
+		var strCd = $preventiveCheckGrid.getRowData(1).STR_CD
+		//첨부파일 및 서명 파일명 및 경로
+		var fileNm = '예방점검완료_'+strNm+'_첨부파일';
+		var engrSignFileNm = '예방점검완료_'+strNm+'_점검자_서명파일';
+		var managerSignFileNm = '예방점검완료_'+strNm+'_관리자_서명파일';
+		
+		//서명파일 형식 저장
+		var dataURL = sign.toDataURL('image/png');		var blob = dataURItoBlob(dataURL);
+		var dataURL = sign2.toDataURL('image/png');		var blob2 = dataURItoBlob(dataURL);
+		
+		if($('#preventiveCheckViewEngrSignFlag').val() == undefined){
+			alert('엔지니어 서명이 없습니다.');
+			return false;
+		}
+		if($('#preventiveCheckViewMngSignFlag').val() == undefined){
+			alert('점포담당자 서명이 없습니다.');
+			return false;
+		}
+		
+		//Param Data
+		var formData = new FormData();
+		
+		if($('#preventiveCheckAddFile')[0].files[0] != undefined){
+			formData.append('attach',$('#preventiveCheckAddFile')[0].files[0]);
+		}
+		formData.append('mngSign', blob, engrSignFileNm+ ".png");
+		formData.append('engrSign', blob2, managerSignFileNm+ ".png");
+		formData.append('strCd', strCd);
+		
+		var rowData = {
+						astSeq		: "AST_SEQ",
+						strCd		: "STR_CD",
+						prdCd		: "PRD_CD",
+						obsYn		: "OBS_YN",
+						obsMemo		: "OBS_MEMO"
+		};
+		
+		var jsonData = $preventiveCheckGrid.getGridData(rowData);
+		
+		var data = {
+				dt_data : jsonData,
+				strCd	: strCd
+		}
+		console.log(data);
+		$.ajax({
+			 url: "/ctrl/preventiveCheck/preventiveCheckDetail/completePreventiveCheckDetail",
+			 data: JSON.stringify(data),
+			 dataType: 'JSON',
+//			 processData: false,
+//			 contentType: false,
+             contentType: 'application/json; charset=utf-8',
+			 type: 'POST',
+			 success: function (result) {
+			 	 formData.append('checkSeq', result.checkSeq);
+			 	 
+				 $.ajax({
+					 url : "/ctrl/preventiveCheck/preventiveCheckDetail/completePreventiveCheckDetailFile",
+					 data: formData,
+					 processData: false,
+					 contentType: false,
+					 success : function(result){
+						$preventiveCheckGrid.paragonGridReload();
+						$('#preventiveCheckViewEngrAfterSignNew').empty();
+						$('#preventiveCheckViewEngrAfterSignNew').append(engrSignTag);
+						$('#preventiveCheckViewMngAfterSignNew').empty();
+						$('#preventiveCheckViewMngAfterSignNew').append(mngSignTag);
+//							//브라우저마다 다를수있음
+//							$('#preventiveCheckAddFile').val("");
+						var $el = $('#preventiveCheckAddFile');
+						$el.wrap('<form>').closest('form').get(0).reset();
+						$el.unwrap();
+						console.log('서명완료');
+						fnCheckValInit();
+						$preventiveCheckGrid.paragonGridReload();
+					 }
+				 })
+			 }
+		});
+    }
+    
+    //첨부파일 확장자 확인
+	function checkFileType(filePath) {
+		   var fileFormat = filePath.split(".");
+		   if (fileFormat.indexOf("txt") > -1) {
+		       return true;
+		   }else if(fileFormat.indexOf("png") > -1){
+		       return true;
+		   }else if(fileFormat.indexOf("gif") > -1){
+		       return true;
+		   }else if(fileFormat.indexOf("jpg") > -1){
+		       return true;
+		   }else{
+		       return false;
+		   }
+	}
+    
+    //첨부파일 업로드
+    function fnSaveFileUpload(){
+		 var file = $("#preventiveCheckAddFile").val();
+		 if (file == "" || file == null) {
+		     alert("파일을 선택해주세요.");
+		     return false;
+		 } else if (!checkFileType(file)) {
+		     alert("파일만 업로드 가능합니다.");
+		     return false;
+		 }
+		 return true;
+    }
+    
+    //예방점검 유의사항 조회
+    function fnPreventiveCheckView(aspCompCd){
+		var strCd	= $('#preventiveCheckStrNm').val()
+        PopApp.paragonOpenPopup({
+            ajaxUrl : '/ctrl/preventiveCheck/preventiveCheckDetail/notice',
+            id : 'prventiveCheckNoticePop',
+            data : {	
+        			"strCd" 	: strCd,
+        			"aspCompCd"	: aspCompCd
+            		},
+            width : '1000px',
+            title : "예방점검 유의사항",
+            onload : function(modal) {
+                modal.show();
+            }
+        });
+    };
+    
+    /********************************************************************
+     * 자산관리 그리드 생성
+     * Since   : 2017-11-15
+     * 작성자  : 김 선호
+     * 수정내역: 
+     ********************************************************************/
+    //[Fn] jqgrid 예방점검 목록 
+    function fnListPreventiveCheck(){
+    	$preventiveCheckGrid.paragonGrid({
+        	url: '/ctrl/preventiveCheck/preventiveCheckDetail/getPreventiveCheckDetailList',
+        	rowEditable:true,
+			rownumbers: true,
+			rowNum : 100,
+			rowList : [100],
+			height: '200px',
+			caption:"예방점검",
+			shrinkToFit	: false,
+			sortable:true,
+			datatype : "local",
+			colNames : ["자산번호","파트너사코드","고객사코드","브랜드코드","점포코드", "품목코드", "자산상태", "자산상태명",
+			            "고객사","브랜드", "점포명", "제품범주", "제품군", "제조사","모델명","SPEC","POS번호","위치","시리얼","정상유무","메모"],
+			colModel : [ 
+	            {name : 'AST_SEQ', hidden : true}, 						//자산번호
+	            {name : 'ASP_COMP_CD', align:"center", hidden:true},	//파트너사코드  
+	            {name : 'COMP_CD', align:"center", hidden : true},		//고객사코드
+	            {name : 'BRND_CD', align:"center", hidden : true},		//브랜드코드
+	            {name : 'STR_CD', align:"center", hidden : true},		//점포코드
+	            {name : 'PRD_CD', align:"center", hidden : true},		//품목코드
+	            {name : 'AST_ST', align:"center", hidden : true},		//자산상태
+	            {name : 'AST_ST_NM', align:"center", hidden : true},		//자산상태명
+	            {name : 'COMP_NM', align:"center", width:"100px"},						//고객사	            
+	            {name : 'BRND_NM', align:"center", width:"100px"},						//브랜드
+	            {name : 'STR_NM', align:"center", width:"100px"},        				//점포명
+	            {name : 'PRD_TYPE_LV1_NM', align:"center", width:"100px"},				//제품범주  
+	            {name : 'PRD_TYPE_LV2_NM', align:"center", width:"100px"},				//제품군
+	            {name : 'PRD_TYPE_LV3_NM', align:"center", width:"100px"},				//제조사  
+	            {name : 'PRD_NM', align:"center", width:"200px"},						//모델명
+	            {name : 'PRD_SPEC', align:"center", width:"200px"},					//제품규격
+	            {name : 'AST_TYPE2', align:"center", width:"100px"},		//포스번호
+	            {name : 'AST_TYPE1', align:"center", width:"100px"},		//위치정보
+	            {name : 'AST_SERIAL', align:"center", width:"100px"},					//시리얼
+	            {name : 'OBS_YN', align:"center", width: "100px", editable: true, 
+	            	edittype:'select',
+	            	formatter:'select',
+			    	editoptions: {
+			    		value : obsFlagSelect
+			    	}
+	            },         					//정상유무
+	            {name : 'OBS_MEMO', align:"center", editable: true},					//메모
+			],
+            pager: "#preventiveCheckGridNavi",
+            domainId : "예방점검",
+            loadComplete: function () {
+                var $this = $(this), rows = this.rows, l = rows.length, i, row;
+                for (i = 0; i < l; i++) {
+                    row = rows[i];
+                    if ($.inArray('jqgrow', row.className.split(' ')) >= 0) {
+                        $this.jqGrid('editRow', row.id, true);
+                    }
+                }
+            },
+    		ondblClickRow	: function(id, iRow, iCol, e){
+    			e.preventDefault();
+    		}
+        });
+	}
+    
+    //[Fn] dataURL -> Blob으로 변환
+    function dataURItoBlob(dataURI) {
+    	var byteString;
+    	if(dataURI.split(',')[0].indexOf('base64') >= 0){
+    		byteString = atob(dataURI.split(',')[1]);
+    	}
+    	else{
+    		byteString = unescape(dataURI.split(',')[1]);
+    	}
+    	
+    	var mimeTypeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    	console.log("mimetype : "+mimeTypeString);
+    	var ia = new Uint8Array(byteString.length);
+    	for (var i = 0; i < byteString.length; i++) {
+    		ia[i] = byteString.charCodeAt(i);
+    	}
+    	
+    	return new Blob([ia], {type:mimeTypeString});
+    }
+
+    //[Fn]Canvas 초기화 <-- 수정 필요 없음.
+    function fnCanvasInit(){
+		
+    }
+    
+    //[Fn]Canvas Resize <-- 수정 필요 없음.
+	function resizeCanvas(){
+
+		var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+		canvas.width = canvas.offsetWidth * ratio;
+//		console.log("canvas.width : "+canvas.width);
+		canvas.height = canvas.offsetHeight * ratio;
+//		console.log("canvas.height : "+canvas.height);
+		canvas.getContext("2d").scale(ratio, ratio);
+		
+		sign.clear();
+	}
+	
+    //[Fn]Canvas Resize <-- 수정 필요 없음.
+	function resizeCanvas2(){
+
+		var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+		canvas2.width = canvas2.offsetWidth * ratio;
+//		console.log("canvas.width : "+canvas.width);
+		canvas2.height = canvas2.offsetHeight * ratio;
+//		console.log("canvas.height : "+canvas.height);
+		canvas2.getContext("2d").scale(ratio, ratio);
+		
+		sign2.clear();
+	}
+
+	//datepicker Set up today.
+    function toDateSetEvent() {
+        $("#preventiveCheckDateDt").datepicker({
+        	todayHighlight: true, 
+        	autoclose: true
+        });
+        $("#preventiveCheckDateDt").datepicker("setDate" , new Date());
+    }
+    
+    //검색(엔터, 버튼)
+    function fnPreventiveCheckSearch(){
+    	var searchStrNm = $("#preventiveCheckStrNm").val().trim();
+    	if(!searchStrNm){
+    		alert('점포를 입력해주세요');
+    		return false;
+    	}
+    	
+		var searchData = {
+				compCd		: $("#preventiveCheckCompNm").val(),
+				brndCd		: $("#preventiveCheckBrndNm").val(),
+				strCd		: $("#preventiveCheckStrNm").val(),
+		};
+		$preventiveCheckGrid.paragonGridSearch(searchData);
+    }
+    
+    $preventiveCheckGrid.jqGrid("setFrozenColumns");
+
+    function fnObsFlagSelectBox(cellValue){
+    	$.ajax({
+    		url : "/ctrl/preventiveCheck/preventiveCheckDetail/getPrventiveCheckObsFlag",
+    		type : "POST",
+    		dataType : "json",
+    		cache: false,
+    		async:false,
+    		success : function(result) {
+    			obsFlagSelect = Util.MakeGridOptions(result);
+			}
+    	});
+    }
+    
+    //터치로직 변수 초기화
+    function fnCheckValInit(){
+    	touchId = '';
+    	dupTouchId = '';
+    	backTouchId = '';
+    	dupTouchCheck = '';
+    	modCount = 0;
+    	modVal = '';
+    	modVal2 = '';
+    }
+    
+    //자산변동 버튼
+    function fnAssetModify(){
+		var rowid= $preventiveCheckGrid.jqGrid('getGridParam','selrow');
+		
+		if(rowid == "" || rowid == undefined){
+			alert("자산이 선택되지 않았습니다. 자산 목록의 내용(행)을 선택 후 다시 클릭해주세요");
+			return false;
+		}
+		
+		// 선택행 데이터
+		var rowData = $preventiveCheckGrid.getRowData( rowid );
+
+		// 선택행 데이터 AST_SEQ
+		var sendData = {
+				"astSeq"	:	rowData.AST_SEQ,
+				"astSt"		:	rowData.AST_ST,
+				"astStNm"	:	rowData.AST_ST_NM,
+				"aspCompCd" : 	rowData.ASP_COMP_CD
+		}
+		
+		PopApp.paragonOpenPopup({
+    		ajaxUrl: '/ctrl/asset/asset/addAssetManagerPopup',
+    		data:{"sendData": sendData},
+    		id: 'AssetManagerPopup',
+    		width: '700px',	    		
+    		btnName:"수정",
+    		title :"자산 수정",
+    		onload:function(modal){
+    			modal.show();
+    		}
+		});
+	};
+	
+	function fnTouchGrid($this){
+		dupTouchId = $this.getGridParam( "selrow" );   
+		
+		var lastRowData = $this.getRowData(dupTouchId);
+		var lastModCheck = lastRowData.MOD_CHECK;
+		
+		//처음 -> 수정
+		if(modCount == 0){
+			$this.jqGrid('editRow', dupTouchId, true, 'clientArray');
+			modCount = 1;
+			backTouchId = dupTouchId;
+			modVal = $this.getRow('','OBS_YN','')+', '+$this.getRow('','OBS_MEMO',''); 
+			return false;
+		}
+		//수정 -> 저장(변경 있음과 변경없음)
+		if(modCount == 1){
+			modVal2 = $this.getRow('','OBS_YN','')+', '+$this.getRow('','OBS_MEMO',''); 
+			
+			if(modVal != modVal2){ //저장(데이터변경시)
+				$this.jqGrid('saveRow', dupTouchId, false, 'clientArray');
+				$this.jqGrid('setCell', dupTouchId, 'MOD_CHECK', '<i class="fa fa-repeat" />');
+				$this.jqGrid('setCell', dupTouchId, 'MOD_FLAG', 'UPDATE');
+				touchId = dupTouchId;
+				modCount = 2;
+				return false;
+			}else{ //수정 -> 행초기화(변경없음)
+				if(touchId == '' || touchId == dupTouchId){ //변경없이저장, 초기화
+					$this.jqGrid('restoreRow', dupTouchId, false);
+					fnCheckValInit();
+					return false;
+				}else{ //수정모드에서 다른 쎌 더블클릭(기존수정->초기화, 다른행 수정모드)
+					$this.jqGrid('restoreRow', backTouchId, false);
+					$this.jqGrid('editRow', dupTouchId, false, 'clientArray');
+					modCount = 1;
+					return false;
+				}
+
+			}
+		}
+		console.log(dupTouchId);
+		
+		if(modCount == 2){
+				if(touchId == dupTouchId){ //저장모드(recycle)인 행 더블클릭
+					$('tr[id='+dupTouchId+'] > td[aria-describedby=preventiveCheckGrid_MOD_CHECK]').empty();
+					$('tr[id='+dupTouchId+'] > td[aria-describedby=preventiveCheckGrid_MOD_FLAG]').empty();
+					$this.jqGrid('editRow', dupTouchId, false, 'clientArray');
+					modCount = 1;
+					return false;
+				}else{ //저장모드아닌 행 더블클릭
+					$this.jqGrid('saveRow', backTouchId, false, 'clientArray');
+					fnCheckValInit();
+					modCount = 0;
+					fnTouchGrid($preventiveCheckGrid);
+					return false;
+				}	
+		}
+	}
+	
+    //고객사 목록 조회
+    function fnGetCompNameList(){
+    	$('#preventiveCheckCompNm').combobox();
+    	MMSUtil.fnMakeCompCombo($('#preventiveCheckCompNm'), '', '선택');
+    }
+    
+}();
+
+$(document).ready(function() {
+	PreventiveCheckDetailApp.init();
+});
+
+
+
+
+CTRL
+public Params completePreventiveCheckDetailFile(FileParams fileParams, HttpSession session, MultipartHttpServletRequest request, Params inParams){
+		LOG.debug("preventiveCheckNoticeNewSave completePreventiveCheckDetailFile()"+ fileParams);
+		
+		int count = 2;
+		String fileId = "";
+		DataTable fileDt = null;;
+		
+		for (int i = 0; i <= count; i++){
+			switch (i) {
+			case 0 : fileId = "attach"; break;
+			case 1 : fileId = "mngSign"; break;
+			case 2 : fileId = "engrSign"; break;
+			}
+			if(fileParams.getString(fileId) !=  null){
+				fileMng.setFolder("upload/");
+				fileMng.setWebRoot(true);
+				fileDt = fileMng.saveFile(fileParams.getFiles(fileId));
+				
+				for (DataRow dr :fileDt) {
+					inParams.setParam(fileId+"Path", dr.getString("webPath"));
+					inParams.setParam(fileId+"Nm", dr.getString("saveName"));
+				}
+			}
+		}
+		
+		return preventiveCheckDetailService.completePreventiveCheckDetailFile(inParams);
+	}
+
+SOURCE
+
+!function(a,b){"function"==typeof define&&define.amd?define([],function(){return a.SignaturePad=b()}):"object"==typeof exports?module.exports=b():a.SignaturePad=b()}(this,function(){/*!
+ * Signature Pad v1.5.2 | https://github.com/szimek/signature_pad
+ * (c) 2015 Szymon Nowak | Released under the MIT license
+ */
+var a=function(a){"use strict";var b=function(a,b){var c=this,d=b||{};this.velocityFilterWeight=d.velocityFilterWeight||.7,this.minWidth=d.minWidth||.5,this.maxWidth=d.maxWidth||2.5,this.dotSize=d.dotSize||function(){return(this.minWidth+this.maxWidth)/2},this.penColor=d.penColor||"black",this.backgroundColor=d.backgroundColor||"rgba(0,0,0,0)",this.onEnd=d.onEnd,this.onBegin=d.onBegin,this._canvas=a,this._ctx=a.getContext("2d"),this.clear(),this._handleMouseDown=function(a){1===a.which&&(c._mouseButtonDown=!0,c._strokeBegin(a))},this._handleMouseMove=function(a){c._mouseButtonDown&&c._strokeUpdate(a)},this._handleMouseUp=function(a){1===a.which&&c._mouseButtonDown&&(c._mouseButtonDown=!1,c._strokeEnd(a))},this._handleTouchStart=function(a){if(1==a.targetTouches.length){var b=a.changedTouches[0];c._strokeBegin(b)}},this._handleTouchMove=function(a){a.preventDefault();var b=a.targetTouches[0];c._strokeUpdate(b)},this._handleTouchEnd=function(a){var b=a.target===c._canvas;b&&(a.preventDefault(),c._strokeEnd(a))},this._handleMouseEvents(),this._handleTouchEvents()};b.prototype.clear=function(){var a=this._ctx,b=this._canvas;a.fillStyle=this.backgroundColor,a.clearRect(0,0,b.width,b.height),a.fillRect(0,0,b.width,b.height),this._reset()},b.prototype.toDataURL=function(){var a=this._canvas;return a.toDataURL.apply(a,arguments)},b.prototype.fromDataURL=function(a){var b=this,c=new Image,d=window.devicePixelRatio||1,e=this._canvas.width/d,f=this._canvas.height/d;this._reset(),c.src=a,c.onload=function(){b._ctx.drawImage(c,0,0,e,f)},this._isEmpty=!1},b.prototype._strokeUpdate=function(a){var b=this._createPoint(a);this._addPoint(b)},b.prototype._strokeBegin=function(a){this._reset(),this._strokeUpdate(a),"function"==typeof this.onBegin&&this.onBegin(a)},b.prototype._strokeDraw=function(a){var b=this._ctx,c="function"==typeof this.dotSize?this.dotSize():this.dotSize;b.beginPath(),this._drawPoint(a.x,a.y,c),b.closePath(),b.fill()},b.prototype._strokeEnd=function(a){var b=this.points.length>2,c=this.points[0];!b&&c&&this._strokeDraw(c),"function"==typeof this.onEnd&&this.onEnd(a)},b.prototype._handleMouseEvents=function(){this._mouseButtonDown=!1,this._canvas.addEventListener("mousedown",this._handleMouseDown),this._canvas.addEventListener("mousemove",this._handleMouseMove),a.addEventListener("mouseup",this._handleMouseUp)},b.prototype._handleTouchEvents=function(){this._canvas.style.msTouchAction="none",this._canvas.addEventListener("touchstart",this._handleTouchStart),this._canvas.addEventListener("touchmove",this._handleTouchMove),a.addEventListener("touchend",this._handleTouchEnd)},b.prototype.on=function(){this._handleMouseEvents(),this._handleTouchEvents()},b.prototype.off=function(){this._canvas.removeEventListener("mousedown",this._handleMouseDown),this._canvas.removeEventListener("mousemove",this._handleMouseMove),a.removeEventListener("mouseup",this._handleMouseUp),this._canvas.removeEventListener("touchstart",this._handleTouchStart),this._canvas.removeEventListener("touchmove",this._handleTouchMove),a.removeEventListener("touchend",this._handleTouchEnd)},b.prototype.isEmpty=function(){return this._isEmpty},b.prototype._reset=function(){this.points=[],this._lastVelocity=0,this._lastWidth=(this.minWidth+this.maxWidth)/2,this._isEmpty=!0,this._ctx.fillStyle=this.penColor},b.prototype._createPoint=function(a){var b=this._canvas.getBoundingClientRect();return new c(a.clientX-b.left,a.clientY-b.top)},b.prototype._addPoint=function(a){var b,c,e,f,g=this.points;g.push(a),g.length>2&&(3===g.length&&g.unshift(g[0]),f=this._calculateCurveControlPoints(g[0],g[1],g[2]),b=f.c2,f=this._calculateCurveControlPoints(g[1],g[2],g[3]),c=f.c1,e=new d(g[1],b,c,g[2]),this._addCurve(e),g.shift())},b.prototype._calculateCurveControlPoints=function(a,b,d){var e=a.x-b.x,f=a.y-b.y,g=b.x-d.x,h=b.y-d.y,i={x:(a.x+b.x)/2,y:(a.y+b.y)/2},j={x:(b.x+d.x)/2,y:(b.y+d.y)/2},k=Math.sqrt(e*e+f*f),l=Math.sqrt(g*g+h*h),m=i.x-j.x,n=i.y-j.y,o=l/(k+l),p={x:j.x+m*o,y:j.y+n*o},q=b.x-p.x,r=b.y-p.y;return{c1:new c(i.x+q,i.y+r),c2:new c(j.x+q,j.y+r)}},b.prototype._addCurve=function(a){var b,c,d=a.startPoint,e=a.endPoint;b=e.velocityFrom(d),b=this.velocityFilterWeight*b+(1-this.velocityFilterWeight)*this._lastVelocity,c=this._strokeWidth(b),this._drawCurve(a,this._lastWidth,c),this._lastVelocity=b,this._lastWidth=c},b.prototype._drawPoint=function(a,b,c){var d=this._ctx;d.moveTo(a,b),d.arc(a,b,c,0,2*Math.PI,!1),this._isEmpty=!1},b.prototype._drawCurve=function(a,b,c){var d,e,f,g,h,i,j,k,l,m,n,o=this._ctx,p=c-b;for(d=Math.floor(a.length()),o.beginPath(),f=0;d>f;f++)g=f/d,h=g*g,i=h*g,j=1-g,k=j*j,l=k*j,m=l*a.startPoint.x,m+=3*k*g*a.control1.x,m+=3*j*h*a.control2.x,m+=i*a.endPoint.x,n=l*a.startPoint.y,n+=3*k*g*a.control1.y,n+=3*j*h*a.control2.y,n+=i*a.endPoint.y,e=b+i*p,this._drawPoint(m,n,e);o.closePath(),o.fill()},b.prototype._strokeWidth=function(a){return Math.max(this.maxWidth/(a+1),this.minWidth)};var c=function(a,b,c){this.x=a,this.y=b,this.time=c||(new Date).getTime()};c.prototype.velocityFrom=function(a){return this.time!==a.time?this.distanceTo(a)/(this.time-a.time):1},c.prototype.distanceTo=function(a){return Math.sqrt(Math.pow(this.x-a.x,2)+Math.pow(this.y-a.y,2))};var d=function(a,b,c,d){this.startPoint=a,this.control1=b,this.control2=c,this.endPoint=d};return d.prototype.length=function(){var a,b,c,d,e,f,g,h,i=10,j=0;for(a=0;i>=a;a++)b=a/i,c=this._point(b,this.startPoint.x,this.control1.x,this.control2.x,this.endPoint.x),d=this._point(b,this.startPoint.y,this.control1.y,this.control2.y,this.endPoint.y),a>0&&(g=c-e,h=d-f,j+=Math.sqrt(g*g+h*h)),e=c,f=d;return j},d.prototype._point=function(a,b,c,d,e){return b*(1-a)*(1-a)*(1-a)+3*c*(1-a)*(1-a)*a+3*d*(1-a)*a*a+e*a*a*a},b}(document);return a});

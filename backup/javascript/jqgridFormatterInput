@@ -1,0 +1,9 @@
+    function formatImage(cellValue, options, rowObject) {
+    	console.log(cellValue);
+    	console.log(rowObject);
+        var imageHtml = "<input type='text' value='"+options+"'/>";
+        return imageHtml;
+    }
+    
+    
+    fotmatter : formatImage,

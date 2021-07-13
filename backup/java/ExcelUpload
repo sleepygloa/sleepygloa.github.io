@@ -1,0 +1,472 @@
+1. jsp
+
+
+ 		<form id="excelUploadForm" name="excelUploadForm" enctype="multipart/form-data" method="post" >
+		   	<input type="hidden" id="aspComopExcelColumnCount" name="aspComopExcelColumnCount" value="13" />
+		    <input id="excelFile" type="file" name="excelFile" />
+		    <button type="button" id="addExcelImpoartBtn" class="btn" ><span>추가</span></button> 
+		</form>
+    
+    
+    
+2. js
+
+    	$('#addExcelImpoartBtn').click(function(){
+    		excepUpload();
+    	});
+      
+   function checkFileType(filePath) {
+    	   var fileFormat = filePath.split(".");
+    	   if (fileFormat.indexOf("xlsx") > -1) {
+    	       return true;
+    	   } else if(fileFormat.indexOf("xls") > -1){
+    	       return true;
+    	   }else{
+    	       return false;
+    	   }
+	}
+    function excepUpload(){
+	    var file = $("#excelFile").val();
+	    if (file == "" || file == null) {
+	        alert("파일을 선택해주세요.");
+	        return false;
+	    } else if (!checkFileType(file)) {
+	        alert("엑셀 파일만 업로드 가능합니다.");
+	        return false;
+	    }
+
+	    if (confirm("업로드 하시겠습니까?")) {
+	    	
+			 var form = new FormData(document.getElementById('excelUploadForm'));
+			 $.ajax({
+			   url: "/ctrl/asp/company/uploadExcel", //컨트롤러 URL
+				 data: form,
+				 dataType: 'json',
+				 processData: false,
+				 contentType: false,
+				 type: 'POST',
+				 success: function (response) {
+				   alert("success");
+				   console.log(response);
+				 },error: function (jqXHR) {
+				   alert(jqXHR.responseText);
+				 }
+		    });
+		};
+    }
+    
+    
+    
+    3. controller
+    
+  @RequestMapping("/uploadExcel")
+	public Params uploadExcel(HttpSession session, MultipartHttpServletRequest request, Params inParams){
+		LOG.debug("AspCompanyController uploadExcel()");
+		
+		return aspCompanyService.uploadExcel(session, request, inParams);
+	}	
+  
+  
+  
+  4.service
+  
+  public Params uploadExcel(HttpSession session, MultipartHttpServletRequest request, Params inParams) {
+		LOG.debug("AspCompanyService uploadExcel()");
+		Params outParams = ParamsFactory.createOutParams(inParams);
+		
+		List<Map<String, String>> article = cc.excelUpload(session, request, inParams);
+		Map<String, List<Map<String, String>>> map = new HashMap<>();
+		map.put("dt_list", article);		
+		LOG.debug("return & loadExcelData === " + map);
+		
+		getSqlManager().update("AspCompanyService.insertAspCompanyExcelData", map);
+		
+		return outParams;
+	}
+  
+  
+  5. query
+  
+  <update id="insertAspCompanyExcelData" parameterType="java.util.HashMap">
+		INSERT /* [AspCompanyService.query][getAspCompanyComboList][ASPCompany 엑셀 업로드][Kim Seon Ho][2017-11-27] */
+		  INTO TB_MMS_ASP_COMP(
+			   ASP_COMP_CD
+			 , ASP_COMP_NM
+			 , ASP_CEO_NM
+			 , ASP_CORP_NUM
+			 , ASP_USER_NM
+			 , PHONE
+			 , MEMO
+			 , USE_YN
+			 , DEL_YN 
+			 , IN_USER_ID
+			 , IN_DT
+		)
+		VALUES
+		<foreach collection="dt_list" item="dt_list"  separator=",">
+			(
+				   #{dt_list.A}
+				 , #{dt_list.B}
+				 , #{dt_list.C}
+				 , #{dt_list.D}
+				 , #{dt_list.E}
+				 , #{dt_list.F}
+				 , #{dt_list.G}
+				 , #{dt_list.H}
+				 , #{dt_list.I}
+				 , #{dt_list.J}
+				 , #{dt_list.L}				 
+			)
+		</foreach>
+		 ON DUPLICATE KEY UPDATE
+ 			   UP_USER_ID	=	''
+			 , UP_DT		=	''
+		
+	</update>
+  
+  
+  5.source
+  
+  	public  List<Map<String, String>> excelUpload(HttpSession session, MultipartHttpServletRequest request, Params inParams){
+		LOG.debug("CommonController excelUploadAjax : "  + inParams);
+        MultipartFile excelFile =request.getFile("excelFile");
+        List<Map<String, String>>excelContent = new ArrayList<Map<String, String>>();
+        
+		LOG.debug("===== 엑셀 업로드 시작 =====");
+		//엑셀파일 존재여부 파악
+        if(excelFile==null || excelFile.isEmpty()){
+            throw new RuntimeException("엑셀파일이 없습니다. 선택 해 주세요.");
+        }
+
+        //Excel 파일을 MultipartFile 안에 저장
+        try{
+            File destFile = new File(session.getServletContext().getRealPath(excelFile.getOriginalFilename()));
+            excelFile.transferTo(destFile);
+
+            //읽을 엑셀 자료 기준 설정
+            ExcelReadOption excelReadOption = new ExcelReadOption();
+            excelReadOption.setFilePath(destFile.getAbsolutePath());
+            excelReadOption.setStartRow(2); 
+            
+            //column 갯수 및 엑셀 column 명 매칭 및 생성, 갯수만큼 A++ 생성
+            char ch = 'A';
+            String[] chStr = new String[inParams.getIntParam("aspComopExcelColumnCount")];
+	          for (int i = 0; i < inParams.getIntParam("aspComopExcelColumnCount"); i++){
+	        	  if(i == 0){
+	        		  chStr[0] = "" + ch;
+	        	  }else{
+	  	        	chStr[i] = "" + (char)(ch+i);
+	        	  }
+	              LOG.debug(chStr[i]);
+	          }
+            excelReadOption.setOutputColumns(chStr);  
+            
+            excelContent =CommExcel.read(excelReadOption); //*** 엑셀자료 읽어 List 에 담기
+            
+            //자료 내용확인
+/*            for(Map<String, String> article: excelContent){ 
+        		LOG.debug("엑셀자료 확인 : " 
+	            + article.get("A") 	            + ", "+  article.get("B") 	            + ", " + article.get("C") 	            + ", " + article.get("D") 	            + ", " + article.get("E")
+	            + ", " + article.get("F") 	            + ", " + article.get("G") 	            + ", " + article.get("H") 	            + ", " + article.get("I") 	            + ", " + article.get("J") 
+	            + ", " + article.get("K") 	            + ", " + article.get("L") 	            + ", " + article.get("M") 	            + ", " + article.get("N") 	            + ", " + article.get("O") 
+	            );
+            }*/
+        }catch(IllegalStateException | IOException e){
+            throw new RuntimeException(e.getMessage(),e);
+        }
+        
+        //userService.excelUpload(destFile); //서비스 부분을 삭제한다.
+        
+        //FileUtils.forceDelete(destFile.getAbsolutePath());
+        LOG.debug("===== 엑셀 업로드 끝 =====");
+        
+        return excelContent;
+    }
+    
+    
+    6. vo
+    
+    public class ExcelReadOption {
+    /**
+     * 엑셀파일의 경로
+     */
+    private String filePath;
+    
+    /**
+     * 추출할 컬럼 명
+     */
+    private List<String> outputColumns;
+    
+    /**
+     * 추출을 시작할 행 번호
+     */
+    private int startRow;
+    
+    public String getFilePath() {
+        return filePath;
+    }
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+    public List<String> getOutputColumns() {
+        
+        List<String> temp = new ArrayList<String>();
+        temp.addAll(outputColumns);
+        
+        return temp;
+    }
+    public void setOutputColumns(List<String> outputColumns) {
+
+        List<String> temp = new ArrayList<String>();
+        temp.addAll(outputColumns);
+        
+        this.outputColumns = temp;
+    }
+    
+    public void setOutputColumns(String ... outputColumns) {
+
+        if(this.outputColumns == null) {
+            this.outputColumns = new ArrayList<String>();
+        }
+        
+        for(String ouputColumn : outputColumns) {
+            this.outputColumns.add(ouputColumn);
+        }
+    }
+    
+    public int getStartRow() {
+        return startRow;
+    }
+    public void setStartRow(int startRow) {
+        this.startRow = startRow;
+    }
+
+
+}
+
+
+7. source
+
+    public static List<Map<String, String>> read(ExcelReadOption excelReadOption) {
+        //엑셀 파일 자체
+        //엑셀파일을 읽어 들인다.
+        //FileType.getWorkbook() <-- 파일의 확장자에 따라서 적절하게 가져온다.
+
+        Workbook wb = getWorkbook(excelReadOption.getFilePath());
+
+        int sheetNum = wb.getNumberOfSheets(); //시트의 개수를 가져오기 위한 변수 
+        int numOfCells = 0;
+        
+        Row row = null;
+        Cell cell = null;
+        
+        String cellName = "";
+    	String columnNmStr = ""; //Log용
+        
+        /**
+         * 각 row마다의 값을 저장할 맵 객체
+         * 저장되는 형식은 다음과 같다.
+         * put("A", "이름");
+         * put("B", "게임명");
+         */
+        Map<String, String> map = null;
+
+        /*
+         * 각 Row를 리스트에 담는다.
+         * 하나의 Row를 하나의 Map으로 표현되며
+         * List에는 모든 Row가 포함될 것이다.
+         */
+        List<Map<String, String>> result = new ArrayList<Map<String, String>>(); 
+        
+    	LOG.debug("Excel'content Loading Start!! ");  
+        for(int i =0; i<sheetNum; i++){
+        	LOG.debug("Sheet 이름: "+ wb.getSheetName(i));
+        	Sheet sheet = wb.getSheetAt(i);
+        
+            int numOfRows = sheet.getPhysicalNumberOfRows(); //유효한 데이터가 있는 행의 개수를 가져온다.
+        
+            /**
+             * 각 Row만큼 반복을 한다.
+             */
+            for(int rowIndex = excelReadOption.getStartRow() - 1; rowIndex < numOfRows; rowIndex++) {
+            
+                /*
+             * 워크북에서 가져온 시트에서 rowIndex에 해당하는 Row를 가져온다.
+             * 하나의 Row는 여러개의 Cell을 가진다.
+             */
+            row = sheet.getRow(rowIndex);
+            
+            if(row != null) {
+                /*
+                 * 가져온 Row의 Cell의 개수를 구한다. 
+                 */
+                numOfCells = row.getPhysicalNumberOfCells(); //한개의 행마다 몇개의 cell이 있는지 체크 
+                
+                /*
+                 * 데이터를 담을 맵 객체 초기화
+                 */
+                map = new HashMap<String, String>();
+                
+                /*
+                 * cell의 수 만큼 반복한다.
+                 */
+                for(int cellIndex = 0; cellIndex < numOfCells; cellIndex++) {
+                    /*
+                     * Row에서 CellIndex에 해당하는 Cell을 가져온다.
+                     */
+                    cell = row.getCell(cellIndex);
+                    /*
+                     * 현재 Cell의 이름을 가져온다
+                     * 이름의 예 : A,B,C,D,......
+                     */
+                    cellName = ExcelCellRefGetName(cell, cellIndex);
+                    /*
+                     * 추출 대상 컬럼인지 확인한다
+                     * 추출 대상 컬럼이 아니라면, 
+                     * for로 다시 올라간다
+                     */
+                    if( !excelReadOption.getOutputColumns().contains(cellName) ) {
+                        continue;
+                    }
+                    /*
+                     * map객체의 Cell의 이름을 키(Key)로 데이터를 담는다.
+                     * [매핑을 하려면 이곳에서]
+                     */
+                    if(rowIndex == 0){ //(매핑할)ColumnName 을 LOG로 출력
+                    	if(cellIndex != 0){
+                    		columnNmStr += ", ";
+                    	}
+                    	columnNmStr += cellName;
+                    	if(cellIndex == numOfCells){
+                    		LOG.debug("Excel's Column Name  :  "+columnNmStr);
+                    	}
+                    }
+                    map.put(cellName, ExcelCellRefGetValue(cell));
+                }
+                /*
+                 * 만들어진 Map객체를 List로 넣는다.
+                 */
+                result.add(map);   
+            }
+            
+        }
+    }
+	LOG.debug("Excel'content Loading End!! ");  
+    return result;       
+}      
+
+
+	/** [엑셀 업로드 메서드]
+	 * [설명] 엑셀파일을 읽어서 Workbook 객체에 리턴한다.
+	 * [설명] XLS와 XLSX 확장자를 비교한다.
+	 * 
+	 * @Author "Kim Seon Ho"
+	 * @Date 2017. 11. 24.
+	 */
+    public static Workbook getWorkbook(String filePath) {
+        
+        /*
+         * FileInputStream은 파일의 경로에 있는 파일을
+         * 읽어서 Byte로 가져온다.
+         * 
+         * 파일이 존재하지 않는다면은
+         * RuntimeException이 발생된다.
+         */
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(filePath);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+        
+        Workbook wb = null;
+        
+        /*
+         * 파일의 확장자를 체크해서 .XLS 라면 HSSFWorkbook에
+         * .XLSX라면 XSSFWorkbook에 각각 초기화 한다.
+         */
+        if(filePath.toUpperCase().endsWith(".XLS")) {
+            try {
+                wb = new HSSFWorkbook(fis);
+            } catch (IOException e) {
+            	LOG.debug(".XLS 로딩오류");
+                throw new RuntimeException(e.getMessage(), e);
+            }
+        }
+        else if(filePath.toUpperCase().endsWith(".XLSX")) {
+            try {
+                wb = new XSSFWorkbook(fis);
+            } catch (IOException e) {
+            	LOG.debug(".XLSX 로딩오류");
+                throw new RuntimeException(e.getMessage(), e);
+            }
+        }
+        
+        return wb;
+        
+    }
+	/** [엑셀업로드 메서드]
+     * [설명] Cell에 해당하는 Column Name을 가젼온다(A,B,C..)
+     * [설명] 만약 Cell이 Null이라면 int cellIndex의 값으로
+     * [설명] Column Name을 가져온다.
+     * 
+	 * @Author "Kim Seon Ho"
+	 * @Date 2017. 11. 24.
+	 */
+    public static String ExcelCellRefGetName(Cell cell, int cellIndex) {
+        int cellNum = 0;
+        if(cell != null) {
+            cellNum = cell.getColumnIndex();
+        }
+        else {
+            cellNum = cellIndex;
+        }
+        
+        return CellReference.convertNumToColString(cellNum);
+    }
+    
+	/** [엑셀업로드 메서드]
+     * [설명] Cell에 해당하는 Column Name을 가젼온다(A,B,C..)
+     * [설명] 만약 Cell이 Null이라면 int cellIndex의 값으로
+     * [설명] Column Name을 가져온다.
+     * 
+	 * @Author "Kim Seon Ho"
+	 * @Date 2017. 11. 24.
+	 */
+    public static String ExcelCellRefGetValue(Cell cell) {
+        String value = "";
+        
+        //내용이 없다면 ''빈칸처리
+        if(cell == null) {
+            value = "";
+        }
+        //각 쎌의 값을 가져와 Type에 따라 + '' 하여 String으로 변환, 소수점 -> 정수표현
+        switch(cell.getCellType()) {
+            case Cell.CELL_TYPE_FORMULA :
+                value = cell.getCellFormula();
+                break;
+            
+            case Cell.CELL_TYPE_NUMERIC :
+                value = (int)cell.getNumericCellValue() + "";
+                break;
+                
+            case Cell.CELL_TYPE_STRING :
+                value = cell.getStringCellValue();
+                break;
+            
+            case Cell.CELL_TYPE_BOOLEAN :
+                value = cell.getBooleanCellValue() + "";
+                break;
+           
+            case Cell.CELL_TYPE_BLANK :
+                value = "";
+                break;
+            
+            case Cell.CELL_TYPE_ERROR :
+                value = cell.getErrorCellValue() + "";
+                break;
+            default:
+                value = cell.getStringCellValue();
+        }
+        return value;
+    }

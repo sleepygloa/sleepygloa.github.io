@@ -1,0 +1,26 @@
+<style>
+.loadingPage {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    opacity: 0.7;
+    background: url(img/loading.gif) center no-repeat #fff;
+}
+</style>
+
+
+<div class="loadingPage"></div>
+
+
+
+$(document).ready(function(){
+    alert("");
+    $(".se-pre-con").hide();
+});
+
+setInterval(function(){
+    $(".se-pre-con").fadeOut(5000);
+}, 5000);

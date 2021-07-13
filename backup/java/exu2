@@ -1,0 +1,116 @@
+	public Params uploadExcelAstDataCheck(HttpSession session, MultipartHttpServletRequest request, Params inParams){
+		LOG.debug("AssetService uploadExcelAstDataCheck() :: " + inParams);
+		List<Map<String, String>> article = new ArrayList<Map<String, String>>(); //엑셀파일 데이터를 담는 변수
+		Params outParams = ParamsFactory.createOutParams(inParams);
+		CommExcel ce = new CommExcel(); //엑셀 업로드 로직 클래스파일
+		
+		ArrayList<String> serialList = new ArrayList<String>();
+		
+		//엑셀업로드 데이터 세팅 및 COLUMN 세팅
+		try{
+			ce.setColMapping(ce.excelFileColumnMapping(session, request));
+		}catch(IOException ioe){
+			outParams.setParam("NULL_FILE", "Y"); //파일없을때 alert
+		}
+		
+		//DATA READ
+		try{
+			//엑셀업로드 파일 Data Stream 및 필수값 유효성 검사, 저장
+			article = ce.read();
+//			LOG.debug(article);
+		}catch(NullPointerException e){ //필수입력값이 NULL 일때 alert
+			outParams.setParam("NULL_CHECK", "Y");
+			outParams.setParam("COL_INDEX", ce.cellName);
+			outParams.setParam("ROW_INDEX", ce.rowIndex);
+			outParams.setParam("CELL_NAME", ce.getColMapping().get(ce.cellName));
+			return outParams;
+		}
+		
+		//엑셀파일내 유효성 검사
+		//엑셀데이터 중복자산 체크
+		for(int i = 0; i < article.size(); i++){
+			//유효시리얼
+			String check = article.get(i).get("AST_SERIAL");
+			if(check != null && check.length() != 0) {
+				serialList.add(check);
+			}
+		}
+		
+		List list = new ArrayList();
+		//시리얼 중복체크
+		for(int i = 1; i < article.size(); i++){
+			if(serialList.contains(article.get(i).get("AST_SERIAL"))){
+				
+				for(int j = 0; j < serialList.size(); j++){
+					if(article.get(i).get("AST_SERIAL").equals(serialList.get(j))){
+						list.add(j+3);
+					};
+				}
+				outParams.setParam("DUP_SERIAL_ARRAY", list);
+				outParams.setParam("DUPLICATION_EXCEL_SERIAL", "Y");
+				return outParams;
+			}
+		}
+		
+		//엑셀데이터와 DB데이터 비교
+		//중복자산 체크
+		DataTable dbDt = new CommDataTable();
+		dbDt = getSqlManager().selectDataTable("AssetService.uploadExcelDataCompare",inParams);
+		for(DataRow dr : dbDt){
+			String strCd = dr.getString("STR_CD");
+			String prdCd = dr.getString("PRD_CD");
+			
+			for(int i = 0; i < article.size(); i++){
+				String exStrCd = article.get(i).get("STR_CD");
+				String exPrdCd = article.get(i).get("PRD_CD");
+				try{
+					if(strCd == null || prdCd == null || exStrCd == null || exPrdCd == null){
+						new NullPointerException();
+					}else if(strCd.equals(exStrCd) && prdCd.equals(exPrdCd)){
+						outParams.setParam("DUPLICATION_DATA_CHECK", "Y");
+						outParams.setParam("ROW_INDEX", ce.rowIndex);
+						return outParams;
+					}
+				}catch(NullPointerException ne){
+					outParams.setParam("NULL_CHECK", "Y");
+					outParams.setParam("ROW_INDEX", ce.rowIndex);
+					if(exStrCd == null){
+						outParams.setParam("CELL_NAME", "STR_CD");
+					}else{
+						outParams.setParam("CELL_NAME", "PRD_CD");
+					}
+					return outParams;
+				}
+			}
+		}
+		//중복 시리얼 체크
+		for(DataRow dr : dbDt){
+			String serialNo = dr.getString("AST_SERIAL");
+			
+			for(int i = 0; i < article.size(); i++){
+				String exSerialNo = article.get(i).get("AST_SERIAL");
+				try{
+					if(exSerialNo == null){
+						new NullPointerException();
+					}else if(serialNo.equals(exSerialNo)){
+						outParams.setParam("DUPLICATION_SERIAL_DATA_CHECK", "Y");
+						outParams.setParam("ROW_INDEX", ce.rowIndex);
+						return outParams;
+					}
+				}catch(NullPointerException ne){
+					outParams.setParam("NULL_CHECK", "Y");
+					outParams.setParam("ROW_INDEX", ce.rowIndex);
+					outParams.setParam("CELL_NAME", ce.getColMapping().get(ce.cellName));
+					return outParams;
+				}
+			}
+		}
+		
+		//유효성검사 완료한 LIST
+		inParams.setParam("dt_list", article);
+		
+		getSqlManager().insert("AssetService.insertAssetUploadExcelData", inParams); //자산 DB 입력
+		
+		getSqlManager().insert("AssetService.insertAssetHistUploadExcelData", inParams); //자산 DB 입력된 DATA 설치일 입력
+		
+	return outParams;
