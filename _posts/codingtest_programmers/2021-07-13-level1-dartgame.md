@@ -52,54 +52,71 @@ toc: true
 ## 🏆 1차 시도 - 성공
 
 ```java
-import java.util.*;
+// import java.util.regex.*;
 
-class Solution {
-    public String[] solution(int n, int[] arr1, int[] arr2) {
-        String[] answer = new String[n];
+// class Solution {
+//     public int solution(String dartResult) {
+//         int answer = 0;
         
-        //변수선언
-        String[] arr11 = new String[n];
-        String[] arr21 = new String[n];
+//             String[] darts = dartResult.split("[A-Z#*]");
+//             String[] dartArr = dartResult.split("");
+
+//             //배열정리
+//             for(int i = 1; i < dartArr.length; i++) {
+//                 if(dartArr[i-1].matches("[0-9]]") && dartArr[i].matches("[0-9]]")){
+//                     dartArr[i-1] += dartArr[i];
+//                     dartArr[i] = "";
+//                 }
+//             }
         
-        //10진법 TO 2진법
-        for(int i = 0; i < n; i++){
-            //첫번째 배열            
-            String str = Integer.toBinaryString(arr1[i]);
-            while(n != str.length()) {
-                str = "0" + str;
-            }
-            arr11[i] = str;
-            
-            //두번째 배열
-            str = Integer.toBinaryString(arr2[i]);
-            while(n != str.length()) {
-                str = "0" + str;
-            }
-            arr21[i] = str;
-            
-            //판단
-            String[] strarr1 = arr11[i].split("");
-            String[] strarr2 = arr21[i].split("");
-            answer[i] = "";
-            for(int j = 0; j < n; j++){
-                if(strarr1[j].equals("1") || strarr2[j].equals("1")){
-                    answer[i] += "#";
-                }else{
-                    answer[i] += " ";
-                }
-            }
-        }
-        return answer;
-    }
-}
+//             //배열 갯수 확인
+//             int cnt = 0;
+// //        Pattern pattern = Pattern.compile("^[\D]*$");
+//             int[] dartscore = new int[darts.length];
+//             int i = 0;
+//             for(String dart : darts){
+//                 if(dart.equals("")) continue;
+
+//                 dartscore[i] = Integer.parseInt(dart);
+//                 i++;
+//             }
+
+//             int j = 0;
+//             for(String dart : dartArr){
+//                 if(dart.equals("")) continue;
+
+//                 if(dart.equals("S")){
+//                     dartscore[j] = (int)Math.pow(dartscore[j], 1);
+//                     j++;
+//                 }else if(dart.equals("D")){
+//                     dartscore[j] = (int)Math.pow(dartscore[j], 2);
+//                     j++;
+//                 }else if(dart.equals("T")){
+//                     dartscore[j] = (int)Math.pow(dartscore[j], 3);
+//                     j++;
+//                 }else if(dart.equals("*")){
+//                     dartscore[j] = dartscore[j] * 2;
+//                     if(j-1 > -1) dartscore[j-1] = dartscore[j-1] * 2;
+//                 }else if(dart.equals("#")){
+//                     dartscore[j] = dartscore[j] * -1;
+//                 }
+//             }
+
+//         //결과
+//         for(int score : dartscore){
+//             answer += score;
+//         }
+        
+//         return answer;
+//     }
+// }
 ```
 
 ### 생각
 
-- 카카오에 가까워졌다. 0.00001
+<!-- - 카카오에 가까워졌다. 0.00001
 - 저번에 Integer 에 진법 전환하는 함수를 보고 사용했다.
-- 나름 어떻게 처리하는지 명시적으로 보여준거 같다.
+- 나름 어떻게 처리하는지 명시적으로 보여준거 같다. -->
 <!-- 
 ## 📊 첨삭
 
