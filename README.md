@@ -1,146 +1,117 @@
-# gatsby-gitbook-starter
 
-Kick off your project with this starter to create a powerful/flexible docs/tutorial web apps.
 
-![gatsby-gitbook-starter](https://graphql-engine-cdn.hasura.io/learn-hasura/gatsby-gitbook-starter/assets/documentation_app_blog.png)
+### TODO
+- 메뉴 탭화
 
-## Motivation
+### Revision
 
-We wanted to create a [GraphQL tutorial](https://learn.hasura.io) series. The content would be written by developers for various languages/frameworks and what better than writing it in Markdown! And since this is a tutorial series we also needed rich embeds, syntax highlighting and more customisations.
+2022.06.28 사이드 메뉴 변경
+ - 트리구조화
+ - 메뉴 오픈 & 비오픈 아이콘 변경
 
-We also wanted to serve these tutorials in sub paths of [learn.hasura.io](https://learn.hasura.io). To serve all these requirements, we decided to use Gatsby + MDX (Markdown + JSX) to extend markdown and used a neat consistent theme like the one at [GitBook](https://www.gitbook.com) and deployed as docker containers.
+# React Material Admin — Material-UI Dashboard Template
 
-## 🔥 Features
-- Write using Markdown / [MDX](https://github.com/mdx-js/mdx)
-- GitBook style theme
-- Syntax Highlighting using Prism [`Bonus`: Code diff highlighting]
-- Search Integration with Algolia
-- Progressive Web App, Works Offline
-- Google Analytics Integration
-- Automatically generated sidebar navigation, table of contents, previous/next
-- Dark Mode toggle
-- Edit on Github
-- Fully customisable
-- Rich embeds and live code editor using MDX
-- Easy deployment: Deploy on Netlify / Now.sh / Docker
+Built with [React](https://facebook.github.io/react/), [Material-UI](https://material-ui.com), [React Router](https://reacttraining.com/react-router/).
+**No jQuery and Bootstrap!**
 
-## 🔗 Live Demo
+**This version uses React 16.14.0, React Router v5, MaterialUI v4, built with React Hooks and React Context (No Redux)**
 
-Here's a [live demo](https://learn.hasura.io/graphql/react)
+[View Demo](https://flatlogic.com/templates/react-material-admin/demo) | [Download](https://github.com/flatlogic/react-material-admin/archive/master.zip) | [More templates](https://flatlogic.com/templates) | [Support forum](https://flatlogic.com/forum)
 
-## 🚀 Quickstart
+[![image](https://user-images.githubusercontent.com/24964748/55800639-df780300-5adc-11e9-84b7-7c2437088516.png)](https://flatlogic.com/admin-dashboards/react-material-admin/demo)
 
-Get started by running the following commands:
+## Full Version
 
-```
-$ git clone git@github.com:hasura/gatsby-gitbook-starter.git
-$ cd gatsby-gitbook-starter
-$ npm install
-$ npm start
-```
+This is a limited version of [**Full React Material Admin**](https://flatlogic.com/templates/react-material-admin-full/demo) with more components, pages and theme support.
 
-Visit `http://localhost:8000/` to view the app.
+## Features
 
-## 🔧 Configure
+- React (**16.14.0**)
+- React Hooks
+- React Context
+- **No jQuery and Bootstrap!**
+- Mobile friendly layout (responsive)
+- Create-react-app under the hood
+- React Router v5
+- Material-UI v4
+- Modular Architecture
+- CSS-in-JS styles
+- Webpack build
+- Stylish, clean, responsive layout
+- Authentication
 
-Write markdown files in `content` folder.
+## Pages
 
-Open `config.js` for templating variables. Broadly configuration is available for `gatsby`, `header`, `sidebar` and `siteMetadata`.
+We have implemented some basic pages, so you can see our template in action.
 
-- `gatsby` config for global configuration like 
-    - `pathPrefix` - Gatsby Path Prefix
-    - `siteUrl` - Gatsby Site URL
-    - `gaTrackingId` - Google Analytics Tracking ID
+- Dashboard
+- Typography
+- Tables
+- Notifications
+- Charts
+- Icons
+- Maps
+- Login
+- Error
 
-- `header` config for site header configuration like
-    - `title` - The title that appears on the top left
-    - `githubUrl` - The Github URL for the docs website
-    - `helpUrl` - Help URL for pointing to resources
-    - `tweetText` - Tweet text
-    - `links` - Links on the top right
-    - `search` - Enable search and [configure Algolia](https://www.gatsbyjs.org/docs/adding-search-with-algolia/)
+## Quick Start
 
-- `sidebar` config for navigation links configuration
-    - `forcedNavOrder` for left sidebar navigation order. It should be in the format "/\<filename>"
-    - `frontLine` - whether to show a front line at the beginning of a nested menu.(Collapsing capability would be turned of if this option is set to true)
-    - `links` - Links on the bottom left of the sidebar
-    - `ignoreIndex` - Set this to true if the index.md file shouldn't appear on the left sidebar navigation. Typically this can be used for landing pages.
+#### 1. Get the latest version
 
-- `siteMetadata` config for website related configuration
-    - `title` - Title of the website
-    - `description` - Description of the website
-    - `ogImage` - Social Media share og:image tag
-    - `docsLocation` - The Github URL for Edit on Github
+You can start by cloning the latest version of React Dashboard on your
+local machine by running:
 
-- For sub nesting in left sidebar, create a folder with the same name as the top level `.md` filename and the sub navigation is auto-generated. The sub navigation is alphabetically ordered.
-
-### Algolia Configuration
-
-To setup Algolia, go to `config.js` and update the `search` object to look like the one below:
-
-```...,
-	"search": {
-		"enabled": true,
-		"indexName": "MY_INDEX_NAME",
-		"algoliaAppId": process.env.GATSBY_ALGOLIA_APP_ID,
-		"algoliaSearchKey": process.env.GATSBY_ALGOLIA_SEARCH_KEY,
-		"algoliaAdminKey": process.env.ALGOLIA_ADMIN_KEY
-	},
+```shell
+$ git clone https://github.com/flatlogic/react-material-admin.git MyApp
+$ cd MyApp
 ```
 
-Values for Algolia App ID, Search Key, and Admin Key can be obtained from Algolia Dashboard with the right set of permissions. Replace `MY_INDEX_NAME` with the Algolia Index name of your choice. To build the Algolia index, you need to run `npm run build` which will do a gatsby build along with content indexing in Algolia.
+#### 2. Run `yarn install`
 
-### Progressive Web App, Offline
+This will install both run-time project dependencies and developer tools listed
+in [package.json](package.json) file.
 
-To enable PWA, go to `config.js` and update the `pwa` object to look like the one below:
+#### 3. Run `yarn start`
 
-```
-   "pwa": {
-        "enabled": false, // disabling this will also remove the existing service worker.
-        "manifest": {
-            "name": "Gatsby Gitbook Starter",
-            "short_name": "GitbookStarter",
-            "start_url": "/",
-            "background_color": "#6b37bf",
-            "theme_color": "#6b37bf",
-            "display": "standalone",
-            "crossOrigin": "use-credentials",
-            icons: [
-                {
-                    src: "src/pwa-512.png",
-                    sizes: `512x512`,
-                    type: `image/png`,
-                },
-            ],
-        },
-    }
-```
+Runs the app in the development mode.
 
-## Live Code Editor
+Open http://localhost:3000 to view it in the browser. Whenever you modify any of the source files inside the `/src` folder,
+the module bundler ([Webpack](http://webpack.github.io/)) will recompile the
+app on the fly and refresh all the connected browsers.
 
-To render react components for live editing, add the `react-live=true` to the code section. For example:
+#### 4. Run `yarn build`
 
-```javascript react-live=true
-<button>Edit my text</button>
-```
+Builds the app for production to the build folder.
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-In the above code, just add `javascript react-live=true` after the triple quote ``` to start rendering react components that can be edited by users.
+The build is minified and the filenames include the hashes.
+Your app is ready to be deployed!
 
-## 🤖 SEO friendly
+## Support
 
-This is a static site and comes with all the SEO benefits. Configure meta tags like title and description for each markdown file using MDX Frontmatter
+For any additional information please go to our [**support forum**](https://flatlogic.com/forum) and raise your questions or feedback provide there. We highly appreciate your participation!
 
-```markdown
----
-title: "Title of the page"
-metaTitle: "Meta Title Tag for this page"
-metaDescription: "Meta Description Tag for this page"
----
-```
+## How can I support developers?
 
-Canonical URLs are generated automatically.
+- Star our GitHub repo :star:
+- [Tweet about it](https://twitter.com/intent/tweet?text=Amazing%20dashboard%20built%20with%20NodeJS,%20React%20and%20Bootstrap!&url=https://github.com/flatlogic/react-material-template&via=flatlogic).
+- Create pull requests, submit bugs, suggest new features or documentation updates :wrench:
+- Follow [@flatlogic on Twitter](https://twitter.com/flatlogic).
+- Subscribe to Flatlogic newsletter at [flatlogic.com](https://flatlogic.com/)
+- Like our page on [Facebook](https://www.facebook.com/flatlogic/) :thumbsup:
 
-## ☁️ Deploy
+## More from Flatlogic
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/hasura/gatsby-gitbook-starter)
+- [React Native Starter](https://github.com/flatlogic/react-native-starter) - 🚀 A powerful react native starter template that bootstraps development of your mobile application
+- [Sing App](https://github.com/flatlogic/sing-app) - 💥 Free and open-source admin dashboard template built with Bootstrap 4
+- [Awesome Bootstrap Checkboxes & Radios](https://github.com/flatlogic/awesome-bootstrap-checkbox) - ✅ Pure css way to make inputs look prettier
+- [React Dashboard](https://github.com/flatlogic/react-dashboard) - 🔥 React Dashboard - isomorphic admin dashboard template with GraphQL
+- [Light Blue Dashboard](https://github.com/flatlogic/light-blue-dashboard) - 💦 Free and open-source admin dashboard template built with Bootstrap
 
+## Premium themes
+
+Looking for premium themes and templates? Check out more [admin dashboard templates at flatlogic.com](https://flatlogic.com/admin-dashboards).
+
+## License
+
+[MIT](https://github.com/flatlogic/react-material-dashboard/blob/master/LICENSE.txt).
