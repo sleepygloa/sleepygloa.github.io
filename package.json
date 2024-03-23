@@ -51,7 +51,7 @@
     "predeploy" : "npm run build",
     "deploy" : "gh-pages -d build"
   },
-  "homepage": "https://sleepygloa.github.io/com.comfunny.client/",
+  "homepage": "https://github.com/sleepygloa/sleepygloa.github.io",
   "eslintConfig": {
     "extends": "react-app"
   },
