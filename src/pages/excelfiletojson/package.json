@@ -1,0 +1,6 @@
+{
+  "name": "ExcelFileToJson",
+  "version": "1.0.0",
+  "private": true,
+  "main": "ExcelFileToJson.js"
+}
