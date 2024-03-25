@@ -29,7 +29,7 @@ export default makeStyles(theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: "hidden",
-    width: 40,
+    width: 0,
     [theme.breakpoints.down("sm")]: {
       width: drawerWidth,
     },

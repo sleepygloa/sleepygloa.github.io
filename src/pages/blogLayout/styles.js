@@ -6,6 +6,12 @@ export default makeStyles(theme => ({
     left: "240px",
     top: "50px",
     padding: "10px 10px 10px 10px"
+  },  
+  contentsAreaLeftSide: {
+    position: "fixed",
+    left: "0px",
+    top: "50px",
+    padding: "10px 10px 10px 10px"
   },
   contents: {
     margin: "0px"

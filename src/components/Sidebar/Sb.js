@@ -3,9 +3,7 @@ import SbItem from './SbItem'
 import {SbContainer} from './Sb.style'
 
 // context
-import {
-  useLayoutState,
-} from "../../context/LayoutContext";
+import { useLayoutState } from "../../context/LayoutContext";
 
 import classNames from "classnames";
 import useStyles from "./styles";

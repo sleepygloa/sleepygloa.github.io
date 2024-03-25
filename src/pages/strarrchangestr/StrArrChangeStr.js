@@ -27,12 +27,14 @@ export default function StrArrChangeStr(props) {
       <button onClick={handleReplace}>치환 시작</button>
       <p>-. 치환할 문자열 </p>
       <textarea
+        col={30} rows={20}
         placeholder="치환될 문자열 입력..."
         value={templateString}
         onChange={(e) => setTemplateString(e.target.value)}
       />
       <p>-. 변경할 문자배열</p>
       <textarea
+        col={400} rows={20}
         placeholder="'첫번째값, 두번째값, 세번째값' 형식으로 입력"
         value={replacementString}
         onChange={(e) => setReplacementString(e.target.value)}
