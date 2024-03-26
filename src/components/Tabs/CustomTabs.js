@@ -15,18 +15,18 @@ import TabPanels from './TabPanels';
 
 // pages
 import Dashboard from "../../pages/dashboard";
-import Notifications from "../../pages/notifications";
-import Maps from "../../pages/maps";
-import Charts from "../../pages/charts";
-//sd
-import SdBiz from "../../pages/sd/Biz";
+// import Notifications from "../../pages/notifications";
+// import Maps from "../../pages/maps";
+// import Charts from "../../pages/backup/charts";
+// //sd
+// import SdBiz from "../../pages/sd/Biz";
 
-//Sys
-import SysMenu from "../../pages/sys/Menu";
-import SysCode from "../../pages/sys/Code";
-import SysUser from "../../pages/sys/User";
-import SysAuth from "../../pages/sys/Auth";
-import SysAuthMenu from "../../pages/sys/AuthMenu";
+// //Sys
+// import SysMenu from "../../pages/sys/Menu";
+// import SysCode from "../../pages/sys/Code";
+// import SysUser from "../../pages/sys/User";
+// import SysAuth from "../../pages/sys/Auth";
+// import SysAuthMenu from "../../pages/sys/AuthMenu";
 
 //css
 import './Tabs.css';
@@ -34,17 +34,17 @@ import { TabContext } from '../../context/TabContext';
 
 const Components = {
   Dashboard: Dashboard,
-  Notifications: Notifications,
-  Maps: Maps,
-  Charts: Charts,
+  // Notifications: Notifications,
+  // Maps: Maps,
+  // Charts: Charts,
 
-  SdBiz: SdBiz,
+  // SdBiz: SdBiz,
 
-  SysMenu: SysMenu,
-  SysCode: SysCode,
-  SysUser: SysUser,
-  SysAuth: SysAuth,
-  SysAuthMenu: SysAuthMenu,
+  // SysMenu: SysMenu,
+  // SysCode: SysCode,
+  // SysUser: SysUser,
+  // SysAuth: SysAuth,
+  // SysAuthMenu: SysAuthMenu,
   // SysAuthUser: SysAuthUser
 };
 

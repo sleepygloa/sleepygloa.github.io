@@ -1,149 +1,151 @@
 import { makeStyles } from "@mui/styles";
 
 export default makeStyles(theme => ({
-  container: {
-    height: "100vh",
-    width: "100vw",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
+  modal: {
+    position: 'fixed',
     top: 0,
+    right: 0,
+    bottom: 0,
     left: 0,
+    background: 'rgba(0, 0, 0, 0.6)',   ///배경에 픽스를 주고 투명도를 준다.
+  }, 
+  loginModal: {
+      width: '480px',
+      height: '621px',
+      backgroundColor: 'white',
+      position: 'relative',
+      boxSizing: 'border-box',
+      margin: '50px auto',
+      padding: '20px',
+      background: '#fff',      //로그인 배경이다 
   },
-  logotypeContainer: {
-    backgroundColor: theme.palette.primary.main,
-    width: "60%",
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    [theme.breakpoints.down("md")]: {
-      width: "50%",
-    },
-    [theme.breakpoints.down("md")]: {
-      display: "none",
-    },
+  close: {
+    float: 'right',
+    fontSize: '25px',
   },
-  logotypeImage: {
-    width: 165,
-    marginBottom: theme.spacing(4),
+  modalContents: {
+    margin: '0 auto',
+    width: '100%',
+    position: 'relative',
+    padding: '0 20px 32px',
+    boxSizing: 'border-box',
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
   },
-  logotypeText: {
-    color: "white",
-    fontWeight: 500,
-    fontSize: 84,
-    [theme.breakpoints.down("md")]: {
-      fontSize: 48,
-    },
+  signinIcon: {
+    width: '150px',
+    margin: '0 auto',
   },
-  formContainer: {
-    width: "40%",
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    [theme.breakpoints.down("md")]: {
-      width: "50%",
-    },
+  loginId: {
+    marginTop: '30px',
+    borderRadius: '2px',
+    width: '100%',
+    height: '40px',
+    border: '1px solid #e5e5e5',
+    padding: '9px 12px',
+    outline: 'none',
+    boxSizing: 'border-box',
   },
-  form: {
-    width: 320,
+  // input:placeholder: {
+  //   color: '#999999'
+  // }
+  loginPw: {
+    marginTop: '15px',
+    borderRadius: '2px',
+    width: '100%',
+    height: '40px',
+    border: '1px solid #e5e5e5',
+    padding: '9px 12px',
+    outline: 'none',
+    boxSizing: 'border-box',
   },
-  tab: {
-    fontWeight: 400,
-    fontSize: 18,
+  loginMid: {
+    display: 'flex',
+    justifyContent: 'å',
+    alignItems: 'center',
   },
-  greeting: {
-    fontWeight: 500,
-    textAlign: "center",
-    marginTop: theme.spacing(4),
-    marginBottom: 30
+  autoLogin: {
+    fontSize: '12px',
+    color: '#8d8d8d',
+    lineHeight: '3',
   },
-  subGreeting: {
-    fontWeight: 500,
-    textAlign: "center",
-    marginTop: theme.spacing(2),
+  loginBtn: {
+    height: '40px',
+    fontSize: '14px',
+    padding: '13px 30px',
+    cursor: 'pointer',
+    backgroundColor: 'black',
+    color: 'white',
+    lineHeight: '1px',
+    marginTop: '20px',
+    marginBottom: '12px',
+    borderRadius: '3px',
+    borderStyle: 'none',
   },
-  googleButton: {
-    marginTop: theme.spacing(6),
-    boxShadow: theme.customShadows.widget,
-    backgroundColor: "white",
-    width: "100%",
-    textTransform: "none",
+  socialBox: {
+    marginBottom: '30px'
   },
-  googleButtonCreating: {
-    marginTop: 0,
+  kakao: {
+    backgroundColor: '#feec34',
+    borderColor: '#feec34',
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxSizing: 'border-box',
+    marginBottom: '10px',
+    borderRadius: '3px',
   },
-  googleIcon: {
-    width: 30,
-    marginRight: theme.spacing(2),
+  kakaoLogo: {
+    width: '24px',
+    height: '25px',
   },
-  creatingButtonContainer: {
-    marginTop: theme.spacing(2.5),
-    height: 46,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+  kakaoText: {
+    width: '300px',
+    fontSize: '15px',
+    textAlign: 'center',
+    display: 'inline-block',
+    boxSizing: 'border-box',
   },
-  createAccountButton: {
-    height: 46,
-    textTransform: "none",
+  facebook: {
+    backgroundColor: '#21538a',
+    borderColor: '#21538a',
+    height: '40px',
+    display: 'flex',
+    justifyContent: 'center',
+    boxSizing: 'border-box',
+    color: '#fff',
+    borderRadius: '3px',
   },
-  formDividerContainer: {
-    marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(4),
-    display: "flex",
-    alignItems: "center",
+  facebookText: {
+    paddingTop: '12px',
+    width: '310px',
+    color: '#fff',
+    fontSize: '15px',
+    textAlign: 'center',
+    boxSizing: 'border-box',
   },
-  formDividerWord: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
+  facebookLogo: {
+    paddingTop: '7px',
+    width: '24px',
+    height: '25px',
   },
-  formDivider: {
-    flexGrow: 1,
-    height: 1,
-    backgroundColor: theme.palette.text.hint + "40",
+  loginEnd: {
+    textAlign: 'center',
+    fontSize: '11px',
   },
-  errorMessage: {
-    textAlign: "center",
+  loginLine: {
+    color: '#bcbcbc',
+    fontSize: '11px',
+    marginBottom: '20px',
   },
-  textFieldUnderline: {
-    "&:before": {
-      borderBottomColor: theme.palette.primary.light,
-    },
-    "&:after": {
-      borderBottomColor: theme.palette.primary.main,
-    },
-    "&:hover:before": {
-      borderBottomColor: `${theme.palette.primary.light} !important`,
-    },
+  loginLineA:{
+    color: 'black',
+    textDecoration: 'underline',
+    cursor: 'pointer',
   },
-  textField: {
-    borderBottomColor: theme.palette.background.light,
-  },
-  formButtons: {
-    width: "100%",
-    marginTop: theme.spacing(4),
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  forgetButton: {
-    textTransform: "none",
-    fontWeight: 400,
-  },
-  loginLoader: {
-    marginLeft: theme.spacing(4),
-  },
-  copyright: {
-    marginTop: theme.spacing(4),
-    whiteSpace: "nowrap",
-    [theme.breakpoints.up("md")]: {
-      position: "absolute",
-      bottom: theme.spacing(2),
-    },
-  },
+  noUser: {
+    textDecoration: 'underline',
+  }
 }));

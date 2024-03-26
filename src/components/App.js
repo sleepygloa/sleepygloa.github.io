@@ -6,12 +6,11 @@ import Layout from "./Layout";
 
 // pages
 import Error from "../pages/error";
-import Login from "../pages/login";
 import Dashboard from "../pages/dashboard";
-import BlogLayout from "../pages/blogLayout";
-import ExcelFileToJson from "../pages/excelfiletojson";
-import ExcelDataToJson from "../pages/exceldatatojson";
-import StrArrChangeStr from "../pages/strarrchangestr";
+import BlogLayout from "../pages/blog/blogLayout/BlogLayout";
+import {ExcelFileToJson} from "../pages/blog/ExcelFileToJson";
+import {ExcelDataToJson} from "../pages/blog/ExcelDataToJson";
+import {StrArrChangeStr} from "../pages/blog/StrArrChangeStr";
 
 // context
 import { useUserState } from "../context/UserContext";

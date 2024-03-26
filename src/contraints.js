@@ -3,7 +3,7 @@ import axios from 'axios';
 export const API_URL = process.env.NODE_ENV === 'production' ? 'http://50.17.91.210:8090' : "http://localhost:8090";
 export const blogMenu = [
     { menuCd: 220, label: "메인화면", link: "/", thumbnail:"", blog:""},
-    { menuCd: 221, label: "엑셀", link: "", thumbnail:"", blog:"",
+    { menuCd: 221, label: "Blog", link: "", thumbnail:"", blog:"",
         children:[
             {menuCd: 222, label: "엑셀파일Json변환", link: "/blog/excel/excelfiletojson", thumbnail:"", blog:"",},
             {menuCd: 223, label: "엑셀데이터 Json변환", link: "/blog/excel/exceldatatojson", thumbnail:"", blog:"",},
