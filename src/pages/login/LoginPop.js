@@ -1,19 +1,22 @@
 import React, { Component, useState } from "react";
 import { Link } from "react-router-dom";
 import useStyles from "./styles.js";
+import { useUserLoginPopAction } from "../../context/UserContext";
+
 
 export default function LoginPop({isOpen, setIsOpen}) {
   var classes = useStyles();
-  
+  const loginPopAction = useUserLoginPopAction();
+
   const loginUser = useState({
     email: "",
     password: "",
   })
 
-      //닫기
-      const handleClose = () => {
-        setIsOpen(false);
-    };
+  // //닫기
+  // const handleClose = () => {
+  //   loginPopAction.closePop
+  // };
 
   // loginHandler = (e) => {
   //   const { name, value } = e.target;
@@ -49,7 +52,7 @@ export default function LoginPop({isOpen, setIsOpen}) {
           <div className={classes.modal}>
             <div>
               <div className={classes.loginModal}>
-                <span className={classes.close} onClick={handleClose}
+                <span className={classes.close} onClick={loginPopAction.closePop}
                 >
                   &times;
                 </span>

@@ -14,7 +14,7 @@ import { Typography,
 
 // context
 import {useLayoutState,useLayoutDispatch,toggleSidebar,} from "../../context/LayoutContext";
-import { useUserDispatch, signOut } from "../../context/UserContext";
+import { useUserDispatch, useUserState, signOut, useUserLoginPopAction } from "../../context/UserContext";
 
 
 
@@ -26,6 +26,8 @@ export default function Header(props) {
   var layoutState = useLayoutState();
   var layoutDispatch = useLayoutDispatch();
   var userDispatch = useUserDispatch();
+  var isLogin = useUserState();
+  const loginPopAction = useUserLoginPopAction();
 
   // local
   // var [mailMenu, setMailMenu] = useState(null);
@@ -86,12 +88,14 @@ export default function Header(props) {
           </div>
         </div>
         {/* 프로필 버튼 */}
+        {!isLogin ? <p>Guest</p> : <p>Admin</p>}
         <IconButton
           aria-haspopup="true"
           color="inherit"
           className={classes.headerMenuButton}
           aria-controls="profile-menu"
-          onClick={e => setProfileMenu(e.currentTarget)}
+          // onClick={(e)=>(!isLogin ? loginPopAction.openPop : setProfileMenu(e.currentTarget.value))}
+          onClick={loginPopAction.openPop}
         >
           <AccountIcon classes={{ root: classes.headerIcon }} />
         </IconButton>

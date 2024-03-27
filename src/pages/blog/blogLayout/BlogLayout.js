@@ -2,7 +2,7 @@ import React, {useState} from "react";
 
 // context
 import { useLayoutState } from "../../../context/LayoutContext";
-import { useUserDispatch, loginUser } from "../../../context/UserContext";
+import { useUserLoginPop } from "../../../context/UserContext";
 
 // styles
 import classNames from "classnames";
@@ -17,11 +17,8 @@ import LoginPop from "../../login/LoginPop";
 export default function BlogLayout({props}) {
   var classes = useStyles();
   var { isSidebarOpened } = useLayoutState();
-  // global
-  var userDispatch = useUserDispatch();
-  //로그인팝업
-  const [isLoginPop, setIsLoginPop] = useState(false);
-  
+  var isLoginPop = useUserLoginPop();
+  console.log('isLoginPop',isLoginPop)
   return (
     <div className={classes.contents}>
       <Header history={props.history} />
@@ -29,7 +26,7 @@ export default function BlogLayout({props}) {
       <div className={isSidebarOpened ? classes.contentsArea : classes.contentsAreaLeftSide}>
         {props}
       </div>
-      <LoginPop isOpen={isLoginPop} setIsLoginPop={setIsLoginPop}//close={false}
+      <LoginPop isOpen={isLoginPop} //close={false}
        />
     </div>
   );

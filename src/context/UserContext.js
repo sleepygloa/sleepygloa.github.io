@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext, useMemo, useState } from "react";
 import axios from 'axios';
 import { API_URL } from '../contraints';
 
 var UserStateContext = React.createContext();
 var UserDispatchContext = React.createContext();
+var IsLoginPopContext = React.createContext(false);
+var IsLoginPopActionContext = React.createContext(false);
 
 function userReducer(state, action) {
   switch (action.type) {
@@ -28,16 +30,48 @@ function UserProvider({ children }) {
     // isAuthenticated : (axios.defaults.headers.common['access_token'] ? true : false)
     isAuthenticated: !!sessionStorage.getItem("refresh_token"),
   });
+  const [isLoginPop, setIsLoginPop] = useState(false);
+  const isLoginPopAction = useMemo(() => ({
+    openPop(){
+      setIsLoginPop(true);
+    },
+    closePop(){
+      setIsLoginPop(false);
+    }
+  }), [isLoginPop]
+  )
+
 
   return (
-    <UserStateContext.Provider value={state}>
-      <UserDispatchContext.Provider value={dispatch}>
-        {children}
-      </UserDispatchContext.Provider>
-    </UserStateContext.Provider>
+    <IsLoginPopActionContext.Provider value={isLoginPopAction}>
+      <IsLoginPopContext.Provider value={isLoginPop}>
+        <UserStateContext.Provider value={state}>
+          <UserDispatchContext.Provider value={dispatch}>
+            {children}
+          </UserDispatchContext.Provider>
+        </UserStateContext.Provider>
+      </IsLoginPopContext.Provider>
+    </IsLoginPopActionContext.Provider>
   );
 }
-
+function useUserLoginPop() {
+  var context = React.useContext(IsLoginPopContext);
+  // var context = axios.defaults.headers.common['Authorization'];
+  if (context === undefined) {
+    return false;
+    // throw new Error("useUserDispatch must be used within a UserProvider");
+  }
+  return context;
+}
+function useUserLoginPopAction() {
+  var context = React.useContext(IsLoginPopActionContext);
+  // var context = axios.defaults.headers.common['Authorization'];
+  if (context === undefined) {
+    return false;
+    // throw new Error("useUserDispatch must be used within a UserProvider");
+  }
+  return context;
+}
 function useUserState() {
   var context = React.useContext(UserStateContext);
   // var context = axios.defaults.headers.common['Authorization'];
@@ -45,7 +79,7 @@ function useUserState() {
     return false;
     // throw new Error("useUserDispatch must be used within a UserProvider");
   }
-  return context;
+  return context.isAuthenticated;
 }
 
 function useUserDispatch() {
@@ -58,9 +92,10 @@ function useUserDispatch() {
   return context;
 }
 
-export { UserProvider, useUserState, useUserDispatch, loginUser, signOut };
+export { UserProvider, useUserState, useUserDispatch, useUserLoginPop, useUserLoginPopAction, loginUser, signOut,  };
 
 // ###########################################################
+
 
 function loginUser(dispatch, values, history, setIsLoading, setError) {
   setError(false);
