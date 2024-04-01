@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 export const API_URL = process.env.NODE_ENV === 'production' ? 'http://50.17.91.210:8090' : "http://localhost:8090";
+export const CLINET_URL = process.env.NODE_ENV === 'production' ? 'http://sleepygloa.github.io' : "http://localhost:3000";
 export const blogMenu = [
     { menuCd: 220, label: "메인화면", link: "/", thumbnail:"", blog:""},
     { menuCd: 221, label: "Blog", link: "", thumbnail:"", blog:"",

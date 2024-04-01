@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AppBar, div, IconButton, InputBase, Menu, MenuItem, } from "@mui/material";
 import { Menu as MenuIcon, Person as AccountIcon, Search as SearchIcon, ArrowBack as ArrowBackIcon,} from "@mui/icons-material";
 import classNames from "classnames";
+import qs from 'qs';
 
 // styles
 import useStyles from "./styles";
@@ -15,6 +16,8 @@ import { Typography,
 // context
 import {useLayoutState,useLayoutDispatch,toggleSidebar,} from "../../context/LayoutContext";
 import { useUserDispatch, useUserState, signOut, useUserLoginPopAction } from "../../context/UserContext";
+import axios from "axios";
+import { API_URL } from "../../contraints";
 
 
 
@@ -36,6 +39,34 @@ export default function Header(props) {
   // var [isNotificationsUnread, setIsNotificationsUnread] = useState(true);
   var [profileMenu, setProfileMenu] = useState(null);
   var [isSearchOpen, setSearchOpen] = useState(false);
+
+  //페이지 로딩시, 로그인으로 인한 access_token 이 있다면, 로그인처리 
+  useEffect(()=>{
+    const { access_token } = qs.parse(window.location.hash.substr(1));
+    if(access_token != null){
+      handleLogin(access_token);
+    }
+  }, [])
+
+  const handleLogin = async (access_token) => {
+    console.log(access_token);
+    try {
+      const response = await axios.post(`${API_URL}/login/auth/socialAuthCheck`, {
+        access_token: access_token
+      });
+
+      if (response.status === 200) {
+        console.log('로그인 성공!');
+        // 로그인 성공 후 추가적인 작업 수행
+      } else {
+        console.error('로그인 실패');
+        // 로그인 실패 시 추가적인 처리
+      }
+    } catch (error) {
+      console.error('로그인 중 오류 발생:', error);
+      // 오류 발생 시 추가적인 처리
+    }
+  };
 
   return (
     <AppBar position="fixed" >
