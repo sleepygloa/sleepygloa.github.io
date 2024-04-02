@@ -2,6 +2,7 @@ import { makeStyles } from "@mui/styles";
 
 export default makeStyles(theme => ({
   modal: {
+    zIndex: 99999,
     position: 'fixed',
     top: 0,
     right: 0,
@@ -10,8 +11,10 @@ export default makeStyles(theme => ({
     background: 'rgba(0, 0, 0, 0.6)',   ///배경에 픽스를 주고 투명도를 준다.
   }, 
   loginModal: {
-      width: '480px',
-      height: '621px',
+      width: '100%',
+      height: '100%',
+      maxWidth: '480px',
+      maxHeight: '600px',
       backgroundColor: 'white',
       position: 'relative',
       boxSizing: 'border-box',
@@ -66,6 +69,7 @@ export default makeStyles(theme => ({
     alignItems: 'center',
   },
   autoLogin: {
+    paddingLeft: '10px',
     fontSize: '12px',
     color: '#8d8d8d',
     lineHeight: '3',

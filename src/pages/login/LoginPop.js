@@ -62,10 +62,11 @@ export default function LoginPop({isOpen, setIsOpen}) {
                   &times;
                 </span>
                 <div className={classes.modalContents} >
-                  <img
+                  Comfunny Developers
+                  {/* <img
                     className="signinIcon"
-                    src="/Images/SignIn/signinIcon.png"
-                  />
+                    src="banner.png"
+                  /> */}
                   <input
                     name="userId"
                     className={classes.loginId}
@@ -94,26 +95,26 @@ export default function LoginPop({isOpen, setIsOpen}) {
                   </button>
                   <div className={classes.socialBox}>
                     <div className={classes.kakao}>
-                      <img
+                      {/* <img
                         className={classes.kakaoLogo}
                         src="/Images/SignIn/kakao.png"
-                      />
+                      /> */}
                       <div className={classes.kakaoText} onClick={()=>{loginKakaoClickHandler()}}
                       >카카오 계정으로 신규가입</div>
                     </div>
                     <div className={classes.google}>
-                      <img
+                      {/* <img
                         className={classes.googleLogo}
                         src="/Images/SignIn/kakao.png"
-                      />
+                      /> */}
                       <div className={classes.googleText} onClick={()=>{loginGoogleClickHandler2()}}
                       >구글 계정으로 신규가입</div>
                     </div>
                     <div className={classes.facebook}>
-                      <img
+                      {/* <img
                         className={classes.facebookLogo}
                         src="/Images/SignIn/facebook.png"
-                      />
+                      /> */}
                       <div className={classes.facebookText}
                       onClick={()=>{loginNaverClickHandler()}}
                       >
