@@ -15,24 +15,25 @@ export const blogMenu = [
 export const client = axios.create({
     baseURL: API_URL,
     timeout: 30000,
+    withCredentials: true,
     headers:{
         'Content-Type' : 'application/json'
     }
 })
 
 client.interceptors.request.use(
-    function (config) {
-        const at = sessionStorage.getItem('access_token');
-        const rt = sessionStorage.getItem('refresh_token');
-        if (!at || !rt) {
-            config.headers["access_token"] = null;
-            config.headers["refresh_token"] = null;
-            return config
-        }
-        config.headers["access_token"] = "Bearer "+at;
-        config.headers["refresh_token"] = "Bearer "+rt;
-        return config
-    }
+    // function (config) {
+    //     const at = sessionStorage.getItem('access_token');
+    //     const rt = sessionStorage.getItem('refresh_token');
+    //     if (!at || !rt) {
+    //         config.headers["access_token"] = null;
+    //         config.headers["refresh_token"] = null;
+    //         return config
+    //     }
+    //     config.headers["access_token"] = "Bearer "+at;
+    //     config.headers["refresh_token"] = "Bearer "+rt;
+    //     return config
+    // }
 )
 
 client.interceptors.response.use(
@@ -46,7 +47,7 @@ client.interceptors.response.use(
                 console.log('error.response.status 401');
                 sessionStorage.removeItem('access_token');
                 sessionStorage.removeItem('refresh_token');
-                window.location.href = '/';
+                // window.location.href = '/';
             }
             if (error.response.status === 403) {
                 try {

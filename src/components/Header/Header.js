@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { AppBar, div, IconButton, InputBase, Menu, MenuItem, } from "@mui/material";
 import { Menu as MenuIcon, Person as AccountIcon, Search as SearchIcon, ArrowBack as ArrowBackIcon,} from "@mui/icons-material";
 import classNames from "classnames";
@@ -17,7 +17,7 @@ import { Typography,
 import {useLayoutState,useLayoutDispatch,toggleSidebar,} from "../../context/LayoutContext";
 import { useUserDispatch, useUserState, signOut, useUserLoginPopAction } from "../../context/UserContext";
 import axios from "axios";
-import { API_URL } from "../../contraints";
+import { API_URL, client } from "../../contraints";
 
 
 
@@ -49,7 +49,6 @@ export default function Header(props) {
   }, [])
 
   const handleLogin = async (access_token) => {
-    console.log(access_token);
     try {
       const response = await axios.post(`${API_URL}/login/auth/socialAuthCheck`, {
         access_token: access_token
@@ -67,6 +66,21 @@ export default function Header(props) {
       // 오류 발생 시 추가적인 처리
     }
   };
+  const [userInfo, setUserInfo] = useState({
+    nickname: "",
+  });
+
+  useEffect(() => {
+    client.post(`${API_URL}/login/getUserInfo`, userInfo)
+    .then(res => {
+      console.log(res.data)
+      setUserInfo({
+        nickname: res.data.nickname
+      })
+    }).catch(error => { 
+    })
+  }, [userInfo]); 
+
 
   return (
     <AppBar position="fixed" >
@@ -119,7 +133,7 @@ export default function Header(props) {
           </div>
         </div>
         {/* 프로필 버튼 */}
-        {!isLogin ? <p>Guest</p> : <p>Admin</p>}
+        {userInfo.nickname ? <p>{userInfo.nickname}</p> : <p></p>}
         <IconButton
           aria-haspopup="true"
           color="inherit"

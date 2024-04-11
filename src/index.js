@@ -50,7 +50,7 @@ const container = document.getElementById('root');
 if (!container) throw new Error('Failed to find the root element');
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <LayoutProvider>
        <UserProvider>
 {/* //         <TabProvider> */}
@@ -62,7 +62,7 @@ root.render(
 {/* //          </TabProvider> */}
         </UserProvider>
       </LayoutProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 ); 
 
 // If you want your app to work offline and load faster, you can change

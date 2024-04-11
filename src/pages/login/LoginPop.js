@@ -1,28 +1,67 @@
 import React, { Component, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import axios from 'axios';
 import useStyles from "./styles.js";
-import { useUserLoginPopAction } from "../../context/UserContext";
-import qs from 'qs';
-import { API_URL } from "../../contraints.js";
-
-
-
+import { useUserLoginPopAction, useSignupPop, useSignupPopAction, useUserDispatch, useSetUserInfo } from "../../context/UserContext";
+import { API_URL, client } from "../../contraints.js";
+import SingupPop from "./SignupPop.js";
+import { Cookie } from "@mui/icons-material";
 
 
 export default function LoginPop({isOpen, setIsOpen}) {
   var classes = useStyles();
+
+  const isDispatch = useUserDispatch();
   const loginPopAction = useUserLoginPopAction();
+  //회원가입 
+  const isSignupPopAction = useSignupPopAction();
+  const isSignupPop = useSignupPop();
 
+  // const [userInfo, setUserInfo] = useSetUserInfo();
 
-  const loginUser = useState({
+  //회원가입 팝업 열기
+  const SingupPopupHandler = (e) => {
+    isSignupPopAction.openPop();
+  }
+
+  //Form Data
+  const [isUser, setIsUser] = useState({
     userId: "",
     password: "",
   })
-
+  //LoginData KeyIn
+  const loginUserHandler = (e)=>{
+    setIsUser({ ...isUser, [e.target.name]: e.target.value });
+  }
+  
+  //User Login
   const loginClickHandler = (e) => {
-    const { name, value } = e.target;
-    // this.setState({ [name]: value });
-  };   ////계산된 속성명 사용
+    if (!isUser.userId && !isUser.password) {
+      alert('아이디와 비밀번호를 입력해주세요');
+      return;
+    }
+  
+    var headers = {
+      "Content-type":"application/json"
+    }
+    axios.post(`${API_URL}/login/login`, isUser)
+    .then(res => {
+      console.log(res);
+      // 만료일까지의 시간을 계산합니다.
+      var accessTokenDt = new Date();
+      accessTokenDt.setTime(accessTokenDt.getTime() + (res.data.accessTokenDt*1000));
+      var refreshTokenDt = new Date();
+      refreshTokenDt.setTime(refreshTokenDt.getTime() + (res.data.refreshTokenDt*1000));
+      console.log(accessTokenDt, refreshTokenDt)
+
+      document.cookie = 'accessToken='+res.data.accessToken+'; expires='+accessTokenDt.toUTCString()+' path=/';
+      document.cookie = 'refreshToken='+res.data.refreshToken+'; expires='+refreshTokenDt.toUTCString()+' path=/';
+      isDispatch({ type: 'LOGIN_SUCCESS' })
+      loginPopAction.closePop();
+    }).catch(error => { 
+      console.log('login error = '+error); 
+      alert('로그인 실패했습니다.');
+    })
+  }; 
 
   //Kakao Login
   function loginKakaoClickHandler(){
@@ -72,14 +111,14 @@ export default function LoginPop({isOpen, setIsOpen}) {
                     className={classes.loginId}
                     type="text"
                     placeholder="아이디"
-                    // onChange={loginHandler}
+                    onChange={loginUserHandler}
                   />
                   <input
                     name="password"
                     className={classes.loginPw}
                     type="password"
                     placeholder="비밀번호"
-                    // onChange={loginHandler}
+                    onChange={loginUserHandler}
                   />
                   <div className={classes.loginMid}>
                     <label className={classes.autoLogin} for="hint">
@@ -123,16 +162,20 @@ export default function LoginPop({isOpen, setIsOpen}) {
                     </div>
                   </div>
                   <div className={classes.loginEnd}>
-                    <div className={classes.loginLine}>
-                      회원이 아니신가요? <Link to="/signup" className={classes.loginLineA}>회원가입</Link>
+                    <div className={classes.loginLine} onClick={SingupPopupHandler}>
+                      회원이 아니신가요? <span className={classes.loginLineA}>회원가입</span>
                     </div>
-                    <div className={classes.noUser}>비회원 로그인</div>
+                    {/* <div className={classes.noUser}>비회원 로그인</div> */}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         ) : null}
+        {isSignupPop ? (
+          <SingupPop isOpen={isSignupPop}/>
+        ) : null
+        }
       </>
     );
   }
