@@ -1,12 +1,13 @@
 import React, { Component, useState, useEffect } from "react";
 import axios from 'axios';
 import useStyles from "./styles.js";
-import { useUserLoginPopAction, useSignupPop, useSignupPopAction, useUserDispatch, useSetUserInfo } from "../../context/UserContext";
+import { useUserLoginPopAction, useSignupPop, useSignupPopAction, useUserDispatch, useSetUserInfo } from "../../context/UserContext.js";
 import { API_URL, client } from "../../contraints.js";
 import SingupPop from "./SignupPop.js";
+import { Cookie } from "@mui/icons-material";
 
 
-export default function LoginPop({isOpen, setIsOpen}) {
+export default function UserInfoPop({isOpen, setIsOpen}) {
   var classes = useStyles();
 
   const isDispatch = useUserDispatch();
@@ -44,12 +45,13 @@ export default function LoginPop({isOpen, setIsOpen}) {
     }
     axios.post(`${API_URL}/login/login`, isUser)
     .then(res => {
-      // console.log(res);
+      console.log(res);
       // 만료일까지의 시간을 계산합니다.
       var accessTokenDt = new Date();
       accessTokenDt.setTime(accessTokenDt.getTime() + (res.data.accessTokenDt*1000));
       var refreshTokenDt = new Date();
       refreshTokenDt.setTime(refreshTokenDt.getTime() + (res.data.refreshTokenDt*1000));
+      console.log(accessTokenDt, refreshTokenDt)
 
       document.cookie = 'accessToken='+res.data.accessToken+'; expires='+accessTokenDt.toUTCString()+' path=/';
       document.cookie = 'refreshToken='+res.data.refreshToken+'; expires='+refreshTokenDt.toUTCString()+' path=/';

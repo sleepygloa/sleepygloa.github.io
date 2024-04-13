@@ -37,6 +37,7 @@ export default function SingupPop({isOpen}) {
       closePop();
       alert('회원가입에 성공하였습니다. ')
     }).catch(error => { 
+      console.log(error)
       alert('회원가입에 실패했습니다. ')
     })
   }; 

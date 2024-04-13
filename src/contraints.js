@@ -45,27 +45,44 @@ client.interceptors.response.use(
         if(error.response){
             if(error.response.status === 401){
                 console.log('error.response.status 401');
-                sessionStorage.removeItem('access_token');
-                sessionStorage.removeItem('refresh_token');
+                document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                // sessionStorage.removeItem('access_token');
+                // sessionStorage.removeItem('refresh_token');
                 // window.location.href = '/';
             }
             if (error.response.status === 403) {
                 try {
                     const originalRequest = error.config;
-                    const data = await client.get('login/auth/refreshtoken')
-                    if (data) {
-                        const {accessToken, refreshToken} = data.data
+                    const res = await client.get('login/auth/refreshtoken')
+                    if (res) {
                         sessionStorage.removeItem('access_token');
                         sessionStorage.removeItem('refresh_token');
-                        sessionStorage.setItem('access_token', accessToken)
-                        sessionStorage.setItem('refresh_token', refreshToken)
-                        originalRequest.headers['access_token'] = accessToken;
-                        originalRequest.headers['refresh_token'] = refreshToken;
+                        sessionStorage.setItem('access_token', res.data.accessToken)
+                        sessionStorage.setItem('refresh_token', res.data.refreshToken)
+                        originalRequest.headers['access_token'] = res.data.accessToken;
+                        originalRequest.headers['refresh_token'] = res.data.refreshToken;
+
+                        document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                        document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+                        // 만료일까지의 시간을 계산합니다.
+                        var accessTokenDt = new Date();
+                        accessTokenDt.setTime(accessTokenDt.getTime() + (res.data.accessTokenDt*1000));
+                        var refreshTokenDt = new Date();
+                        refreshTokenDt.setTime(refreshTokenDt.getTime() + (res.data.refreshTokenDt*1000));
+                        console.log(accessTokenDt, refreshTokenDt)
+
+                        document.cookie = 'accessToken='+res.data.accessToken+'; expires='+accessTokenDt.toUTCString()+' path=/';
+                        document.cookie = 'refreshToken='+res.data.refreshToken+'; expires='+refreshTokenDt.toUTCString()+' path=/';
                         return await client.request(originalRequest);
                         }
                 } catch (error){
                       sessionStorage.removeItem('access_token');
                       sessionStorage.removeItem('refresh_token');
+                      document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                      document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
                       console.log(error);
                 }
                 return Promise.reject(error)

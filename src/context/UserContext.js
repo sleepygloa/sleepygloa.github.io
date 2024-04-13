@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axios from 'axios';
-import { API_URL } from '../contraints';
-import { Cookie } from "@mui/icons-material";
+import { API_URL, client } from "../contraints";
 
 var UserStateContext = React.createContext();
 var UserDispatchContext = React.createContext();
@@ -21,6 +20,7 @@ function userReducer(state, action) {
       alert('로그인에 성공하였습니다. ');
       return { ...state, isAuthenticated: true };
     case "SIGN_OUT_SUCCESS":
+      alert('로그아웃 되었습니다. ');
       return { ...state, isAuthenticated: false };
     case "LOGIN_FAILURE":
       alert('로그인에 실패하였습니다. ');
@@ -62,7 +62,6 @@ function UserProvider({ children }) {
       setIsSignupPop(true);
     },
     closePop(){
-      console.log('closePop');
       setIsSignupPop(false);
     }
   }), [isSignupPop]);
@@ -157,9 +156,14 @@ export { UserProvider, useUserState, useUserDispatch, useUserInfo, useSetUserInf
 
 
 //로그아웃 
-function signOut(dispatch, history) {
-  sessionStorage.removeItem("access_token");
-  sessionStorage.removeItem("refresh_token");
-  dispatch({ type: "SIGN_OUT_SUCCESS" });
-  history.push("/login");
+function signOut(dispatch) {
+  client.post(`${API_URL}/login/logout`)
+  .then(res => {
+    document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    dispatch({ type: "SIGN_OUT_SUCCESS" });
+    window.location.href = '/';
+  }).catch(error => { 
+    alert('로그아웃에 실패했습니다.');
+  })
 }

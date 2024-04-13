@@ -29,7 +29,6 @@ export default function Header(props) {
   var layoutState = useLayoutState();
   var layoutDispatch = useLayoutDispatch();
   var userDispatch = useUserDispatch();
-  var isLogin = useUserState();
   const loginPopAction = useUserLoginPopAction();
 
   // local
@@ -40,46 +39,57 @@ export default function Header(props) {
   var [profileMenu, setProfileMenu] = useState(null);
   var [isSearchOpen, setSearchOpen] = useState(false);
 
-  //페이지 로딩시, 로그인으로 인한 access_token 이 있다면, 로그인처리 
-  useEffect(()=>{
-    const { access_token } = qs.parse(window.location.hash.substr(1));
-    if(access_token != null){
-      handleLogin(access_token);
-    }
-  }, [])
 
-  const handleLogin = async (access_token) => {
-    try {
-      const response = await axios.post(`${API_URL}/login/auth/socialAuthCheck`, {
-        access_token: access_token
-      });
-
-      if (response.status === 200) {
-        console.log('로그인 성공!');
-        // 로그인 성공 후 추가적인 작업 수행
-      } else {
-        console.error('로그인 실패');
-        // 로그인 실패 시 추가적인 처리
-      }
-    } catch (error) {
-      console.error('로그인 중 오류 발생:', error);
-      // 오류 발생 시 추가적인 처리
-    }
-  };
+  //조회조건
   const [userInfo, setUserInfo] = useState({
-    nickname: "",
+    nickname: '',
+    userId:'',
   });
+  // const onChangeUserInfo = (event) => {
+  //   setUserInfo({ ...userInfo, [event.target.id]: event.target.value });
+  // }
 
   useEffect(() => {
-    client.post(`${API_URL}/login/getUserInfo`, userInfo)
-    .then(res => {
-      console.log(res.data)
-      setUserInfo({
-        nickname: res.data.nickname
-      })
-    }).catch(error => { 
-    })
-  }, [userInfo]); 
+    
+    //쿠기가 있을때 유저정보 가져오기 
+    const ck = document.cookie;
+    var at = '';
+    ck.split(';').forEach(function(item) {
+      var temp = item.split('=');
+      var temp0 = temp[0].trim()
+      if(temp0 === 'accessToken') {
+        at = temp[1]
+      }
+    });
+    if(at != ''){
+        client.get(`${API_URL}/login/getUserInfo`)
+        .then(res => {
+            setUserInfo({...userInfo, nickname: res.data.nickname, userId: res.data.userId});
+        }).catch(error => { 
+        })
+    }
+
+    //페이지 로딩시, 로그인으로 인한 access_token 이 있다면, 로그인처리 
+    const { access_token } = qs.parse(window.location.hash.substr(1));
+    if(access_token != null){
+      try {
+        const response = axios.post(`${API_URL}/login/auth/socialAuthCheck`, {
+          access_token: access_token
+        });
+  
+        if (response.status === 200) {
+          console.log('로그인 성공!');
+          // 로그인 성공 후 추가적인 작업 수행
+        } else {
+          console.error('로그인 실패');
+          // 로그인 실패 시 추가적인 처리
+        }
+      } catch (error) {
+        console.error('로그인 중 오류 발생:', error);
+        // 오류 발생 시 추가적인 처리
+      }
+    }
+  }, []); 
 
 
   return (
@@ -133,17 +143,29 @@ export default function Header(props) {
           </div>
         </div>
         {/* 프로필 버튼 */}
-        {userInfo.nickname ? <p>{userInfo.nickname}</p> : <p></p>}
+        {userInfo.nickname !== ''? <p>{userInfo.nickname}</p> : <p>1</p>}
+        {userInfo.nickname !== '' ? 
+
+          <IconButton
+          aria-haspopup="true"
+          color="inherit"
+          className={classes.headerMenuButton}
+          aria-controls="profile-menu"
+          onClick={()=>{setProfileMenu(true)}}
+        >
+          <AccountIcon classes={{ root: classes.headerIcon }} />
+        </IconButton> 
+        : 
         <IconButton
           aria-haspopup="true"
           color="inherit"
           className={classes.headerMenuButton}
           aria-controls="profile-menu"
-          // onClick={(e)=>(!isLogin ? loginPopAction.openPop : setProfileMenu(e.currentTarget.value))}
           onClick={loginPopAction.openPop}
         >
           <AccountIcon classes={{ root: classes.headerIcon }} />
         </IconButton>
+        }
         <Menu
           id="profile-menu"
           open={Boolean(profileMenu)}
@@ -155,18 +177,11 @@ export default function Header(props) {
         >
           <div className={classes.profileMenuUser}>
             <Typography variant="h4" weight="medium">
-              John Smith
-            </Typography>
-            <Typography
-              className={classes.profileMenuLink}
-              component="a"
-              color="primary"
-              href="https://flatlogic.com"
-            >
-              Flalogic.com
+              {userInfo.nickname}
             </Typography>
           </div>
-          <MenuItem
+
+          {/* <MenuItem
             className={classNames(
               classes.profileMenuItem,
               classes.headerMenuItem,
@@ -189,7 +204,7 @@ export default function Header(props) {
             )}
           >
             <AccountIcon className={classes.profileMenuIcon} /> Messages
-          </MenuItem>
+          </MenuItem> */}
           <div className={classes.profileMenuUser}>
             <Typography
               className={classes.profileMenuLink}
