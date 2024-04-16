@@ -42,8 +42,8 @@ export default function Header(props) {
 
   //조회조건
   const [userInfo, setUserInfo] = useState({
-    nickname: '',
-    userId:'',
+    nickname: null,
+    userId:null,
   });
   // const onChangeUserInfo = (event) => {
   //   setUserInfo({ ...userInfo, [event.target.id]: event.target.value });
@@ -53,6 +53,7 @@ export default function Header(props) {
     
     //쿠기가 있을때 유저정보 가져오기 
     const ck = document.cookie;
+    console.log('ck',ck)
     var at = '';
     ck.split(';').forEach(function(item) {
       var temp = item.split('=');
@@ -61,34 +62,35 @@ export default function Header(props) {
         at = temp[1]
       }
     });
-    if(at != ''){
+    console.log('at',at)
+    // if(at != ''){
         client.get(`${API_URL}/login/getUserInfo`)
         .then(res => {
             setUserInfo({...userInfo, nickname: res.data.nickname, userId: res.data.userId});
         }).catch(error => { 
         })
-    }
+    // }
 
-    //페이지 로딩시, 로그인으로 인한 access_token 이 있다면, 로그인처리 
-    const { access_token } = qs.parse(window.location.hash.substr(1));
-    if(access_token != null){
-      try {
-        const response = axios.post(`${API_URL}/login/auth/socialAuthCheck`, {
-          access_token: access_token
-        });
+    // //페이지 로딩시, 로그인으로 인한 access_token 이 있다면, 로그인처리 
+    // const { access_token } = qs.parse(window.location.hash.substr(1));
+    // if(access_token != null){
+    //   try {
+    //     const response = axios.post(`${API_URL}/login/auth/socialAuthCheck`, {
+    //       access_token: access_token
+    //     });
   
-        if (response.status === 200) {
-          console.log('로그인 성공!');
-          // 로그인 성공 후 추가적인 작업 수행
-        } else {
-          console.error('로그인 실패');
-          // 로그인 실패 시 추가적인 처리
-        }
-      } catch (error) {
-        console.error('로그인 중 오류 발생:', error);
-        // 오류 발생 시 추가적인 처리
-      }
-    }
+    //     if (response.status === 200) {
+    //       console.log('로그인 성공!');
+    //       // 로그인 성공 후 추가적인 작업 수행
+    //     } else {
+    //       console.error('로그인 실패');
+    //       // 로그인 실패 시 추가적인 처리
+    //     }
+    //   } catch (error) {
+    //     console.error('로그인 중 오류 발생:', error);
+    //     // 오류 발생 시 추가적인 처리
+    //   }
+    // }
   }, []); 
 
 
@@ -143,8 +145,8 @@ export default function Header(props) {
           </div>
         </div>
         {/* 프로필 버튼 */}
-        {userInfo.nickname !== ''? <p>{userInfo.nickname}</p> : <p>1</p>}
-        {userInfo.nickname !== '' ? 
+        {userInfo.nickname != null && userInfo.nickname != '' ? <p>{userInfo.nickname}</p> : <p></p>}
+        {userInfo.nickname != null && userInfo.nickname != '' ? 
 
           <IconButton
           aria-haspopup="true"

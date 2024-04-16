@@ -40,7 +40,7 @@ export function StrArrChangeStr(props) {
         onChange={(e) => setReplacementString(e.target.value)}
       />
       <hr />
-      <p>결과: {result}</p>
+      <textarea>{result}</textarea>
     </div>
 
   );
