@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const API_URL = process.env.NODE_ENV === 'production' ? 'https://www.comfunnydevelopers.com:8090' : "http://localhost:8090";
+export const API_URL = process.env.NODE_ENV === 'production' ? 'http://www.comfunnydevelopers.com:8090' : "http://localhost:8090";
 export const CLINET_URL = process.env.NODE_ENV === 'production' ? 'http://sleepygloa.github.io' : "http://localhost:3000";
 export const blogMenu = [
     { menuCd: 220, label: "메인화면", link: "/", thumbnail:"", blog:""},
