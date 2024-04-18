@@ -34,7 +34,7 @@ export const SbTitle = styled.div`
 // 제일 하위메뉴에서 클릭할 Link 
 // export const SbLink = styled(Link)`
 export const SbLink = styled.div`
-  color: inherit;
-  text-decoration: inherit;
+  color: black;
+  text-decoration: none;
   display: flex;
 `;

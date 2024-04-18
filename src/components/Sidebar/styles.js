@@ -60,5 +60,9 @@ export default makeStyles(theme => ({
   listIcon: {
     whiteSpace: "nowrap",
     minWidth: "20px"
+  },
+  listText: {
+    color: "black",
+    textDecoration: "none"
   }
 }));

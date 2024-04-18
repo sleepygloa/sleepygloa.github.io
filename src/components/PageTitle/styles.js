@@ -10,7 +10,7 @@ export default makeStyles(theme => ({
     marginTop: '10px',
   },
   typo: {
-    color: theme.palette.text.hint,
+    // color: theme.palette.text.hint,
   },
   button: {
     boxShadow: theme.customShadows.widget,

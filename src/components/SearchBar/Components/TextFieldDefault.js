@@ -11,29 +11,30 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     marginBottom: 0,
     marginTop: 0,
+    height: 30,
   },
   div : {
     display:'inline-flex',
     width:'99.5%',
-    height:'40px',
-    margin:'0px 0px 10px 0px',
-    padding:'0px 5px 0px 5px',
+    height:'30px',
+    margin:'0px',
+    padding:'0px',
     overflow:'hidden',
   },
   div3 : {
     display:'inline-flex',
     width:'33%',
-    height:'40px',
-    margin:'0px 0px 10px 0px',
-    padding:'0px 5px 0px 5px',
+    height:'30px',
+    margin:'0px',
+    padding:'0px',
     overflow:'hidden',
   },
   div4 : {
-    display:'flex',
+    display:'inline-flex',
     width:'24.5%',
-    height:'40px',
-    margin:'0px 0px 10px 0px',
-    padding:'0px 5px 0px 5px',
+    height:'30px',
+    margin:'0px',
+    padding:'0px',
     overflow:'hidden',
   },
   textFieldLabel:{
@@ -52,11 +53,23 @@ const useStyles = makeStyles((theme) => ({
 /**
  * Div Component
 */
-function DivDefault (props){
+function  DivDefault (props){
   const classes = useStyles(); 
-  return (
-    <div className={props.props.div === "fullwidth" ? classes.div : (props.props.div === "3" ? classes.div3 : (props.props.div ==="4" ? classes.div4 :''))}>
-      {/* 사용할 내부 Component  */}
+  if(!props.props) return null;
+
+  if(props.props.div == "fullwidth") return (
+    <div className={classes.div}>
+      {props.children}
+    </div>
+  )
+
+  if(props.props.div == 3) return (
+    <div className={classes.div3}>
+      {props.children}
+    </div>
+  )
+  if(props.props.div == 4) return (
+    <div className={classes.div4}>
       {props.children}
     </div>
   )
@@ -76,14 +89,13 @@ export function TextFieldDefault (props) {
   const classes = useStyles(); 
   return (
     <DivDefault props={props}>
-      {props.labeling ? <LabelDefault >{props.label}</LabelDefault> : ''}
+      <LabelDefault >{props.label}</LabelDefault>
       <TextField
-        style={{marginTop:0}}
-        margin="normal"
+        style={{margin:0, padding:0}}
+        // margin="normal"
         type='text'
         className={classes.textField}
-        id={props.id}
-        name={props.id}
+        id={props.id} name={props.id}
         label={!props.labeling ? props.label : ''}
         fullWidth
         // defaultValue={props.defaultValue ? props.defaultValue : ''}
@@ -96,12 +108,13 @@ export function TextFieldDefault (props) {
         InputLabelProps={{ shrink : (props.labeling ? false : true) }}
         disabled={props.disabled}
         placeholder={props.placeholder}
-        InputProps={{
-          classes: {
-            underline: classes.textFieldUnderline,
-            input: classes.textField,
-          },
-        }}
+        // InputProps={{
+        //   classes: {
+        //     underline: classes.textFieldUnderline,
+        //     input: classes.textField,
+        //   },
+        // }
+      // }
       />
     </DivDefault>
   )
@@ -111,8 +124,8 @@ export function SchTextField (props) {
   const classes = useStyles(); 
   return (
     <DivDefault props={props}>
-      {props.labeling ? <LabelDefault >{props.label}</LabelDefault> : ''}
-      <TextField
+      <LabelDefault >{props.label}</LabelDefault>
+      <input
         // label={props.label}
         // value={value}
         id={props.id ? props.id : 'noneId'}
@@ -121,7 +134,7 @@ export function SchTextField (props) {
         // error={props.required && !props.value ? `${props.label}은(는))필수입력입니다.` : '' }
         onChange={props.onChange ? props.onChange : false}
         onKeyDown={props.onKeyDown ? props.onKeyDown : null}
-        InputProps={props.classes}
+        // InputProps={props.classes}
       />
     </DivDefault>
   )

@@ -53,7 +53,6 @@ export default function Header(props) {
     
     //쿠기가 있을때 유저정보 가져오기 
     const ck = document.cookie;
-    console.log('ck',ck)
     var at = '';
     ck.split(';').forEach(function(item) {
       var temp = item.split('=');
@@ -63,34 +62,14 @@ export default function Header(props) {
       }
     });
     console.log('at',at)
-    // if(at != ''){
+    if(at != ''){
         client.get(`${API_URL}/login/getUserInfo`)
         .then(res => {
             setUserInfo({...userInfo, nickname: res.data.nickname, userId: res.data.userId});
         }).catch(error => { 
         })
-    // }
+    }
 
-    // //페이지 로딩시, 로그인으로 인한 access_token 이 있다면, 로그인처리 
-    // const { access_token } = qs.parse(window.location.hash.substr(1));
-    // if(access_token != null){
-    //   try {
-    //     const response = axios.post(`${API_URL}/login/auth/socialAuthCheck`, {
-    //       access_token: access_token
-    //     });
-  
-    //     if (response.status === 200) {
-    //       console.log('로그인 성공!');
-    //       // 로그인 성공 후 추가적인 작업 수행
-    //     } else {
-    //       console.error('로그인 실패');
-    //       // 로그인 실패 시 추가적인 처리
-    //     }
-    //   } catch (error) {
-    //     console.error('로그인 중 오류 발생:', error);
-    //     // 오류 발생 시 추가적인 처리
-    //   }
-    // }
   }, []); 
 
 
@@ -182,31 +161,6 @@ export default function Header(props) {
               {userInfo.nickname}
             </Typography>
           </div>
-
-          {/* <MenuItem
-            className={classNames(
-              classes.profileMenuItem,
-              classes.headerMenuItem,
-            )}
-          >
-            <AccountIcon className={classes.profileMenuIcon} /> Profile
-          </MenuItem>
-          <MenuItem
-            className={classNames(
-              classes.profileMenuItem,
-              classes.headerMenuItem,
-            )}
-          >
-            <AccountIcon className={classes.profileMenuIcon} /> Tasks
-          </MenuItem>
-          <MenuItem
-            className={classNames(
-              classes.profileMenuItem,
-              classes.headerMenuItem,
-            )}
-          >
-            <AccountIcon className={classes.profileMenuIcon} /> Messages
-          </MenuItem> */}
           <div className={classes.profileMenuUser}>
             <Typography
               className={classes.profileMenuLink}

@@ -7,10 +7,11 @@ import Layout from "./Layout";
 // pages
 import Error from "../pages/error";
 import Dashboard from "../pages/dashboard";
-import BlogLayout from "../pages/blog/blogLayout/BlogLayout";
+import BlogLayout from "../pages/layout/BlogLayout";
 import {ExcelFileToJson} from "../pages/blog/ExcelFileToJson";
 import {ExcelDataToJson} from "../pages/blog/ExcelDataToJson";
 import {StrArrChangeStr} from "../pages/blog/StrArrChangeStr";
+import SysCode from "../pages/wms/sys/Code.js";
 
 // context
 import { useUserState } from "../context/UserContext";
@@ -26,6 +27,10 @@ export default function App() {
         <Route exact path="/blog/excel/excelfiletojson" render={()=><BlogLayout props={<ExcelFileToJson />}></BlogLayout>} />
         <Route exact path="/blog/excel/exceldatatojson" render={()=><BlogLayout props={<ExcelDataToJson />}></BlogLayout>} />
         <Route exact path="/blog/excel/strarrchangestr" render={()=><BlogLayout props={<StrArrChangeStr />}></BlogLayout>} />
+
+
+
+        <Route exact path="/wms/sys/code" render={()=><BlogLayout props={<SysCode />}></BlogLayout>} />
 
         {/* <Route
           exact

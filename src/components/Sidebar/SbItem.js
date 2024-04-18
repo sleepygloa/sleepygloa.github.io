@@ -68,7 +68,7 @@ const SbItem = ({ item, depth = 0, isSidebarOpened, nested }) => {
             {item.blog == undefined ? 
             <Button onClick={()=>addTab(item.menuCd, item.label)}>{item.label}</Button>
             :
-            <Link to={item.link}>{item.label}</Link>
+            <Link className={classes.listText} to={item.link}>{item.label}</Link>
             }
           </SbLink>
         </SbTitle>

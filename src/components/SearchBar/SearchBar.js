@@ -14,13 +14,12 @@ import useStyles from "./styles";
 export default function SearchBar(props) {
   var classes = useStyles();
   const {title, button, onClickSelect, onClickAdd, onClickSave, onClickDel, onClickUpload, children} = props;
-  console.log(props);
   return (
     <Box
       className={classes.pageTitleContainer}
       component="form"
       sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch' },
+        '& .MuiTextField-root': { m: 1, width: '20ch' },
       }}
       noValidate
       autoComplete="off"
@@ -29,7 +28,8 @@ export default function SearchBar(props) {
       {children}
       <ButtonGroup size="small" aria-label="small outlined button group">
         <Button
-          variant="contained"
+          variant="outlined"
+          color="primary"
           className={classes.button}
           onClick={onClickSelect}
           startIcon={<SearchIcon />}
@@ -38,7 +38,7 @@ export default function SearchBar(props) {
         </Button>
         {onClickAdd ? 
         <Button
-          variant="contained"
+          variant="outlined"
           className={classes.button}
           onClick={onClickAdd}
           startIcon={<AddIcon />}
@@ -49,7 +49,7 @@ export default function SearchBar(props) {
         ''}
         {onClickSave ? 
         <Button
-          variant="contained"
+          variant="outlined"
           size="small"
           className={classes.button}
           onClick={onClickSave}
@@ -63,7 +63,7 @@ export default function SearchBar(props) {
 
         {onClickDel ? 
         <Button
-          variant="contained"
+          variant="outlined"
           className={classes.button}
           onClick={onClickDel}
           startIcon={<DeleteIcon />}
@@ -75,7 +75,7 @@ export default function SearchBar(props) {
         }
         {onClickUpload ?
         <Button
-          variant="contained"
+          variant="outlined"
           className={classes.button}
           onClick={onClickUpload}
           startIcon={<CloudUploadIcon />}

@@ -27,6 +27,8 @@ export default makeStyles(theme => ({
     // "&:active": {
     //   boxShadow: theme.customShadows.widgetWide,
     // },
-    margin: theme.spacing(1),
+    // margin: theme.spacing(1),
+    marginTop: theme.spacing(3),
+    height: '30px',
   },
 }));

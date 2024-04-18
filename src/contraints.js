@@ -11,6 +11,16 @@ export const blogMenu = [
             {menuCd: 224, label: "문자배열로 문자열 일괄치환", link: "/blog/excel/strarrchangestr", thumbnail:"", blog:"",}
             ]
     },
+    { menuCd: 1000, label: "WMS", link: "/wms", thumbnail:"", blog:"",
+        children:[
+            {menuCd: 1010, label: "시스템관리", link: "/wms/sys/", thumbnail:"", blog:"",
+                children:[
+                    {menuCd: 1011, label: "환경설정", link: "/wms/sys/setting", thumbnail:"", blog:"",},
+                    {menuCd: 1012, label: "코드관리", link: "/wms/sys/code", thumbnail:"", blog:"",},
+                    ]
+            },
+        ]
+    },
 ]
 export const client = axios.create({
     baseURL: API_URL,

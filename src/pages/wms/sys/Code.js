@@ -2,18 +2,17 @@ import React, {useEffect, useState} from "react";
 import { makeStyles } from "@mui/styles";
 
 // components
-import PageTitle from "../../components/PageTitle/PageTitle";
-import SearchBar from "../../components/SearchBar/SearchBar";
-import {SchTextField} from "../../components/SearchBar/Components/TextFieldDefault"
-import {client} from '../../contraints';
+import PageTitle from "../../../../src/components/PageTitle/PageTitle";
+import SearchBar from "../../../../src/components/SearchBar/SearchBar";
+import {SchTextField} from "../../../../src/components/SearchBar/Components/TextFieldDefault"
+import {client} from '../../../contraints.js';
 import { DataGrid } from "@mui/x-data-grid";
 import { Grid } from "@mui/material";
-import { CenterFocusStrong, RowingRounded } from "@mui/icons-material";
-import { gvGridDropdownDisLabel, gvGetRowData, gvSeData } from "../../components/Common";
+import { gvGridDropdownDisLabel, gvGetRowData, gvSeData } from "../../../../src/components/Common";
 
 //Modal
-import MyModal from "../../components/Modal/MyModal.js";
-import useModal from "../../components/Modal/useModal";
+import MyModal from "../../../../src/components/Modal/MyModal.js";
+import useModal from "../../../../src/components/Modal/useModal";
 
 //page
 // import BizDetailPop from  './BizDetailPop'
@@ -153,23 +152,20 @@ export default function Code(props) {
   }, []);
   
   const fnSearch = () => {
-    console.log('gvSeData',gvSeData);
     //메뉴리스트 조회
     client.post(
-      `/api/sys/code/selectCodeGrpList`,
+      `/wms/sys/code/selectCodeGrpList`,
       {
         codeCd : schValues.codeCd
       },{
       }
       )
       .then(res => {
-        var dataList = res.data.content;
+        var dataList = res.data;
         setDataList(dataList);
         if(dataList.length > -1){
           setSelRowId(1);
-          fnSearchDtl(dataList[0]);
-        }else{
-
+          // fnSearchDtl(dataList[0]);
         }
       }).catch(error => { 
         console.log('error = '+error); 
@@ -178,20 +174,17 @@ export default function Code(props) {
   const fnSearchDtl = (rowData) => {
     setSelRowId(rowData.id);
 
-    console.log('상세조회', rowData)
     //메뉴리스트 조회
     client.post(
-      `/api/sys/code/selectCodeList`,
+      `/wms/sys/code/selectCodeList`,
       rowData,{}
       )
       .then(res => {
-        var dataList = res.data.content;
+        var dataList = res.data;
         setDataDtlList(dataList);
 
         if(dataList.length > -1){
           setSelDtlRowId(1);
-        }else{
-
         }
       }).catch(error => { 
         console.log('error = '+error); 
@@ -333,12 +326,13 @@ export default function Code(props) {
         onClickAdd={onClickAdd} 
         onClickSave={onClickSave}
         onClickDel={onClickDel}>
-          <SchTextField id="codeGrpCd" label='코드/명' 
+          <SchTextField id="codeGrpCd" label='코드/명'
+            div={"3"}
             onChange={onChangeSearch} 
             onKeyDown={onKeyDown} />    
       </SearchBar>
       
-      <Grid container spacing={4}>
+      <Grid spacing={4}>
         <Grid item xs={12} style={{ height: 250, width: '100%' }}>
           <DataGrid
             title={"Employee List"} //제목
@@ -364,11 +358,12 @@ export default function Code(props) {
         onClickSave={onClickDtlSave}
         onClickDel={onClickDtlDel}>
           <SchTextField id="codeGrpCd" label='코드/명' 
+            div={"3"}
             onChange={onChangeSearch}
             onKeyDown={onKeyDown} />
       </SearchBar>
       
-      <Grid container spacing={4}>
+      <Grid spacing={4}>
         <Grid item xs={12} style={{ height: 250, width: '100%' }}>
           <DataGrid
             title={"Employee List"}
