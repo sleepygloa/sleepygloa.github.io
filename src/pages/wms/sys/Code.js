@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import { makeStyles } from "@mui/styles";
 
 // components
 import PageTitle from "../../../../src/components/PageTitle/PageTitle";
@@ -13,6 +12,9 @@ import { gvGridDropdownDisLabel, gvGetRowData, gvSeData } from "../../../../src/
 //Modal
 import MyModal from "../../../../src/components/Modal/MyModal.js";
 import useModal from "../../../../src/components/Modal/useModal";
+
+// styles
+import useStyles from "../styles";
 
 //page
 // import BizDetailPop from  './BizDetailPop'
@@ -50,11 +52,10 @@ const columnsDtl = [
   { field: "id",          headerName: "ID",                        align:"center", width:20},
   { field: "bizCd",   headerName: "회사코드",    hide:true, editable: true, align:"center", width:120},
   { field: "codeGrpCd",   headerName: "그룹코드",hide:true, editable: true, align:"center", width:150},
-  { field: "codeSeq",   headerName: "순번",     editable: true, align:"center", width:100},
   { field: "codeCd",   headerName: "코드",     editable: true, align:"center", width:200},
   { field: "codeNm",   headerName: "코드명",   editable: true, align:"left", width:300},
   { field: "codeDesc", headerName: "코드설명", editable: true, align:"left", width:300},
-  { field: "codeOrdr",   headerName: "순서", editable: true, align:"center", width:100},
+  { field: "codeOrder",   headerName: "순서", editable: true, align:"center", width:100},
   { field: "codeOther1",   headerName: "코드기타1", editable: true, align:"center", width:100},
   { field: "codeOther2",   headerName: "코드기타2", editable: true, align:"center", width:100},
   { field: "codeOther3",   headerName: "코드기타3", editable: true, align:"center", width:100},
@@ -78,27 +79,6 @@ const columnsDtl = [
 ];
 
  
-const useStyles = makeStyles(theme => ({
-  tableOverflow: {
-    overflow: 'auto'
-  },
-  div3 : {
-    display:'flex',
-    width:'33.3%',
-    heigth:'25px',
-    marginBottom:'5px'
-  },
-  div4 : {
-    display:'flex',
-    width:'25%',
-    heigth:'25px',
-    marginBottom:'5px'
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
-}))
-
 export default function Code(props) {
   const {menuTitle} = '코드그룹 리스트';
   const {menuDtlTitle} = '코드 리스트';
@@ -113,9 +93,6 @@ export default function Code(props) {
   //메뉴 데이터 변수
   const [dataList, setDataList] = useState([]); //
   const [dataDtlList, setDataDtlList] = useState([]); //
-
-  //Modal
-  // const [isOpen, setIsOpen] = React.useState(false);
 
   //조회조건
   const [schValues, setSchValues] = useState({ 
@@ -152,7 +129,7 @@ export default function Code(props) {
   }, []);
   
   const fnSearch = () => {
-    //메뉴리스트 조회
+    //코드그룹리스트 조회
     client.post(
       `/wms/sys/code/selectCodeGrpList`,
       {
@@ -165,7 +142,7 @@ export default function Code(props) {
         setDataList(dataList);
         if(dataList.length > -1){
           setSelRowId(1);
-          // fnSearchDtl(dataList[0]);
+          fnSearchDtl(dataList[0]);
         }
       }).catch(error => { 
         console.log('error = '+error); 
@@ -174,7 +151,7 @@ export default function Code(props) {
   const fnSearchDtl = (rowData) => {
     setSelRowId(rowData.id);
 
-    //메뉴리스트 조회
+    //코드리스트 조회
     client.post(
       `/wms/sys/code/selectCodeList`,
       rowData,{}
@@ -201,7 +178,7 @@ export default function Code(props) {
     //선택된 행 다음에 추가
     setDataList(dataList => dataList.concat({
       id:dataList.length+1,
-      bizCd: gvSeData.bizCd,
+      bizCd:'COMFUNNY_DEVELOPERS',
       codeGrpCd: "",
       codeGrpNm: "",
       codeGrpDesc: "",
@@ -220,7 +197,7 @@ export default function Code(props) {
       onSubmit: () => {
         //메뉴리스트 저장
         client.post(
-          `/api/sys/code/saveCodeGrp`,
+          `/wms/sys/code/saveCodeGrp`,
           rowData
           )
           .then(res => {
@@ -244,7 +221,7 @@ export default function Code(props) {
       onSubmit: () => {
         //메뉴리스트 저장
         client.post(
-          `/api/sys/code/deleteCodeGrp`,
+          `/wms/sys/code/deleteCodeGrp`,
           rowData,
           {
           }
@@ -284,7 +261,7 @@ export default function Code(props) {
       onSubmit: () => {
         //메뉴리스트 저장
         client.post(
-          `/api/sys/code/saveCode`,
+          `/wms/sys/code/saveCode`,
           rowData
           )
           .then(res => {
@@ -307,7 +284,7 @@ export default function Code(props) {
       content:"삭제 하시겠습니까?",
       onSubmit: () => {
         //메뉴리스트 저장
-        client.post(`/api/sys/code/deleteCode`,rowData,{})
+        client.post(`/wms/sys/code/deleteCode`,rowData,{})
           .then(res => {
             alert('삭제되었습니다.')
             fnSearchDtl(values);
@@ -341,7 +318,6 @@ export default function Code(props) {
             headerHeight={30} //헤더 높이
             rowHeight={28} //행 높이
             onRowClick={(e)=>{setValues(e.row); fnSearchDtl(e.row)} }
-            paginationMode={'client'} //page 처리 위치
             // hideFooter={true}
             footerHeight={30}
             selectionModel={selRowId} //쎌선택 변수지정
@@ -373,8 +349,7 @@ export default function Code(props) {
             rowHeight={28}
             // onCellDoubleClick={fnGridDbClick}
             onRowClick={(e)=>{setValuesDtl(e.row); setSelDtlRowId(e.row.id)} }
-            paginationMode={'client'}
-            hideFooter={true}
+            // hideFooter={true}
             selectionModel={selDtlRowId} //쎌선택
             onCellEditCommit={React.useCallback((params) => {dataDtlList[params.id-1][params.field] = params.value;},[dataDtlList] //쎌변경시 데이터변경
             )}

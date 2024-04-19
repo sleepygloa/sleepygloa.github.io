@@ -36,8 +36,6 @@ const columns = [
   { field: "upDt",      headerName: "수정일시",},
 ];
 
- 
-
 export default function User(props) {
   const {menuNm} = props; //메뉴명
   const getRowId = "";

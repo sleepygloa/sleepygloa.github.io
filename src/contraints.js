@@ -51,8 +51,8 @@ client.interceptors.response.use(
         return response
     },
     async function (error) {
-        console.log(error);
         if(error.response){
+            alert('에러가 발생했습니다.' + error.response.data.message);
             if(error.response.status === 401){
                 console.log('error.response.status 401');
                 document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";

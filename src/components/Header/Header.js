@@ -2,7 +2,6 @@ import React, { useEffect, useState, useMemo } from "react";
 import { AppBar, div, IconButton, InputBase, Menu, MenuItem, } from "@mui/material";
 import { Menu as MenuIcon, Person as AccountIcon, Search as SearchIcon, ArrowBack as ArrowBackIcon,} from "@mui/icons-material";
 import classNames from "classnames";
-import qs from 'qs';
 
 // styles
 import useStyles from "./styles";
@@ -16,7 +15,6 @@ import { Typography,
 // context
 import {useLayoutState,useLayoutDispatch,toggleSidebar,} from "../../context/LayoutContext";
 import { useUserDispatch, useUserState, signOut, useUserLoginPopAction } from "../../context/UserContext";
-import axios from "axios";
 import { API_URL, client } from "../../contraints";
 
 
