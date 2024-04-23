@@ -12,6 +12,7 @@ import {ExcelFileToJson} from "../pages/blog/ExcelFileToJson";
 import {ExcelDataToJson} from "../pages/blog/ExcelDataToJson";
 import {StrArrChangeStr} from "../pages/blog/StrArrChangeStr";
 import SysCode from "../pages/wms/sys/Code.js";
+import SysScheduler from "../pages/wms/sys/Scheduler.js";
 
 // context
 import { useUserState } from "../context/UserContext";
@@ -31,6 +32,7 @@ export default function App() {
 
 
         <Route exact path="/wms/sys/code" render={()=><BlogLayout props={<SysCode />}></BlogLayout>} />
+        <Route exact path="/wms/sys/scheduler" render={()=><BlogLayout props={<SysScheduler />}></BlogLayout>} />
 
         {/* <Route
           exact

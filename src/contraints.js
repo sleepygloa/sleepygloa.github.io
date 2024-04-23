@@ -17,6 +17,7 @@ export const blogMenu = [
                 children:[
                     {menuCd: 1011, label: "환경설정", link: "/wms/sys/setting", thumbnail:"", blog:"",},
                     {menuCd: 1012, label: "코드관리", link: "/wms/sys/code", thumbnail:"", blog:"",},
+                    {menuCd: 1013, label: "스케쥴관리", link: "/wms/sys/scheduler", thumbnail:"", blog:"",},
                     ]
             },
         ]

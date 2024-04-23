@@ -128,15 +128,11 @@ export default function Code(props) {
     fnSearch();
   }, []);
   
+
+  //코드그룹리스트 조회
   const fnSearch = () => {
-    //코드그룹리스트 조회
-    client.post(
-      `/wms/sys/code/selectCodeGrpList`,
-      {
-        codeCd : schValues.codeCd
-      },{
-      }
-      )
+    var data = {codeCd : schValues.codeCd};
+    client.post(`/wms/sys/code/selectCodeGrpList`, data,{})
       .then(res => {
         var dataList = res.data;
         setDataList(dataList);
@@ -148,14 +144,11 @@ export default function Code(props) {
         console.log('error = '+error); 
       })
   }
+
+  //코드리스트 조회
   const fnSearchDtl = (rowData) => {
     setSelRowId(rowData.id);
-
-    //코드리스트 조회
-    client.post(
-      `/wms/sys/code/selectCodeList`,
-      rowData,{}
-      )
+    client.post(`/wms/sys/code/selectCodeList`,rowData,{})
       .then(res => {
         var dataList = res.data;
         setDataDtlList(dataList);
@@ -196,10 +189,7 @@ export default function Code(props) {
       content:"저장 하시겠습니까?",
       onSubmit: () => {
         //메뉴리스트 저장
-        client.post(
-          `/wms/sys/code/saveCodeGrp`,
-          rowData
-          )
+        client.post(`/wms/sys/code/saveCodeGrp`,rowData)
           .then(res => {
             alert('저장되었습니다.');
             fnSearchDtl(values);
@@ -220,12 +210,7 @@ export default function Code(props) {
       content:"삭제 하시겠습니까?",
       onSubmit: () => {
         //메뉴리스트 저장
-        client.post(
-          `/wms/sys/code/deleteCodeGrp`,
-          rowData,
-          {
-          }
-          )
+        client.post(`/wms/sys/code/deleteCodeGrp`,rowData,{})
           .then(res => {
             alert('삭제되었습니다.')
             fnSearchDtl(values);
@@ -260,10 +245,7 @@ export default function Code(props) {
       content:"저장 하시겠습니까?",
       onSubmit: () => {
         //메뉴리스트 저장
-        client.post(
-          `/wms/sys/code/saveCode`,
-          rowData
-          )
+        client.post(`/wms/sys/code/saveCode`,rowData)
           .then(res => {
             alert('저장되었습니다.');
             fnSearchDtl(values);
