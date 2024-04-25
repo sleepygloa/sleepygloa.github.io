@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { Button, Divider, TextareaAutosize } from '@mui/material';
 
-
-import {API_URL} from "../../contraints";
 
 export function StrArrChangeStr(props) {
 
@@ -24,23 +22,30 @@ export function StrArrChangeStr(props) {
 
   return (
     <div>
-      <button onClick={handleReplace}>치환 시작</button>
-      <p>-. 치환할 문자열 </p>
-      <textarea
-        col={30} rows={20}
-        placeholder="치환될 문자열 입력..."
-        value={templateString}
-        onChange={(e) => setTemplateString(e.target.value)}
-      />
+      <Button onClick={handleReplace}  variant="contained">치환 시작</Button>
+      <Divider />
       <p>-. 변경할 문자배열</p>
-      <textarea
-        col={400} rows={20}
+      <TextareaAutosize
+        minLength={20}
+        cols={100}
         placeholder="'첫번째값, 두번째값, 세번째값' 형식으로 입력"
         value={replacementString}
         onChange={(e) => setReplacementString(e.target.value)}
       />
-      <hr />
-      <textarea value={result}></textarea>
+      <p>-. 치환할 문자열 </p>
+      <TextareaAutosize
+        minRows={20} 
+        cols={100}
+        placeholder="치환될 문자열 입력..."
+        value={templateString}
+        onChange={(e) => setTemplateString(e.target.value)}
+      />
+      <Divider />
+      <p>-. Result </p>
+      <TextareaAutosize value={result} 
+        minRows={20} 
+        cols={100}
+      />
     </div>
 
   );
