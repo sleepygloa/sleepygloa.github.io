@@ -20,6 +20,18 @@ export const blogMenu = [
                     {menuCd: 1013, label: "스케쥴관리", link: "/wms/sys/scheduler", thumbnail:"", blog:"",},
                     ]
             },
+            {menuCd: 1020, label: "기준정보", link: "/wms/sd/", thumbnail:"", blog:"",
+                children:[
+                    {menuCd: 1021, label: "사업자", link: "/wms/sd/biz", thumbnail:"", blog:"",},
+                    {menuCd: 1022, label: "고객사", link: "/wms/sd/client", thumbnail:"", blog:"",},
+                    {menuCd: 1023, label: "물류창고", link: "/wms/sd/dc", thumbnail:"", blog:"",},
+                    {menuCd: 1024, label: "구역", link: "/wms/sd/area", thumbnail:"", blog:"",},
+                    {menuCd: 1025, label: "지역", link: "/wms/sd/zone", thumbnail:"", blog:"",},
+                    {menuCd: 1026, label: "로케이션", link: "/wms/sd/loc", thumbnail:"", blog:"",},
+                    {menuCd: 1027, label: "배송처", link: "/wms/sd/store", thumbnail:"", blog:"",},
+                    {menuCd: 1028, label: "공급처", link: "/wms/sd/supplier", thumbnail:"", blog:"",},
+                    ]
+            },
         ]
     },
 ]

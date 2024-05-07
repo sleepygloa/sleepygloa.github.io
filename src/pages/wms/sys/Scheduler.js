@@ -44,15 +44,6 @@ const columns = [
       valueOptions: useYnCmb,
       valueFormatter: gvGridDropdownDisLabel,
   },
-  // { field: "delYn",     headerName: "삭제여부",    editable: true, 
-  //     align:"center",
-  //     type: "singleSelect",
-  //     valueOptions: delYnCmb,
-  //     valueFormatter: gvGridDropdownDisLabel,},
-  // { field: "inUserId",  headerName: "등록자",},
-  // { field: "inDt",      headerName: "등록일시",},
-  // { field: "upUserId",  headerName: "수정자",},
-  // { field: "upDt",      headerName: "수정일시",},
 ];
 
  
@@ -108,7 +99,7 @@ export default function Code(props) {
   //코드그룹리스트 조회
   const fnSearch = () => {
     var data = {codeCd : schValues.codeCd};
-    client.post(`/wms/sys/scheduler/selectSchedulerList`, data,{})
+    client.post(`/wms/sys/scheduler/selectSchedulerList`, data, {})
       .then(res => {
         var dataList = res.data;
         setDataList(dataList);
@@ -186,7 +177,7 @@ export default function Code(props) {
         onClickAdd={onClickAdd} 
         onClickSave={onClickSave}
         onClickDel={onClickDel}>
-          <SchTextField id="scheNm" label='코드/명'
+          <SchTextField id="codeCd" label='코드/명'
             div={"3"}
             onChange={onChangeSearch} 
             onKeyDown={onKeyDown} />    

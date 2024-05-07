@@ -16,37 +16,45 @@ import useModal from "../../../components/Modal/useModal.js";
 // styles
 import useStyles from "../styles.js";
 
-//page
-//import BizDetailPop from  './BizDetailPop'
 
 const useYnCmb = [{value:"Y", label:"사용"},{value:"N", label:"미사용"}];
 const columns = [
-  { field: "id",          headerName: "ID",                               align:"center", width:20},
-  { field: "bizCd",       headerName: "사업자코드",           editable: true, align:"left", width:300},
-  { field: "bizNo",       headerName: "사업자번호",            editable: true, align:"left", width:100},
-  { field: "bizNm",       headerName: "사업자명",             editable: true, align:"left", width:300},
-  { field: "bizSnm",      headerName: "사업자약어",            editable: true, align:"left", width:50},
-  { field: "ceo",         headerName: "대표자",               editable: true, align:"left", width:50},
-  { field: "addr",        headerName: "주소",                editable: true, align:"left", width:300},
-  { field: "detailAddr",  headerName: "상세주소",             editable: true, align:"left", width:50},
-  { field: "tel",          headerName: "전화번호",            editable: true, align:"left", width:50},
-  { field: "fax",         headerName: "팩스",                editable: true, align:"left", width:50},
-  { field: "zip",         headerName: "우편번호",             editable: true, align:"left", width:50},
-  { field: "useYn",       headerName: "사용여부",             editable: true, 
+  { field: "id",                headerName: "ID",                               align:"center", width:20},
+  { field: "bizCd",             headerName: "사업자코드",           editable: true, align:"left", width:100},
+  { field: "clientCd",          headerName: "고객사코드",            editable: true, align:"left", width:100},
+  { field: "clientNm",          headerName: "고객사명",             editable: true, align:"left", width:100},
+  { field: "bizNo",             headerName: "사업자번호",            editable: true, align:"left", width:100},
+  { field: "bizNm",             headerName: "사업자명",             editable: true, align:"left", width:200},
+  { field: "ceoNm",             headerName: "대표자",               editable: true, align:"left", width:100},
+  { field: "postNo",            headerName: "우편번호",               editable: true, align:"left", width:100},
+  { field: "basicAddr",         headerName: "주소",                editable: true, align:"left", width:300},
+  { field: "detailAddr",        headerName: "상세주소",             editable: true, align:"left", width:300},
+  { field: "bizTp",             headerName: "업태(사업자유형)",       editable: true, align:"left", width:300},
+  { field: "bizKnd",            headerName: "업종(사업자종류)",       editable: true, align:"left", width:300},
+  { field: "telNo",             headerName: "전화번호",             editable: true, align:"left", width:100},
+  { field: "faxNo",             headerName: "팩스",                editable: true, align:"left", width:100},
+  { field: "contactNm",         headerName: "담당자명",             editable: true, align:"left", width:100},
+  { field: "contactTelNo",      headerName: "담당자전화번호",         editable: true, align:"left", width:100},
+  { field: "contactEmail",      headerName: "담당자이메일",          editable: true, align:"left", width:100},
+  { field: "countryCd",         headerName: "국가코드",             editable: true, align:"left", width:100},
+  { field: "cityCd",            headerName: "도시코드",             editable: true, align:"left", width:100},
+  { field: "useYn",             headerName: "사용여부",             editable: true, 
       align:"center",
       type: "singleSelect",
       valueOptions: useYnCmb,
       valueFormatter: gvGridDropdownDisLabel,
   },
-  { field: "etcNo1",         headerName: "기타번호1",             editable: true, align:"left", width:50},
-  { field: "etcNo2",         headerName: "기타번호2",             editable: true, align:"left", width:50},
-  { field: "etcTp1",         headerName: "기타유형1",             editable: true, align:"left", width:50},
-  { field: "etcTp2",         headerName: "기타유형2",             editable: true, align:"left", width:50},
+  { field: "userCol1",         headerName: "사용자컬럼1",               editable: true, align:"left", width:100},
+  { field: "userCol2",         headerName: "사용자컬럼2",               editable: true, align:"left", width:100},
+  { field: "userCol3",         headerName: "사용자컬럼3",               editable: true, align:"left", width:100},
+  { field: "userCol4",         headerName: "사용자컬럼4",               editable: true, align:"left", width:100},
+  { field: "userCol5",         headerName: "사용자컬럼5",               editable: true, align:"left", width:100},
+  { field: "remark",            headerName: "비고",               editable: true, align:"left", width:300},
 ];
  
 
 export default function Biz(props) {
-  const {menuTitle} = '스케쥴 리스트';
+  const {menuTitle} = '고객사 리스트';
   const classes = useStyles();
   const {openModal} = useModal();
 
@@ -76,33 +84,34 @@ export default function Biz(props) {
   const initData = {
     id:dataList.length+1,
     bizCd:'',
-    scheNm: "",
-    scheDesc: "",
-    scheClassPath: "",
-    scheSec: "",
-    scheMin: "",
-    scheHour: "",
-    scheDay: "",
-    scheMonth: "",
-    scheYear: "",
+    clientCd: "",
+    clientNm: "",
+    bizNo: "",
+    bizNm: "",
+    ceoNm: "",
+    postNo: "",
+    basicAddr: "",
+    detailAddr: "",
+    bizTp: "",
+    bizKnd: "",
+    telNo: "",
+    faxNo: "",
+    contactNm: "",
+    contactTelNo: "",
+    contactEmail: "",
+    countryCd: "",
+    cityCd: "",
+    userCol1: "",
+    userCol2: "",
+    userCol3: "",
+    userCol4: "",
+    userCol5: "",
+    remark: "",
     useYn: "Y",
   }
 
   //핸들링하고 있는 rowData 저장
-  const [values, setValues] = useState({
-    id:0,
-    bizCd:'',
-    scheNm: "",
-    scheDesc: "",
-    scheClassPath: "",
-    scheSec: "",
-    scheMin: "",
-    scheHour: "",
-    scheDay: "",
-    scheMonth: "",
-    scheYear: "",
-    useYn: "Y",
-  });
+  const [values, setValues] = useState(initData);
   //화면 로드시 1번만 실행
   useEffect(() => {
     fnSearch();
@@ -111,7 +120,7 @@ export default function Biz(props) {
   //코드그룹리스트 조회
   const fnSearch = () => {
     var data = {codeCd : schValues.codeCd};
-    client.post(`/wms/sd/biz/selectBizList`, data, {})
+    client.post(`/wms/sd/client/selectClientList`, data, {})
       .then(res => {
         var dataList = res.data;
         setDataList(dataList);
@@ -140,7 +149,7 @@ export default function Biz(props) {
       content:"저장 하시겠습니까?",
       onSubmit: () => {
         //메뉴리스트 저장
-        client.post(`/wms/sd/biz/saveBiz`,rowData, {})
+        client.post(`/wms/sd/client/saveClient`,rowData, {})
           .then(res => {
             alert('저장되었습니다.');
             fnSearch();
@@ -161,7 +170,7 @@ export default function Biz(props) {
       content:"삭제 하시겠습니까?",
       onSubmit: () => {
         //메뉴리스트 저장
-        client.post(`/wms/sd/biz/deleteBiz`,rowData,{})
+        client.post(`/wms/sd/client/deleteClient`,rowData,{})
           .then(res => {
             alert('삭제되었습니다.')
             fnSearch();
@@ -175,7 +184,7 @@ export default function Biz(props) {
 
   return (
     <>
-      <PageTitle title={'사업자 리스트 '}  />
+      <PageTitle title={'고객사 리스트 '}  />
       <SearchBar
         onClickSelect={onClickSelect} 
         onClickAdd={onClickAdd} 
@@ -190,7 +199,7 @@ export default function Biz(props) {
       <Grid spacing={4}>
         <Grid item xs={12} style={{ height: 750, width: '100%' }}>
           <DataGrid
-            title={"Biz List"} //제목
+            title={"Client List"} //제목
             rows={dataList} //dataList
             columns={columns} //컬럼 정의
             headerHeight={30} //헤더 높이
