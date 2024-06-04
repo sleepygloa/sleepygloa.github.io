@@ -16,6 +16,10 @@ import useModal from "../../../components/Modal/useModal.js";
 // styles
 import useStyles from "../styles.js";
 
+// DataGrid Css
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
+
 
 const useYnCmb = [{value:"Y", label:"사용"},{value:"N", label:"미사용"}];
 const columns = [
@@ -26,8 +30,18 @@ const columns = [
   { field: "bizNo",             headerName: "사업자번호",            editable: true, align:"left", width:100},
   { field: "bizNm",             headerName: "사업자명",             editable: true, align:"left", width:200},
   { field: "ceoNm",             headerName: "대표자",               editable: true, align:"left", width:100},
-  { field: "postNo",            headerName: "우편번호",               editable: true, align:"left", width:100},
-  { field: "basicAddr",         headerName: "주소",                editable: true, align:"left", width:300},
+  { field: "deliveryId",        headerName: "배송처ID",            editable: true, align:"left", width:100},
+  { field: "deliveryNm",        headerName: "배송처명",            editable: true, align:"left", width:100,
+    renderCell: (params) => (
+      <IconButton //onClick={() => handleSearch(params.row)}
+      >
+        <SearchIcon />
+      </IconButton>
+    ),
+  },
+  { field: "zip",               headerName: "우편번호",             editable: true, align:"left", width:100},
+  { field: "jibunAddr",         headerName: "주소",                editable: true, align:"left", width:300},
+  { field: "roadAddr",          headerName: "상세주소",             editable: true, align:"left", width:300},
   { field: "detailAddr",        headerName: "상세주소",             editable: true, align:"left", width:300},
   { field: "bizTp",             headerName: "업태(사업자유형)",       editable: true, align:"left", width:300},
   { field: "bizKnd",            headerName: "업종(사업자종류)",       editable: true, align:"left", width:300},
@@ -182,6 +196,8 @@ export default function Biz(props) {
     });
   }
 
+
+  
   return (
     <>
       <PageTitle title={'물류창고 리스트 '}  />

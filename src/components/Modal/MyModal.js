@@ -17,7 +17,7 @@ export default function MyModal(props){
             <DialogTitle id="responsive-dialog-title">
             {props.title}
             </DialogTitle>
-            <DialogContent>
+            <DialogContent style={{height:props.height, width:props.width}}>
                 {props.content}
             </DialogContent>
             <DialogActions>

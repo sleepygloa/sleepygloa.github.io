@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useCallback } from "react";
 
 // components
 import PageTitle from "../../../components/PageTitle/PageTitle.js";
@@ -6,50 +6,62 @@ import SearchBar from "../../../components/SearchBar/SearchBar.js";
 import {SchTextField} from "../../../components/SearchBar/Components/TextFieldDefault.js"
 import {client} from '../../../contraints.js';
 import { DataGrid } from "@mui/x-data-grid";
-import { Grid } from "@mui/material";
+import { Grid, Box, Typography } from "@mui/material";
 import { gvGridDropdownDisLabel, gvGetRowData, gvSeData } from "../../../components/Common.js";
 
 //Modal
 import MyModal from "../../../components/Modal/MyModal.js";
-import useModal from "../../../components/Modal/useModal.js";
+import {useModal} from "../../../context/ModalContext.js";
 
 // styles
 import useStyles from "../styles.js";
 
-//page
-//import BizDetailPop from  './BizDetailPop'
+// DataGrid Css
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
 
-const useYnCmb = [{value:"Y", label:"사용"},{value:"N", label:"미사용"}];
-const columns = [
-  { field: "id",          headerName: "ID",                               align:"center", width:20},
-  { field: "bizCd",       headerName: "사업자코드",           editable: true, align:"left", width:300},
-  { field: "bizNo",       headerName: "사업자번호",            editable: true, align:"left", width:100},
-  { field: "bizNm",       headerName: "사업자명",             editable: true, align:"left", width:300},
-  { field: "bizSnm",      headerName: "사업자약어",            editable: true, align:"left", width:50},
-  { field: "ceo",         headerName: "대표자",               editable: true, align:"left", width:50},
-  { field: "addr",        headerName: "주소",                editable: true, align:"left", width:300},
-  { field: "detailAddr",  headerName: "상세주소",             editable: true, align:"left", width:50},
-  { field: "tel",          headerName: "전화번호",            editable: true, align:"left", width:50},
-  { field: "fax",         headerName: "팩스",                editable: true, align:"left", width:50},
-  { field: "zip",         headerName: "우편번호",             editable: true, align:"left", width:50},
-  { field: "useYn",       headerName: "사용여부",             editable: true, 
-      align:"center",
-      type: "singleSelect",
-      valueOptions: useYnCmb,
-      valueFormatter: gvGridDropdownDisLabel,
-  },
-  { field: "etcNo1",         headerName: "기타번호1",             editable: true, align:"left", width:50},
-  { field: "etcNo2",         headerName: "기타번호2",             editable: true, align:"left", width:50},
-  { field: "etcTp1",         headerName: "기타유형1",             editable: true, align:"left", width:50},
-  { field: "etcTp2",         headerName: "기타유형2",             editable: true, align:"left", width:50},
-];
+//NaverMap
+import DaumPostcodeShppingMall from "../maps/DaumPostcodeShppingMall.js";
+
+
  
-
 export default function Biz(props) {
   const {menuTitle} = '스케쥴 리스트';
   const classes = useStyles();
-  const {openModal} = useModal();
+  const {openModal, closeModal} = useModal();
 
+  const useYnCmb = [{value:"Y", label:"사용"},{value:"N", label:"미사용"}];
+  const columns = [
+    { field: "id",              headerName: "ID",                               align:"center", width:20},
+    { field: "bizCd",           headerName: "사업자코드",           editable: true, align:"left", width:300},
+    { field: "bizNo",           headerName: "사업자번호",            editable: true, align:"left", width:100},
+    { field: "bizNm",           headerName: "사업자명",             editable: true, align:"left", width:300},
+    { field: "deliveryNm",        headerName: "배송처명",            editable: false, align:"left", width:200,
+        renderCell: (params) => (
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', width: 1, alignItems:'center' }}>
+            <Typography variant="body2">{params.value}</Typography>
+            <IconButton><SearchIcon /></IconButton>
+          </Box>
+      ),},
+    { field: "zip",               headerName: "우편번호",             editable: true, align:"left", width:100},
+    { field: "jibunAddr",         headerName: "지번주소",                editable: true, align:"left", width:300},
+    { field: "roadAddr",          headerName: "도로명주소",             editable: true, align:"left", width:300},
+    { field: "detailAddr",        headerName: "상세주소",             editable: true, align:"left", width:300},
+    { field: "lat",             headerName: "위도",             editable: true, align:"left", width:150},
+    { field: "lon",             headerName: "경도",             editable: true, align:"left", width:150},
+    { field: "tel",             headerName: "전화번호",            editable: true, align:"left", width:120},
+    { field: "fax",             headerName: "팩스",                editable: true, align:"left", width:120},
+    { field: "useYn",           headerName: "사용여부",             editable: true, 
+        align:"center",
+        type: "singleSelect",
+        valueOptions: useYnCmb,
+        valueFormatter: gvGridDropdownDisLabel,
+    },
+    { field: "etcNo1",         headerName: "기타번호1",             editable: true, align:"left", width:50},
+    { field: "etcNo2",         headerName: "기타번호2",             editable: true, align:"left", width:50},
+    { field: "etcTp1",         headerName: "기타유형1",             editable: true, align:"left", width:50},
+    { field: "etcTp2",         headerName: "기타유형2",             editable: true, align:"left", width:50},
+  ];
 
   const getRowId = "";
 
@@ -57,6 +69,8 @@ export default function Biz(props) {
   const [selRowId, setSelRowId] = useState(-1);
   //메뉴 데이터 변수
   const [dataList, setDataList] = useState([]); //
+  //배송처 콜백 데이터 변수
+  const [callbackDelivery, setCallbackDelivery] = useState({});
 
   //조회조건
   const [schValues, setSchValues] = useState({ 
@@ -103,10 +117,30 @@ export default function Biz(props) {
     scheYear: "",
     useYn: "Y",
   });
+
   //화면 로드시 1번만 실행
   useEffect(() => {
-    fnSearch();
-  }, []);
+
+    // selRowId 변경을 감지하고, 주소 찾기 함수 호출
+    if (selRowId !== -1) {
+
+      if(callbackDelivery == undefined){
+        openPopupFindAddress();
+        return;
+      }
+
+      var rowData = gvGetRowData(dataList, selRowId);
+      rowData.zip = callbackDelivery.zip;
+      rowData.jibunAddr = callbackDelivery.jibunAddr;
+      rowData.roadAddr = callbackDelivery.roadAddr;
+      rowData.detailAddr = callbackDelivery.detailAddr;
+      rowData.deliveryNm = callbackDelivery.deliveryNm;
+      rowData.lat = callbackDelivery.lat;
+      rowData.lon = callbackDelivery.lon;
+    }
+
+
+  }, [selRowId, callbackDelivery]);
   
   //코드그룹리스트 조회
   const fnSearch = () => {
@@ -135,10 +169,10 @@ export default function Biz(props) {
   function onClickSave(){
     var rowData = gvGetRowData(dataList, selRowId);
     console.log('저장',selRowId, rowData)
-    openModal(MyModal, {
-      title:"",
-      content:"저장 하시겠습니까?",
-      onSubmit: () => {
+
+    // openModal('FIND_ADDR', '주소 찾기', <DaumPostcodeShppingMall />, handleAddressUpdate, '1000px', '600px');
+    openModal('', '',  '저장 하시겠습니까?', 
+      () => {
         //메뉴리스트 저장
         client.post(`/wms/sd/biz/saveBiz`,rowData, {})
           .then(res => {
@@ -147,9 +181,8 @@ export default function Biz(props) {
           }).catch(error => { 
             console.log('error = '+error); 
           })
-
       }
-    });
+    );
   }
 
   //삭제클릭
@@ -173,6 +206,26 @@ export default function Biz(props) {
     });
   }
 
+  //쎌클릭 핸들링
+  const handleGridCellClick = (e) => {
+    setValues(e.row); 
+    setSelRowId(e.row.id); 
+    if (e.field === 'deliveryNm') {
+      // 컬럼 이름이 'deliveryId' 일 때 함수 호출
+      openPopupFindAddress();
+    }
+  }  
+
+  //주소찾기 팝업
+  const openPopupFindAddress = () => {
+    openModal('FIND_ADDR', '주소 찾기', <DaumPostcodeShppingMall />, handleAddressUpdate, '1000px', '600px');
+  }
+
+  //배송처 팝업 콜백함수
+  const handleAddressUpdate = (addressData) => {
+    setCallbackDelivery(addressData);
+  };
+
   return (
     <>
       <PageTitle title={'사업자 리스트 '}  />
@@ -187,21 +240,19 @@ export default function Biz(props) {
             onKeyDown={onKeyDown} />    
       </SearchBar>
       
-      <Grid spacing={4}>
-        <Grid item xs={12} style={{ height: 750, width: '100%' }}>
-          <DataGrid
-            title={"Biz List"} //제목
-            rows={dataList} //dataList
-            columns={columns} //컬럼 정의
-            headerHeight={30} //헤더 높이
-            rowHeight={28} //행 높이
-            onRowClick={(e)=>{setValues(e.row); setSelRowId(e.row.id);} }
-            footerHeight={30}
-            selectionModel={selRowId} //쎌선택 변수지정
-            onCellEditCommit={React.useCallback((params) => {dataList[params.id-1][params.field] = params.value;},[dataList] //쎌변경시 데이터변경
-          )}
-          />
-        </Grid>
+      <Grid item xs={12} style={{ height: 750, width: '100%' }}>
+        <DataGrid
+          title={"Biz List"} //제목
+          rows={dataList} //dataList
+          columns={columns} //컬럼 정의
+          headerHeight={30} //헤더 높이
+          rowHeight={28} //행 높이
+          onCellClick={handleGridCellClick}
+          footerHeight={30}
+          selectionModel={selRowId} //쎌선택 변수지정
+          onCellEditCommit={React.useCallback((params) => {dataList[params.id-1][params.field] = params.value;},[dataList] //쎌변경시 데이터변경
+        )}
+        />
       </Grid>
     </>
     
