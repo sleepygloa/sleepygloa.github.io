@@ -7,16 +7,15 @@ import { open, close } from "../../context/ModalContext";
 
 // styles
 import useStyles from "./styles";
+
 //Data
-import {blogMenu} from "../../contraints";
+import {blogMenu, KAKAO_API_KEY} from "../../contraints";
 
 import Header from "../../components/Header/Header";
 import Sb from "../../components/Sidebar/Sb";
 import LoginPop from "../login/LoginPop";
 import Modals from "../../components/Modal/Modals"
 import { useKakaoLoader } from "react-kakao-maps-sdk";
-
-import { KAKAO_API_KEY } from '../../contraints.js';
 
 
 export default function BlogLayout({props}) {
@@ -42,6 +41,7 @@ export default function BlogLayout({props}) {
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${KAKAO_API_KEY}&libraries=services`;
     script.async = true;
     document.head.appendChild(script);
+
   }, []);
 
   return (

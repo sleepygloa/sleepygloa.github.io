@@ -124,13 +124,44 @@ export const gvOnChagneHandle = (event, values, setValues) => {
 
 
 
+//그리드 드랍다운 label 보이기
+export const gvSetDropdownData = (data) => {
+    var list = [];
+    data.map((data)=>{
+        list.push({value:data["code"], label:data["name"]})
+    })
+    return list;
+}
 
+//그리드 드랍다운 label 보이기
+export const gvSetLevelDropdownData = (data) => {
+    const map = {};
+
+    data.forEach(item => {
+        const group = item.parent; // 부모 코드를 기준으로 그룹화
+        if (!map[group]) {
+            map[group] = []; // 해당 그룹이 존재하지 않으면 새 배열 생성
+        }
+        map[group].push({
+            value: item.code,
+            label: item.name
+        });
+    });
+    return map;
+}
 
 //그리드 드랍다운 label 보이기
 export const gvGridDropdownDisLabel = ({ value, field, api }) => {
-const colDef = api.getColumn(field);
-const option = colDef.valueOptions
-    ? colDef.valueOptions.find((params) => value === params.value)
-    : {};
-return option?.label;
+    const colDef = api.getColumn(field);
+    const option = colDef.valueOptions
+        ? colDef.valueOptions.find((params) => value === params.value)
+        : {};
+    return option?.label;
+}
+
+//그리드 드랍다운 level-label 보이기
+export const gvGridLevelDropdownDisLabel = ({ value, field, api, id }, parent, ds) => {
+    const colDef = api.getColumn(field);
+    const row = api.getRow(id);
+    return ds[row[parent]].find((params) => value === params.value)?.label;
 }

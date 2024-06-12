@@ -102,7 +102,7 @@ function DaumPostcodeShppingMall(props) {
       <Grid item xs={12} md={6}>
         <Box sx={{display:'flex', marginBottom:'10px'}}>
           <TextField label="우편번호" variant="outlined" value={zonecode} InputProps={{ readOnly: true }} fullWidth />
-          <IconButton onClick={() => openModal('FIND_CMMN_POST', '우편번호 찾기', <DaumPostcodeCommon onComplete={completeHandler} />)} aria-label="search address">
+          <IconButton onClick={() => openModal('FIND_CMMN_POST', '우편번호 찾기', <DaumPostcodeCommon onComplete={completeHandler} />, null,  '600px', '800px')} aria-label="search address">
             <SearchIcon />
           </IconButton>
         </Box>
@@ -116,7 +116,7 @@ function DaumPostcodeShppingMall(props) {
           <TextField label="상세주소" variant="outlined" value={detailedAddress} onChange={inputChangeHandler} fullWidth id="detailAddr" />
         </Box>  
         <Box sx={{display:'flex', marginBottom:'10px'}}>
-          <TextField label="배송처명" variant="outlined" value={deliveryNm} fullWidth id="deliveryNm" />
+          <TextField label="배송처명" variant="outlined" value={deliveryNm} onChange={inputChangeHandler} fullWidth id="deliveryNm" />
         </Box>
         <Box sx={{display:'flex', marginBottom:'10px'}}>
           <TextField label="경도" variant="outlined" value={coordinates.longitude} InputProps={{ readOnly: true }} fullWidth />

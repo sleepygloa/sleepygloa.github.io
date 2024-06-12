@@ -9,6 +9,7 @@ import { LayoutProvider } from "./context/LayoutContext";
 import { TabProvider } from "./context/TabContext";
 import { UserProvider } from "./context/UserContext";
 import { ModalsProvider } from "./context/ModalContext"; //다이얼로그
+import { CmmnCdProvider } from "./context/CommonDataContext"; //다이얼로그
 
 //APi
 import axios from 'axios';
@@ -56,7 +57,9 @@ root.render(
 {/* //         <TabProvider> */}
            <ThemeProvider theme={Themes.default}>
             <ModalsProvider>
+              <CmmnCdProvider>
                 <App />
+              </CmmnCdProvider>
             </ModalsProvider>
             </ThemeProvider>
 {/* //          </TabProvider> */}

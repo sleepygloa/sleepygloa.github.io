@@ -23,10 +23,10 @@ import SearchIcon from '@mui/icons-material/Search';
 //NaverMap
 import DaumPostcodeShppingMall from "../maps/DaumPostcodeShppingMall.js";
 
-
  
 export default function Biz(props) {
-  const {menuTitle} = '스케쥴 리스트';
+  const {menuTitle} = '사업자 관리';
+  const PRO_URL = '/wms/sd/biz';
   const classes = useStyles();
   const {openModal, closeModal} = useModal();
 
@@ -36,6 +36,7 @@ export default function Biz(props) {
     { field: "bizCd",           headerName: "사업자코드",           editable: true, align:"left", width:300},
     { field: "bizNo",           headerName: "사업자번호",            editable: true, align:"left", width:100},
     { field: "bizNm",           headerName: "사업자명",             editable: true, align:"left", width:300},
+    /* 주소 시작 */
     { field: "deliveryNm",        headerName: "배송처명",            editable: false, align:"left", width:200,
         renderCell: (params) => (
           <Box sx={{ display: 'flex', justifyContent: 'space-between', width: 1, alignItems:'center' }}>
@@ -49,8 +50,9 @@ export default function Biz(props) {
     { field: "detailAddr",        headerName: "상세주소",             editable: true, align:"left", width:300},
     { field: "lat",             headerName: "위도",             editable: true, align:"left", width:150},
     { field: "lon",             headerName: "경도",             editable: true, align:"left", width:150},
-    { field: "tel",             headerName: "전화번호",            editable: true, align:"left", width:120},
-    { field: "fax",             headerName: "팩스",                editable: true, align:"left", width:120},
+    /* 주소 끝 */
+    { field: "telNo",             headerName: "전화번호",            editable: true, align:"left", width:120},
+    { field: "faxNo",             headerName: "팩스",                editable: true, align:"left", width:120},
     { field: "useYn",           headerName: "사용여부",             editable: true, 
         align:"center",
         type: "singleSelect",
@@ -70,7 +72,7 @@ export default function Biz(props) {
   //메뉴 데이터 변수
   const [dataList, setDataList] = useState([]); //
   //배송처 콜백 데이터 변수
-  const [callbackDelivery, setCallbackDelivery] = useState({});
+  const [callbackDelivery, setCallbackDelivery] = useState(null);
 
   //조회조건
   const [schValues, setSchValues] = useState({ 
@@ -90,42 +92,41 @@ export default function Biz(props) {
   const initData = {
     id:dataList.length+1,
     bizCd:'',
-    scheNm: "",
-    scheDesc: "",
-    scheClassPath: "",
-    scheSec: "",
-    scheMin: "",
-    scheHour: "",
-    scheDay: "",
-    scheMonth: "",
-    scheYear: "",
+    bizNo: "",
+    bizNm: "",
+    ceoNm: "",
+
+    postNo: "",
+    basicAddr: "",
+    detailAddr: "",
+
+    bizTp: "",
+    bizKnd: "",
+    telNo: "",
+    faxNo: "",
+    contactNm: "",
+    contactTelNo: "",
+    contactEmail: "",
+    countryCd: "",
+    cityCd: "",
+    userCol1: "",
+    userCol2: "",
+    userCol3: "",
+    userCol4: "",
+    userCol5: "",
+    remark: "",
     useYn: "Y",
   }
 
   //핸들링하고 있는 rowData 저장
-  const [values, setValues] = useState({
-    id:0,
-    bizCd:'',
-    scheNm: "",
-    scheDesc: "",
-    scheClassPath: "",
-    scheSec: "",
-    scheMin: "",
-    scheHour: "",
-    scheDay: "",
-    scheMonth: "",
-    scheYear: "",
-    useYn: "Y",
-  });
+  const [values, setValues] = useState(initData);
 
   //화면 로드시 1번만 실행
   useEffect(() => {
-
     // selRowId 변경을 감지하고, 주소 찾기 함수 호출
     if (selRowId !== -1) {
 
       if(callbackDelivery == undefined){
-        openPopupFindAddress();
         return;
       }
 
@@ -137,15 +138,15 @@ export default function Biz(props) {
       rowData.deliveryNm = callbackDelivery.deliveryNm;
       rowData.lat = callbackDelivery.lat;
       rowData.lon = callbackDelivery.lon;
+      setCallbackDelivery(null);
     }
-
 
   }, [selRowId, callbackDelivery]);
   
-  //코드그룹리스트 조회
+  //조회
   const fnSearch = () => {
     var data = {codeCd : schValues.codeCd};
-    client.post(`/wms/sd/biz/selectBizList`, data, {})
+    client.post(`${PRO_URL}/selectList`, data, {})
       .then(res => {
         var dataList = res.data;
         setDataList(dataList);
@@ -168,13 +169,10 @@ export default function Biz(props) {
   //저장클릭
   function onClickSave(){
     var rowData = gvGetRowData(dataList, selRowId);
-    console.log('저장',selRowId, rowData)
-
-    // openModal('FIND_ADDR', '주소 찾기', <DaumPostcodeShppingMall />, handleAddressUpdate, '1000px', '600px');
     openModal('', '',  '저장 하시겠습니까?', 
       () => {
         //메뉴리스트 저장
-        client.post(`/wms/sd/biz/saveBiz`,rowData, {})
+        client.post(`${PRO_URL}/save`,rowData, {})
           .then(res => {
             alert('저장되었습니다.');
             fnSearch();
@@ -188,22 +186,18 @@ export default function Biz(props) {
   //삭제클릭
   function onClickDel(){
     var rowData = gvGetRowData(dataList, selRowId);
-    console.log('삭제',rowData)
-    openModal(MyModal, {
-      title:"",
-      content:"삭제 하시겠습니까?",
-      onSubmit: () => {
+    openModal('', '',  '삭제 하시겠습니까?', 
+      () => {
         //메뉴리스트 저장
-        client.post(`/wms/sd/biz/deleteBiz`,rowData,{})
+        client.post(`${PRO_URL}/delete`,rowData, {})
           .then(res => {
-            alert('삭제되었습니다.')
+            alert('삭제되었습니다.');
             fnSearch();
           }).catch(error => { 
             console.log('error = '+error); 
           })
-
       }
-    });
+    );
   }
 
   //쎌클릭 핸들링
@@ -228,7 +222,7 @@ export default function Biz(props) {
 
   return (
     <>
-      <PageTitle title={'사업자 리스트 '}  />
+      <PageTitle title={"사업자 관리"}  />
       <SearchBar
         onClickSelect={onClickSelect} 
         onClickAdd={onClickAdd} 
@@ -242,7 +236,7 @@ export default function Biz(props) {
       
       <Grid item xs={12} style={{ height: 750, width: '100%' }}>
         <DataGrid
-          title={"Biz List"} //제목
+          title={menuTitle} //제목
           rows={dataList} //dataList
           columns={columns} //컬럼 정의
           headerHeight={30} //헤더 높이

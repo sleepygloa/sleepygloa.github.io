@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useCallback } from "react";
 
 // components
 import PageTitle from "../../../components/PageTitle/PageTitle.js";
@@ -6,15 +6,40 @@ import SearchBar from "../../../components/SearchBar/SearchBar.js";
 import {SchTextField} from "../../../components/SearchBar/Components/TextFieldDefault.js"
 import {client} from '../../../contraints.js';
 import { DataGrid } from "@mui/x-data-grid";
-import { Grid } from "@mui/material";
+import { Grid, Box, Typography } from "@mui/material";
 import { gvGridDropdownDisLabel, gvGetRowData, gvSeData } from "../../../components/Common.js";
 
 //Modal
 import MyModal from "../../../components/Modal/MyModal.js";
-import useModal from "../../../components/Modal/useModal.js";
+import {useModal} from "../../../context/ModalContext.js";
 
 // styles
 import useStyles from "../styles.js";
+
+// DataGrid Css
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
+
+//NaverMap
+import DaumPostcodeShppingMall from "../maps/DaumPostcodeShppingMall.js";
+
+ 
+
+export default function Biz(props) {
+  const {menuTitle} = '배송처 리스트';
+  const PRO_URL = '/wms/sd/store';
+  const classes = useStyles();
+  const {openModal} = useModal();
+
+
+  const getRowId = "";
+
+  //그리드 선택된 행
+  const [selRowId, setSelRowId] = useState(-1);
+  //메뉴 데이터 변수
+  const [dataList, setDataList] = useState([]); //
+  //배송처 콜백 데이터 변수
+  const [callbackDelivery, setCallbackDelivery] = useState(null);
 
 
 const useYnCmb = [{value:"Y", label:"사용"},{value:"N", label:"미사용"}];
@@ -27,9 +52,21 @@ const columns = [
   { field: "bizNo",             headerName: "사업자번호",            editable: true, align:"left", width:100},
   { field: "bizNm",             headerName: "사업자명",             editable: true, align:"left", width:200},
   { field: "ceoNm",             headerName: "대표자",               editable: true, align:"left", width:100},
-  { field: "postNo",            headerName: "우편번호",               editable: true, align:"left", width:100},
-  { field: "basicAddr",         headerName: "주소",                editable: true, align:"left", width:300},
+  /* 주소 시작 */
+  { field: "deliveryNm",        headerName: "배송처명",            editable: false, align:"left", width:200,
+      renderCell: (params) => (
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', width: 1, alignItems:'center' }}>
+          <Typography variant="body2">{params.value}</Typography>
+          <IconButton><SearchIcon /></IconButton>
+        </Box>
+    ),},
+  { field: "zip",               headerName: "우편번호",             editable: true, align:"left", width:100},
+  { field: "jibunAddr",         headerName: "지번주소",                editable: true, align:"left", width:300},
+  { field: "roadAddr",          headerName: "도로명주소",             editable: true, align:"left", width:300},
   { field: "detailAddr",        headerName: "상세주소",             editable: true, align:"left", width:300},
+  { field: "lat",             headerName: "위도",             editable: true, align:"left", width:150},
+  { field: "lon",             headerName: "경도",             editable: true, align:"left", width:150},
+  /* 주소 끝 */
   { field: "bizTp",             headerName: "업태(사업자유형)",       editable: true, align:"left", width:300},
   { field: "bizKnd",            headerName: "업종(사업자종류)",       editable: true, align:"left", width:300},
   { field: "telNo",             headerName: "전화번호",             editable: true, align:"left", width:100},
@@ -61,20 +98,6 @@ const columns = [
   { field: "userCol5",         headerName: "사용자컬럼5",               editable: true, align:"left", width:100},
   { field: "remark",            headerName: "비고",               editable: true, align:"left", width:300},
 ];
- 
-
-export default function Biz(props) {
-  const {menuTitle} = '배송처 리스트';
-  const classes = useStyles();
-  const {openModal} = useModal();
-
-
-  const getRowId = "";
-
-  //그리드 선택된 행
-  const [selRowId, setSelRowId] = useState(-1);
-  //메뉴 데이터 변수
-  const [dataList, setDataList] = useState([]); //
 
   //조회조건
   const [schValues, setSchValues] = useState({ 
@@ -130,15 +153,33 @@ export default function Biz(props) {
 
   //핸들링하고 있는 rowData 저장
   const [values, setValues] = useState(initData);
+
   //화면 로드시 1번만 실행
   useEffect(() => {
-    fnSearch();
-  }, []);
+    // selRowId 변경을 감지하고, 주소 찾기 함수 호출
+    if (selRowId !== -1) {
+
+      if(callbackDelivery == undefined){
+        return;
+      }
+
+      var rowData = gvGetRowData(dataList, selRowId);
+      rowData.zip = callbackDelivery.zip;
+      rowData.jibunAddr = callbackDelivery.jibunAddr;
+      rowData.roadAddr = callbackDelivery.roadAddr;
+      rowData.detailAddr = callbackDelivery.detailAddr;
+      rowData.deliveryNm = callbackDelivery.deliveryNm;
+      rowData.lat = callbackDelivery.lat;
+      rowData.lon = callbackDelivery.lon;
+      setCallbackDelivery(null);
+    }
+
+  }, [selRowId, callbackDelivery]);
   
-  //코드그룹리스트 조회
+  //조회
   const fnSearch = () => {
     var data = {codeCd : schValues.codeCd};
-    client.post(`/wms/sd/store/selectStoreList`, data, {})
+    client.post(`${PRO_URL}/selectList`, data, {})
       .then(res => {
         var dataList = res.data;
         setDataList(dataList);
@@ -152,6 +193,7 @@ export default function Biz(props) {
     fnSearch();
   }
 
+
   //신규클릭
   function onClickAdd(){
     //선택된 행 다음에 추가
@@ -161,48 +203,60 @@ export default function Biz(props) {
   //저장클릭
   function onClickSave(){
     var rowData = gvGetRowData(dataList, selRowId);
-    console.log('저장',selRowId, rowData)
-    openModal(MyModal, {
-      title:"",
-      content:"저장 하시겠습니까?",
-      onSubmit: () => {
+    openModal('', '',  '저장 하시겠습니까?', 
+      () => {
         //메뉴리스트 저장
-        client.post(`/wms/sd/store/saveStore`,rowData, {})
+        client.post(`${PRO_URL}/save`,rowData, {})
           .then(res => {
             alert('저장되었습니다.');
             fnSearch();
           }).catch(error => { 
             console.log('error = '+error); 
           })
-
       }
-    });
+    );
   }
 
   //삭제클릭
   function onClickDel(){
     var rowData = gvGetRowData(dataList, selRowId);
-    console.log('삭제',rowData)
-    openModal(MyModal, {
-      title:"",
-      content:"삭제 하시겠습니까?",
-      onSubmit: () => {
+    openModal('', '',  '삭제 하시겠습니까?', 
+      () => {
         //메뉴리스트 저장
-        client.post(`/wms/sd/store/deleteStore`,rowData,{})
+        client.post(`${PRO_URL}/delete`,rowData, {})
           .then(res => {
-            alert('삭제되었습니다.')
+            alert('삭제되었습니다.');
             fnSearch();
           }).catch(error => { 
             console.log('error = '+error); 
           })
-
       }
-    });
+    );
   }
+
+  //쎌클릭 핸들링
+  const handleGridCellClick = (e) => {
+    setValues(e.row); 
+    setSelRowId(e.row.id); 
+    if (e.field === 'deliveryNm') {
+      // 컬럼 이름이 'deliveryId' 일 때 함수 호출
+      openPopupFindAddress();
+    }
+  }  
+
+  //주소찾기 팝업
+  const openPopupFindAddress = () => {
+    openModal('FIND_ADDR', '주소 찾기', <DaumPostcodeShppingMall />, handleAddressUpdate, '1000px', '600px');
+  }
+
+  //배송처 팝업 콜백함수
+  const handleAddressUpdate = (addressData) => {
+    setCallbackDelivery(addressData);
+  };
 
   return (
     <>
-      <PageTitle title={'배송처 리스트 '}  />
+      <PageTitle title={'배송처 관리'}  />
       <SearchBar
         onClickSelect={onClickSelect} 
         onClickAdd={onClickAdd} 
@@ -214,21 +268,19 @@ export default function Biz(props) {
             onKeyDown={onKeyDown} />    
       </SearchBar>
       
-      <Grid spacing={4}>
-        <Grid item xs={12} style={{ height: 750, width: '100%' }}>
-          <DataGrid
-            title={"Store List"} //제목
-            rows={dataList} //dataList
-            columns={columns} //컬럼 정의
-            headerHeight={30} //헤더 높이
-            rowHeight={28} //행 높이
-            onRowClick={(e)=>{setValues(e.row); setSelRowId(e.row.id);} }
-            footerHeight={30}
-            selectionModel={selRowId} //쎌선택 변수지정
-            onCellEditCommit={React.useCallback((params) => {dataList[params.id-1][params.field] = params.value;},[dataList] //쎌변경시 데이터변경
-          )}
-          />
-        </Grid>
+      <Grid item xs={12} style={{ height: 750, width: '100%' }}>
+        <DataGrid
+          title={menuTitle} //제목
+          rows={dataList} //dataList
+          columns={columns} //컬럼 정의
+          headerHeight={30} //헤더 높이
+          rowHeight={28} //행 높이
+          onCellClick={handleGridCellClick}
+          footerHeight={30}
+          selectionModel={selRowId} //쎌선택 변수지정
+          onCellEditCommit={React.useCallback((params) => {dataList[params.id-1][params.field] = params.value;},[dataList] //쎌변경시 데이터변경
+        )}
+        />
       </Grid>
     </>
     
