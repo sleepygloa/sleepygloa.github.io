@@ -10,7 +10,6 @@ import { Grid } from "@mui/material";
 import { gvGridDropdownDisLabel, gvGetRowData, gvSeData } from "../../../components/Common.js";
 
 //Modal
-import MyModal from "../../../components/Modal/MyModal.js";
 import useModal from "../../../components/Modal/useModal.js";
 
 // styles
@@ -135,39 +134,39 @@ export default function Code(props) {
   //저장클릭
   function onClickSave(){
     var rowData = gvGetRowData(dataList, selRowId);
-    openModal(MyModal, {
-      title:"",
-      content:"저장 하시겠습니까?",
-      onSubmit: () => {
-        //메뉴리스트 저장
-        client.post(`/wms/sys/scheduler/saveScheduler`,rowData)
-          .then(res => {
-            alert('저장되었습니다.');
-          }).catch(error => { 
-            console.log('error = '+error); 
-          })
+    // openModal(MyModal, {
+    //   title:"",
+    //   content:"저장 하시겠습니까?",
+    //   onSubmit: () => {
+    //     //메뉴리스트 저장
+    //     client.post(`/wms/sys/scheduler/saveScheduler`,rowData)
+    //       .then(res => {
+    //         alert('저장되었습니다.');
+    //       }).catch(error => { 
+    //         console.log('error = '+error); 
+    //       })
 
-      }
-    });
+    //   }
+    // });
   }
 
   //삭제클릭
   function onClickDel(){
     var rowData = gvGetRowData(dataList, selRowId);
-    openModal(MyModal, {
-      title:"",
-      content:"삭제 하시겠습니까?",
-      onSubmit: () => {
-        //메뉴리스트 저장
-        client.post(`/wms/sys/scheduler/deleteScheduler`,rowData,{})
-          .then(res => {
-            alert('삭제되었습니다.')
-          }).catch(error => { 
-            console.log('error = '+error); 
-          })
+    // openModal(MyModal, {
+    //   title:"",
+    //   content:"삭제 하시겠습니까?",
+    //   onSubmit: () => {
+    //     //메뉴리스트 저장
+    //     client.post(`/wms/sys/scheduler/deleteScheduler`,rowData,{})
+    //       .then(res => {
+    //         alert('삭제되었습니다.')
+    //       }).catch(error => { 
+    //         console.log('error = '+error); 
+    //       })
 
-      }
-    });
+    //   }
+    // });
   }
   return (
     <>

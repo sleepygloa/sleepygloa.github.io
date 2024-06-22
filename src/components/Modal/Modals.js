@@ -8,11 +8,12 @@ const Modals = () => {
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const handleSubmit = (key) => {
-        const modalInfo = modals[key];
-        if (modalInfo.callback) {
-            modalInfo.callback(modalInfo.data);
-        }
-        closeModal(key);
+      const modalInfo = modals[key];
+      if (modalInfo.callback) {
+          const result = modalInfo.callback(modalInfo.data);
+          if (result == false) return;
+      }
+      closeModal(key);
     };
 
     return (
@@ -32,15 +33,40 @@ const Modals = () => {
               }
             }}
           >
-            <DialogTitle sx={{ backgroundColor: theme.palette.primary.main, color: '#fff' }}>{title}</DialogTitle>
+            <DialogTitle sx={{ backgroundColor: theme.palette.primary.main, color: '#fff' }}>
+              {!(title == 'C' || title == 'I' || title == 'A') && (
+                <>
+                {title}
+                </>
+              )}
+              </DialogTitle>
             <Divider />
-            <DialogContent>
+            {(title == '' || title == 'C') && (
+              <>
+                <DialogContent>
+                {content}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => handleSubmit(key)}>확인</Button>
+                    <Button onClick={() => closeModal(key)}>닫기</Button>
+                </DialogActions>
+              </>
+            )}
+            {(title == 'I' || title == 'A') && (
+              <>
+                <DialogContent>
+                {content}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => closeModal(key)}>닫기</Button>
+                </DialogActions>
+              </>
+            )}
+            {(title != '' && !(title == 'A' || title == 'I' || title == 'C')) && (
+              <>
               {content}
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => handleSubmit(key)}>확인</Button>
-              <Button onClick={() => closeModal(key)}>닫기</Button>
-            </DialogActions>
+              </>
+            )}
           </Dialog>
         ))}
       </>

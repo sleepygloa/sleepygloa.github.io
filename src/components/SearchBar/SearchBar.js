@@ -13,7 +13,11 @@ import useStyles from "./styles";
 
 export default function SearchBar(props) {
   var classes = useStyles();
-  const {title, button, onClickSelect, onClickAdd, onClickSave, onClickDel, onClickUpload, children} = props;
+  const {title, button, 
+    onClickSelect, onClickAdd, onClickSave, onClickDel, onClickUpload, 
+    onClickCustom1, onClickCustom2, onClickCustom3,
+    onClickCustomNm1, onClickCustomNm2, onClickCustomNm3,
+    children} = props;
   return (
     <Box
       className={classes.pageTitleContainer}
@@ -81,6 +85,45 @@ export default function SearchBar(props) {
           startIcon={<CloudUploadIcon />}
         >
           업로드
+        </Button>
+        :
+        ''
+        }
+        {onClickCustom1 ? 
+        <Button
+          variant="outlined"
+          size="small"
+          className={classes.button}
+          onClick={onClickCustom1}
+          startIcon={<SaveIcon />}
+        >
+          {onClickCustomNm1 ? onClickCustomNm1 : '커스텀버튼1'}
+        </Button>
+        :
+        ''
+        }
+        {onClickCustom2 ? 
+        <Button
+          variant="outlined"
+          size="small"
+          className={classes.button}
+          onClick={onClickCustom2}
+          startIcon={<SaveIcon />}
+        >
+          {onClickCustomNm2 ? onClickCustomNm2 : '커스텀버튼2'}
+        </Button>
+        :
+        ''
+        }
+        {onClickCustom3 ? 
+        <Button
+          variant="outlined"
+          size="small"
+          className={classes.button}
+          onClick={onClickCustom3}
+          startIcon={<SaveIcon />}
+        >
+          {onClickCustomNm3 ? onClickCustomNm3 : '커스텀버튼3'}
         </Button>
         :
         ''

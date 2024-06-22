@@ -10,7 +10,6 @@ import { Grid } from "@mui/material";
 import { gvGridDropdownDisLabel, gvGetRowData, gvSeData } from "../../../../src/components/Common";
 
 //Modal
-import MyModal from "../../../../src/components/Modal/MyModal.js";
 import useModal from "../../../../src/components/Modal/useModal";
 
 // styles
@@ -184,42 +183,42 @@ export default function Code(props) {
   function onClickSave(){
     var rowData = gvGetRowData(dataList, selRowId);
     console.log('저장',rowData)
-    openModal(MyModal, {
-      title:"",
-      content:"저장 하시겠습니까?",
-      onSubmit: () => {
-        //메뉴리스트 저장
-        client.post(`/wms/sys/code/saveCodeGrp`,rowData)
-          .then(res => {
-            alert('저장되었습니다.');
-            fnSearchDtl(values);
-          }).catch(error => { 
-            console.log('error = '+error); 
-          })
+    // openModal(MyModal, {
+    //   title:"",
+    //   content:"저장 하시겠습니까?",
+    //   onSubmit: () => {
+    //     //메뉴리스트 저장
+    //     client.post(`/wms/sys/code/saveCodeGrp`,rowData)
+    //       .then(res => {
+    //         alert('저장되었습니다.');
+    //         fnSearchDtl(values);
+    //       }).catch(error => { 
+    //         console.log('error = '+error); 
+    //       })
 
-      }
-    });
+    //   }
+    // });
   }
 
   //삭제클릭
   function onClickDel(){
     var rowData = gvGetRowData(dataList, selRowId);
     console.log('삭제', rowData)
-    openModal(MyModal, {
-      title:"",
-      content:"삭제 하시겠습니까?",
-      onSubmit: () => {
-        //메뉴리스트 저장
-        client.post(`/wms/sys/code/deleteCodeGrp`,rowData,{})
-          .then(res => {
-            alert('삭제되었습니다.')
-            fnSearchDtl(values);
-          }).catch(error => { 
-            console.log('error = '+error); 
-          })
+    // openModal(MyModal, {
+    //   title:"",
+    //   content:"삭제 하시겠습니까?",
+    //   onSubmit: () => {
+    //     //메뉴리스트 저장
+    //     client.post(`/wms/sys/code/deleteCodeGrp`,rowData,{})
+    //       .then(res => {
+    //         alert('삭제되었습니다.')
+    //         fnSearchDtl(values);
+    //       }).catch(error => { 
+    //         console.log('error = '+error); 
+    //       })
 
-      }
-    });
+    //   }
+    // });
   }
   //조회 클릭(상세)
   function onClickDtlSelect(){
@@ -240,42 +239,42 @@ export default function Code(props) {
   function onClickDtlSave(){
     var rowData = gvGetRowData(dataDtlList, selDtlRowId);
     console.log('저장',rowData)
-    openModal(MyModal, {
-      title:"",
-      content:"저장 하시겠습니까?",
-      onSubmit: () => {
-        //메뉴리스트 저장
-        client.post(`/wms/sys/code/saveCode`,rowData)
-          .then(res => {
-            alert('저장되었습니다.');
-            fnSearchDtl(values);
-          }).catch(error => { 
-            console.log('error = '+error); 
-          })
+    // openModal(MyModal, {
+    //   title:"",
+    //   content:"저장 하시겠습니까?",
+    //   onSubmit: () => {
+    //     //메뉴리스트 저장
+    //     client.post(`/wms/sys/code/saveCode`,rowData)
+    //       .then(res => {
+    //         alert('저장되었습니다.');
+    //         fnSearchDtl(values);
+    //       }).catch(error => { 
+    //         console.log('error = '+error); 
+    //       })
 
-      }
-    });
+    //   }
+    // });
   }
 
   //삭제클릭
   function onClickDtlDel(){
     var rowData = gvGetRowData(dataDtlList, selDtlRowId);
     console.log('삭제 클릭',rowData)
-    openModal(MyModal, {
-      title:"",
-      content:"삭제 하시겠습니까?",
-      onSubmit: () => {
-        //메뉴리스트 저장
-        client.post(`/wms/sys/code/deleteCode`,rowData,{})
-          .then(res => {
-            alert('삭제되었습니다.')
-            fnSearchDtl(values);
-          }).catch(error => { 
-            console.log('error = '+error); 
-          })
+    // openModal(MyModal, {
+    //   title:"",
+    //   content:"삭제 하시겠습니까?",
+    //   onSubmit: () => {
+    //     //메뉴리스트 저장
+    //     client.post(`/wms/sys/code/deleteCode`,rowData,{})
+    //       .then(res => {
+    //         alert('삭제되었습니다.')
+    //         fnSearchDtl(values);
+    //       }).catch(error => { 
+    //         console.log('error = '+error); 
+    //       })
 
-      }
-    });
+    //   }
+    // });
   }
   return (
     <>

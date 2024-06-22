@@ -35,18 +35,26 @@ export default function Biz(props) {
 
   const useYnCmb = [{value:"Y", label:"사용"},{value:"N", label:"미사용"}]; //사용여부콤보
   const [dcCmb, setDcCmb] = useState([]); //물류센터콤보
-  const [dcAreaCmb, setDcAreaCmb] = useState([]); //물류센터콤보
+  const [dcAreaCmb, setDcAreaCmb] = useState([]); //구역콤보
   const [keepTempGbnCmb, setKeepTempGbnCmb] = useState([]); //보관온도구분콤보
   const columns = [
     { field: "id",                headerName: "ID",                               align:"center", width:20},
-    { field: "bizCd",             headerName: "사업자코드",           editable: true, align:"left", width:100},
     { field: "dcCd",              headerName: "물류창고코드",         editable: true,
-      align:"center", type: "singleSelect", valueFormatter: gvGridDropdownDisLabel,  
+      align:"center", type: "singleSelect", 
+      valueGetter : (params) => {
+        const option = dcCmb.find((v) => v.value === params.row.dcCd);
+        return option ? option.label : '';
+    },
       valueOptions: dcCmb,  
     },
     { field: "areaCd",            headerName: "구역코드",             editable: true, 
-      align:"center", type: "singleSelect", valueFormatter: (params) => gvGridLevelDropdownDisLabel(params, 'dcCd', dcAreaCmb),
-      valueOptions: (params) => dcAreaCmb[params.row.dcCd],
+      align:"center", type: "singleSelect",
+      valueGetter : (params) => {
+        const options = dcAreaCmb[params.row.dcCd] || [];
+        const option = options.find(v => v.value === params.value);
+        return option ? option.label : '';
+    },
+      valueOptions: (params) => dcAreaCmb[params.row.dcCd] || [],
     },
     { field: "zoneCd",            headerName: "지역코드",             editable: true, align:"left", width:100},
     { field: "zoneNm",            headerName: "지역명",             editable: true, align:"left", width:100},
@@ -221,9 +229,8 @@ export default function Biz(props) {
             dataList[params.id-1][params.field] = params.value;
             //dc 변경시 area 초기화
             if(params.field == "dcCd") {
-              dataList[params.id-1]['areaCd'] = '';
+              dataList[params.id-1]['areaCd'] = null;
             }
-
             
           },[dataList] //쎌변경시 데이터변경
         )}

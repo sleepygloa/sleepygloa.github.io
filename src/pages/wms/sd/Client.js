@@ -10,7 +10,6 @@ import { Grid, Box, Typography } from "@mui/material";
 import { gvGridDropdownDisLabel, gvGetRowData, gvSeData } from "../../../components/Common.js";
 
 //Modal
-import MyModal from "../../../components/Modal/MyModal.js";
 import {useModal} from "../../../context/ModalContext.js";
 
 // styles

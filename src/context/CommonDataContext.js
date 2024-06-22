@@ -35,7 +35,7 @@ export const CmmnCdProvider = ({ children }) => {
         const filterData = cmmnCdData.filter(code => code.codeGrpCd === groupCode);
         const cmbList = [];
         filterData.map((code) => {
-            cmbList.push({value: code.codeCd, label: code.codeNm})
+            cmbList.push({value: code.codeCd, label: code.codeNm+'['+code.codeCd+']'})
         })
         return cmbList;
     };

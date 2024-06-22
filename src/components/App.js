@@ -21,6 +21,13 @@ import SdZone from "../pages/wms/sd/Zone.js";
 import SdLoc from "../pages/wms/sd/Loc.js";
 import SdStore from "../pages/wms/sd/Store.js";
 import SdSupplier from "../pages/wms/sd/Supplier.js";
+import SdItem from "../pages/wms/sd/Item.js";
+import SdItemClass from "../pages/wms/sd/ItemClass.js";
+import SdItemUom from "../pages/wms/sd/ItemUom.js";
+
+//입고
+
+import IbInbound from "../pages/wms/ib/Inbound.js";
 
 // context
 import { useUserState } from "../context/UserContext";
@@ -50,6 +57,11 @@ export default function App() {
         <Route exact path="/wms/sd/loc" render={()=><BlogLayout props={<SdLoc />}></BlogLayout>} />
         <Route exact path="/wms/sd/store" render={()=><BlogLayout props={<SdStore />}></BlogLayout>} />
         <Route exact path="/wms/sd/supplier" render={()=><BlogLayout props={<SdSupplier />}></BlogLayout>} />
+        <Route exact path="/wms/sd/item" render={()=><BlogLayout props={<SdItem />}></BlogLayout>} />
+        <Route exact path="/wms/sd/itemClass" render={()=><BlogLayout props={<SdItemClass />}></BlogLayout>} />
+        <Route exact path="/wms/sd/itemUom" render={()=><BlogLayout props={<SdItemUom />}></BlogLayout>} />
+
+        <Route exact path="/wms/ib/inbound" render={()=><BlogLayout props={<IbInbound />}></BlogLayout>} />
 
         {/* <Route
           exact

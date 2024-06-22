@@ -36,7 +36,6 @@ export default function Biz(props) {
 
   const columns = [
     { field: "id",                headerName: "ID",                               align:"center", width:20},
-    { field: "bizCd",             headerName: "사업자코드",           editable: true, align:"left", width:100},
     { field: "dcCd",              headerName: "물류창고코드",         editable: true, 
         align:"center", type: "singleSelect", valueFormatter: gvGridDropdownDisLabel,  
         valueOptions: dcCmb,

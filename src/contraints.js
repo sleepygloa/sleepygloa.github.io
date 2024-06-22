@@ -31,6 +31,14 @@ export const blogMenu = [
                     {menuCd: 1026, label: "로케이션", link: "/wms/sd/loc", thumbnail:"", blog:"",},
                     {menuCd: 1027, label: "배송처", link: "/wms/sd/store", thumbnail:"", blog:"",},
                     {menuCd: 1028, label: "공급처", link: "/wms/sd/supplier", thumbnail:"", blog:"",},
+                    {menuCd: 1029, label: "상품", link: "/wms/sd/item", thumbnail:"", blog:"",},
+                    {menuCd: 1030, label: "상품분류", link: "/wms/sd/itemClass", thumbnail:"", blog:"",},
+                    {menuCd: 1031, label: "상품단위", link: "/wms/sd/itemUom", thumbnail:"", blog:"",},
+                    ]
+            },
+            {menuCd: 1050, label: "입고관리", link: "/wms/ib/", thumbnail:"", blog:"",
+                children:[
+                    {menuCd: 1051, label: "입고", link: "/wms/ib/inbound", thumbnail:"", blog:"",},
                     ]
             },
         ]

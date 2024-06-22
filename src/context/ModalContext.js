@@ -31,6 +31,8 @@ export const ModalsProvider = ({children}) => {
           return newState;
         });
     }
+
+    
     return (
         <ModalsStateContext.Provider value={{modals, openModal, closeModal, updateModalData, getModalData}}>
             {children}
