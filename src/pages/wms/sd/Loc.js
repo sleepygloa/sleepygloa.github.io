@@ -17,6 +17,9 @@ import { gvGridDropdownDisLabel,
   gvSetLevelDropdownData ,
   gvGridLevel2DropdownDisLabel, 
   gvSetLevel2DropdownData ,
+  gvGridFieldNumberPreEdit,
+  gvGridFieldNumberFormatter,
+  gvGridFieldNumberParser , 
 } from "../../../components/Common.js";
 
 //CommonData
@@ -32,7 +35,7 @@ export default function Biz(props) {
   const {menuTitle} = '로케이션 관리';
   const PRO_URL = '/wms/sd/loc';
   const {openModal} = useModal();
-  const { cmmnCdData, getCodesCmbByGroupCode } = useCommonData();
+  const { getCmbOfGlobalData } = useCommonData();
 
 
   const getRowId = "";
@@ -43,13 +46,15 @@ export default function Biz(props) {
   const [dataList, setDataList] = useState([]); //
 
 
-  const useYnCmb = [{value:"Y", label:"사용"},{value:"N", label:"미사용"}];
+  const [useYnCmb, setUseYnCmb] = useState([]); //사용여부
+  const [locTypeCdCmb, setLocTypeCdCmb] = useState([]); //로케이션유형
+  const [holdStCdCmb, setHoldStCdCmb] = useState([]); //보류상태
   const [dcCmb, setDcCmb] = useState([]); //물류센터콤보
   const [dcAreaCmb, setDcAreaCmb] = useState([]); //구역콤보
   const [dcAreaZoneCmb, setDcAreaZoneCmb] = useState([]); //지역콤보
   const columns = [
     { field: "id",                headerName: "ID",                               align:"center", width:20},
-    { field: "dcCd",              headerName: "물류창고코드",         editable: true,
+    { field: "dcCd",              headerName: "물류창고",         editable: true,
       align:"center", type: "singleSelect", 
       valueGetter : (params) => {
         const option = dcCmb.find((v) => v.value === params.row.dcCd);
@@ -57,7 +62,7 @@ export default function Biz(props) {
     },
       valueOptions: dcCmb,  
     },
-    { field: "areaCd",            headerName: "구역코드",             editable: true, 
+    { field: "areaCd",            headerName: "구역",             editable: true, 
       align:"center", type: "singleSelect",
       valueGetter : (params) => {
         const options = dcAreaCmb[params.row.dcCd] || [];
@@ -66,7 +71,7 @@ export default function Biz(props) {
     },
       valueOptions: (params) => dcAreaCmb[params.row.dcCd] || [],
     },
-    { field: "zoneCd",           headerName: "지역코드",             editable: true, 
+    { field: "zoneCd",           headerName: "지역",             editable: true, 
       align:"center", type: "singleSelect",
       valueGetter : (params) => {
         if(dcAreaZoneCmb === undefined) return '';
@@ -83,22 +88,36 @@ export default function Biz(props) {
     { field: "linCd",             headerName: "행",               editable: true, align:"left", width:100},
     { field: "rowCd",             headerName: "열",             editable: true, align:"left", width:100},
     { field: "levCd",             headerName: "단",             editable: true, align:"left", width:100},
-    { field: "locTypeCd",         headerName: "로케이션유형",     editable: true, align:"left", width:100},
-    { field: "loadGbnCd",         headerName: "로케이션구분",       editable: true, align:"left", width:100},
-    { field: "holdStCd",          headerName: "보류상태",         editable: true, align:"left", width:100},
-    { field: "locPrioord",        headerName: "로케이션우선순위",   editable: true, align:"left", width:100},
-    { field: "itemMixLoadYn",     headerName: "제품혼적여부",     editable: true, align:"left", width:100},
-    { field: "lotMixLoadYn",      headerName: "LOT혼적여부",      editable: true, align:"left", width:100},
-    { field: "horizontal",        headerName: "가로",           editable: true, align:"left", width:100},
-    { field: "vertical",          headerName: "세로",             editable: true, align:"left", width:100},
-    { field: "height",            headerName: "높이",             editable: true, align:"left", width:100},
-    { field: "cbm",               headerName: "체적",             editable: true, align:"left", width:100},
+    { field: "locTypeCd",         headerName: "로케이션유형",     editable: true, 
+      align:"center", type: "singleSelect", valueFormatter: gvGridDropdownDisLabel,
+      valueOptions: locTypeCdCmb,
+    },
+    { field: "holdStCd",          headerName: "보류상태",         editable: true, 
+      align:"center", type: "singleSelect", valueFormatter: gvGridDropdownDisLabel,
+      valueOptions: holdStCdCmb,
+    },
+    { field: "locPrioord",        headerName: "로케이션우선순위",   editable: true, align:"right", width:100,
+      preProcessEditCellProps: (params) => gvGridFieldNumberPreEdit(params),
+      valueFormatter: (params) => gvGridFieldNumberFormatter(params.value),
+      valueParser: (value) => gvGridFieldNumberParser(value)
+    },
+    { field: "horizontal",        headerName: "가로",           editable: true, align:"left", width:100,
+      valueFormatter: (params) => gvGridFieldNumberFormatter(params.value),
+      valueParser: (value) => gvGridFieldNumberParser(value)
+    },
+    { field: "vertical",          headerName: "세로",             editable: true, align:"left", width:100,
+      valueFormatter: (params) => gvGridFieldNumberFormatter(params.value),
+      valueParser: (value) => gvGridFieldNumberParser(value)},
+    { field: "height",            headerName: "높이",             editable: true, align:"left", width:100,
+      valueFormatter: (params) => gvGridFieldNumberFormatter(params.value),
+      valueParser: (value) => gvGridFieldNumberParser(value)},
+    { field: "cbm",               headerName: "체적",             editable: false, align:"left", width:100,
+      valueFormatter: (params) => gvGridFieldNumberFormatter(params.value),
+      valueParser: (value) => gvGridFieldNumberParser(value)},
     { field: "weight",            headerName: "중량",             editable: true, align:"left", width:100},
     { field: "useYn",             headerName: "사용여부",             editable: true, 
-        align:"center",
-        type: "singleSelect",
+        align:"center", type: "singleSelect", valueFormatter: gvGridDropdownDisLabel,
         valueOptions: useYnCmb,
-        valueFormatter: gvGridDropdownDisLabel,
     },
     { field: "remark",            headerName: "비고",               editable: true, align:"left", width:300},
   ];
@@ -150,12 +169,18 @@ export default function Biz(props) {
     if (selRowId !== -1) {
 
     }else{
-      fnSearchDc();
-      fnSearchDcArea();
-      fnSearchDcAreaZone();
+
+      //콤보박스 데이터 조회
+      if(useYnCmb.length === 0) setUseYnCmb(getCmbOfGlobalData('CMMN_CD', 'USE_YN'));
+      if(locTypeCdCmb.length === 0) setLocTypeCdCmb(getCmbOfGlobalData('CMMN_CD', 'LOC_TYPE_CD'));
+      if(holdStCdCmb.length === 0) setHoldStCdCmb(getCmbOfGlobalData('CMMN_CD', 'HOLD_ST_CD'));
+
+      if(dcCmb.length === 0) fnSearchDc();
+      if(dcAreaCmb.length === 0) fnSearchDcArea();
+      if(dcAreaZoneCmb.length === 0) fnSearchDcAreaZone();
     }
 
-  }, [selRowId, cmmnCdData]);
+  }, [selRowId, dcCmb, useYnCmb]);
   
   //물류창고 조회
   const fnSearchDc = async () => {
@@ -257,10 +282,47 @@ export default function Biz(props) {
     setSelRowId(e.row.id); 
   }  
 
+  //쎌변경시 데이터 변경
+  const handleEditCellChangeCommitted = React.useCallback(
+
+    //가로, 세로, 높이 수정시 체적 계산
+    ({ id, field, value }) => {
+      if (['horizontal', 'vertical', 'height'].includes(field)) {
+        const updatedRows = dataList.map((row) => {
+          if (row.id === id) {
+            const newFieldValues = {
+              ...row,
+              [field]: Number(value),
+            };
+            // Calculate new volume
+            newFieldValues.cbm = newFieldValues.horizontal * newFieldValues.vertical * newFieldValues.height;
+            return newFieldValues;
+          }
+          return row;
+        });
+        setDataList(updatedRows);
+      }
+
+      dataList[id-1][field] = value
+
+      //dc 변경시 area 초기화
+      if(field == "dcCd") {
+        dataList[id-1]['areaCd'] = null;
+        return;
+      }
+      //area 변경시 zone 초기화
+      if(field == "areaCd") {
+        dataList[id-1]['zoneCd'] = null;
+        return;
+      }
+    },
+    [dataList],
+  );
+
 
   return (
     <>
-      <PageTitle title={menuTitle}  />
+      <PageTitle title={'로케이션 관리'}  />
       <SearchBar
         onClickSelect={onClickSelect} 
         onClickAdd={onClickAdd} 
@@ -285,22 +347,7 @@ export default function Biz(props) {
           onRowClick={(e)=>{setValues(e.row); setSelRowId(e.row.id);} }
           footerHeight={30}
           selectionModel={selRowId} //쎌선택 변수지정
-          
-          onCellEditCommit={React.useCallback((params) => {
-            dataList[params.id-1][params.field] = params.value;
-            //dc 변경시 area 초기화
-            if(params.field == "dcCd") {
-              dataList[params.id-1]['areaCd'] = null;
-              return;
-            }
-            //area 변경시 zone 초기화
-            if(params.field == "areaCd") {
-              dataList[params.id-1]['zoneCd'] = null;
-              return;
-            }
-            
-          },[dataList] //쎌변경시 데이터변경
-        )}
+          onCellEditCommit={handleEditCellChangeCommitted}
         />
       </Grid>
     </>

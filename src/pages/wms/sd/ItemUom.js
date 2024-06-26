@@ -37,7 +37,7 @@ export default function ItemUom(props) {
   const PRO_URL = '/wms/sd/itemUom';
   const classes = useStyles();
   const {openModal} = useModal();
-  const { cmmnCdData, getCodesCmbByGroupCode } = useCommonData();
+  const { getCmbOfGlobalData } = useCommonData();
 
 
   const getRowId = "";
@@ -47,15 +47,23 @@ export default function ItemUom(props) {
   //메뉴 데이터 변수
   const [dataList, setDataList] = useState([]); //
 
-  const [useYnCmb, setUseYnCmb] = useState([]);
+  const [clientCdCmb, setClientCdCmb] = useState([]); //고객사
+  const [useYnCmb, setUseYnCmb] = useState([]); //사용여부
+  const [uomCdCmb, setUomCdCmb] = useState([]); //단위코드
   const columns = [
     { field: "id",                headerName: "ID",                               align:"center", width:20},
-    { field: "clientCd",          headerName: "고객사코드",             editable: false, align:"left", width:100},
+    { field: "clientCd",          headerName: "고객사",               editable: false, align:"left", width:100},
     { field: "itemCd",            headerName: "상품코드",              editable: false, align:"left", width:100},
-    { field: "stdUomCd",          headerName: "기준단위코드",           editable: false, align:"left", width:100},
-    { field: "convUomCd",         headerName: "변환단위코드",           editable: true, align:"left", width:100},
-    { field: "convUomQty",        headerName: "변환단위수량",           editable: true, align:"left", width:100},
-
+    { field: "itemNm",            headerName: "상품명",               editable: false, align:"left", width:300},
+    { field: "stdUomCd",          headerName: "기준단위",           editable: true, 
+      align:"center", type: "singleSelect", valueFormatter: gvGridDropdownDisLabel,
+      valueOptions: uomCdCmb,
+    },
+    { field: "convUomCd",         headerName: "변환단위",           editable: true, 
+      align:"center", type: "singleSelect", valueFormatter: gvGridDropdownDisLabel,
+      valueOptions: uomCdCmb,
+    },
+    { field: "convUomQty",        headerName: "변환단위수량",           editable: true, align:"right", width:100 },
     { field: "useYn",              headerName: "사용여부",             editable: true, 
         align:"center", type: "singleSelect", valueFormatter: gvGridDropdownDisLabel,
         valueOptions: useYnCmb,
@@ -95,7 +103,19 @@ export default function ItemUom(props) {
 
   //화면 로드시 1번만 실행
   useEffect(() => {
-  }, []);
+    if(selRowId !== -1){
+
+    }else{
+      if(clientCdCmb.length > 0) return;
+
+      //콤보박스 데이터 조회
+      setClientCdCmb(getCmbOfGlobalData("CLIENT_CD", ''))
+  
+      //콤보박스 데이터 조회
+      setUseYnCmb(getCmbOfGlobalData('CMMN_CD', 'USE_YN'));
+      setUomCdCmb(getCmbOfGlobalData('CMMN_CD', 'UOM_CD'));
+    }
+  }, [selRowId, clientCdCmb]);
   
   //조회
   const fnSearch = () => {

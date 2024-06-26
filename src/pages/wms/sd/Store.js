@@ -1,13 +1,20 @@
 import React, {useEffect, useState, useCallback } from "react";
 
+// context
+import { useCommonData } from "../../../context/CommonDataContext.js";
+
 // components
 import PageTitle from "../../../components/PageTitle/PageTitle.js";
 import SearchBar from "../../../components/SearchBar/SearchBar.js";
-import {SchTextField} from "../../../components/SearchBar/Components/TextFieldDefault.js"
+import {SchTextField, GridDateRenderField, GridDateSetField} from "../../../components/SearchBar/Components/TextFieldDefault.js"
 import {client} from '../../../contraints.js';
 import { DataGrid } from "@mui/x-data-grid";
 import { Grid, Box, Typography } from "@mui/material";
-import { gvGridDropdownDisLabel, gvGetRowData, gvSeData } from "../../../components/Common.js";
+import { gvGridDropdownDisLabel, gvGetRowData, gvSeData, gvSetRowData,
+  gvGridFieldEmailInput, //이메일 포멧
+  gvGridFieldFormatPhoneNumber, gvGridFieldParsePhoneNumber, gvGridFieldInputPhoneNumber, //핸드폰번호 포맷팅
+  gvGridFieldFormatFaxNumber, gvGridFieldParseFaxNumber, gvGridFieldInputFaxNumber, //팩스번호 포맷팅
+} from "../../../components/Common.js";
 
 //Modal
 import {useModal} from "../../../context/ModalContext.js";
@@ -29,6 +36,7 @@ export default function Biz(props) {
   const PRO_URL = '/wms/sd/store';
   const classes = useStyles();
   const {openModal} = useModal();
+  const { getCmbOfGlobalData } = useCommonData();
 
 
   const getRowId = "";
@@ -41,13 +49,17 @@ export default function Biz(props) {
   const [callbackDelivery, setCallbackDelivery] = useState(null);
 
 
-const useYnCmb = [{value:"Y", label:"사용"},{value:"N", label:"미사용"}];
+  const [clientCdCmb, setClientCdCmb] = useState([]); //고객사
+  const [useYnCmb, setUseYnCmb] = useState([]); //사용여부
+  const [dealGbnCdCmb, setDealGbnCdCmb] = useState([]); //거래구분
 const columns = [
   { field: "id",                headerName: "ID",                               align:"center", width:20},
-  { field: "bizCd",             headerName: "사업자코드",           editable: true, align:"left", width:100},
-  { field: "clientCd",          headerName: "고객사코드",            editable: true, align:"left", width:100},
+  { field: "clientCd",          headerName: "고객사",            editable: true, 
+    align:"center", type: "singleSelect", valueFormatter: gvGridDropdownDisLabel,
+    valueOptions: clientCdCmb,
+  },
   { field: "storeCd",           headerName: "배송처코드",             editable: true, align:"left", width:100},
-  { field: "storeNm",           headerName: "배송처명",             editable: true, align:"left", width:100},
+  { field: "storeNm",           headerName: "배송처명",             editable: true, align:"left", width:200},
   { field: "bizNo",             headerName: "사업자번호",            editable: true, align:"left", width:100},
   { field: "bizNm",             headerName: "사업자명",             editable: true, align:"left", width:200},
   { field: "ceoNm",             headerName: "대표자",               editable: true, align:"left", width:100},
@@ -59,36 +71,54 @@ const columns = [
           <IconButton><SearchIcon /></IconButton>
         </Box>
     ),},
-  { field: "zip",               headerName: "우편번호",             editable: true, align:"left", width:100},
-  { field: "jibunAddr",         headerName: "지번주소",                editable: true, align:"left", width:300},
-  { field: "roadAddr",          headerName: "도로명주소",             editable: true, align:"left", width:300},
-  { field: "detailAddr",        headerName: "상세주소",             editable: true, align:"left", width:300},
-  { field: "lat",             headerName: "위도",             editable: true, align:"left", width:150},
-  { field: "lon",             headerName: "경도",             editable: true, align:"left", width:150},
+  { field: "zip",               headerName: "우편번호",             editable: false, align:"left", width:100},
+  { field: "jibunAddr",         headerName: "지번주소",             editable: false, align:"left", width:300},
+  { field: "roadAddr",          headerName: "도로명주소",           editable: false, align:"left", width:300},
+  { field: "detailAddr",        headerName: "상세주소",             editable: false, align:"left", width:300},
+  { field: "lat",               headerName: "위도",               editable: false, align:"left", width:150},
+  { field: "lon",               headerName: "경도",               editable: false, align:"left", width:150},
   /* 주소 끝 */
-  { field: "bizTp",             headerName: "업태(사업자유형)",       editable: true, align:"left", width:300},
-  { field: "bizKnd",            headerName: "업종(사업자종류)",       editable: true, align:"left", width:300},
-  { field: "telNo",             headerName: "전화번호",             editable: true, align:"left", width:100},
-  { field: "faxNo",             headerName: "팩스",                editable: true, align:"left", width:100},
+  { field: "bizTp",             headerName: "업태(사업자유형)",       editable: true, align:"left", width:100},
+  { field: "bizKnd",            headerName: "업종(사업자종류)",       editable: true, align:"left", width:100},
+  { field: "telNo",             headerName: "전화번호",             editable: true, align:"left", width:150,
+    valueFormatter: (params) => gvGridFieldFormatPhoneNumber(params.value),
+    valueParser: (value) => gvGridFieldParsePhoneNumber(value),
+    renderEditCell: (params) => gvGridFieldInputPhoneNumber(params)
+  },
+  { field: "faxNo",             headerName: "팩스",                editable: true, align:"left", width:120,
+    valueFormatter: (params) => gvGridFieldFormatFaxNumber(params.value),
+    valueParser: (value) => gvGridFieldParseFaxNumber(value),
+    renderEditCell: (params) => gvGridFieldInputFaxNumber(params)
+  },
   { field: "contactNm",         headerName: "담당자명",             editable: true, align:"left", width:100},
-  { field: "contactTelNo",      headerName: "담당자전화번호",         editable: true, align:"left", width:100},
-  { field: "contactEmail",      headerName: "담당자이메일",          editable: true, align:"left", width:100},
-  { field: "countryCd",         headerName: "국가코드",             editable: true, align:"left", width:100},
-  { field: "cityCd",            headerName: "도시코드",             editable: true, align:"left", width:100},
+  { field: "contactTelNo",      headerName: "담당자전화번호",         editable: true, align:"left", width:150,
+    valueFormatter: (params) => gvGridFieldFormatPhoneNumber(params.value),
+    valueParser: (value) => gvGridFieldParsePhoneNumber(value),
+    renderEditCell: (params) => gvGridFieldInputPhoneNumber(params)
+  },
+  { field: "contactEmail",      headerName: "담당자이메일",          editable: true, align:"left", width:200,
+    renderEditCell: (params) => gvGridFieldEmailInput(params)
+  },
 
   { field: "deliveryDcCd",      headerName: "배송물류센터",             editable: true, align:"left", width:100},
   { field: "deliveryDomainCd",  headerName: "배송권역코드",             editable: true, align:"left", width:100},
   { field: "allocPrioordCd",    headerName: "할당우선순위코드",         editable: true, align:"left", width:100},
   { field: "channelGbnCd",      headerName: "채널구분코드",             editable: true, align:"left", width:100},
-  { field: "dealStartYmd",      headerName: "거래시작일자",             editable: true, align:"left", width:100},
-  { field: "dealEndYmd",        headerName: "거래종료일자",             editable: true, align:"left", width:100},
-  { field: "dealGbnCd",         headerName: "거래구분코드",             editable: true, align:"left", width:100},
-
+  { field: "dealStartYmd",      headerName: "거래시작일자",             editable: true, align:"left", width:150, 
+    valueSetter: (params) => {return GridDateSetField(params, 'dealStartYmd');},
+    renderCell: (params) => <GridDateRenderField params={params} />,
+  },
+  { field: "dealEndYmd",        headerName: "거래종료일자",             editable: true, align:"left", width:150,
+    valueSetter: (params) => {return GridDateSetField(params, 'dealEndYmd');},
+    renderCell: (params) => <GridDateRenderField params={params} />,
+  },
+  { field: "dealGbnCd",         headerName: "거래구분코드",             editable: true, 
+    align:"center",type: "singleSelect", valueFormatter: gvGridDropdownDisLabel,
+    valueOptions: dealGbnCdCmb,
+  },
   { field: "useYn",             headerName: "사용여부",             editable: true, 
-      align:"center",
-      type: "singleSelect",
-      valueOptions: useYnCmb,
-      valueFormatter: gvGridDropdownDisLabel,
+    align:"center",type: "singleSelect", valueFormatter: gvGridDropdownDisLabel,
+    valueOptions: useYnCmb,
   },
   { field: "userCol1",         headerName: "사용자컬럼1",               editable: true, align:"left", width:100},
   { field: "userCol2",         headerName: "사용자컬럼2",               editable: true, align:"left", width:100},
@@ -132,15 +162,13 @@ const columns = [
     contactNm: "",
     contactTelNo: "",
     contactEmail: "",
-    countryCd: "",
-    cityCd: "",
     deliveryDcCd: "",
     deliveryDomainCd: "",
     allocPrioordCd: "",
     channelGbnCd: "",
     dealStartYmd: "",
-    dealEndYmd: "",
-    dealGbnCd: "",
+    dealEndYmd: "99991321",
+    dealGbnCd: "10",
     userCol1: "",
     userCol2: "",
     userCol3: "",
@@ -158,27 +186,37 @@ const columns = [
     // selRowId 변경을 감지하고, 주소 찾기 함수 호출
     if (selRowId !== -1) {
 
-      if(callbackDelivery == undefined){
-        return;
+      if(callbackDelivery != undefined){
+        //배송처 데이터 콜백
+        var rowData = gvGetRowData(dataList, selRowId);
+        rowData.zip = callbackDelivery.zip;
+        rowData.jibunAddr = callbackDelivery.jibunAddr;
+        rowData.roadAddr = callbackDelivery.roadAddr;
+        rowData.detailAddr = callbackDelivery.detailAddr;
+        rowData.deliveryNm = callbackDelivery.deliveryNm;
+        rowData.lat = callbackDelivery.lat;
+        rowData.lon = callbackDelivery.lon;
+        setCallbackDelivery(null);
       }
 
-      var rowData = gvGetRowData(dataList, selRowId);
-      rowData.zip = callbackDelivery.zip;
-      rowData.jibunAddr = callbackDelivery.jibunAddr;
-      rowData.roadAddr = callbackDelivery.roadAddr;
-      rowData.detailAddr = callbackDelivery.detailAddr;
-      rowData.deliveryNm = callbackDelivery.deliveryNm;
-      rowData.lat = callbackDelivery.lat;
-      rowData.lon = callbackDelivery.lon;
-      setCallbackDelivery(null);
+
+    }else{
+      //콤보박스 데이터 조회
+      setUseYnCmb(getCmbOfGlobalData('CMMN_CD', 'USE_YN'));
+      setDealGbnCdCmb(getCmbOfGlobalData('CMMN_CD', 'DEAL_GBN_CD'));
+
+      if(clientCdCmb.length == 0) {
+        //콤보박스 데이터 조회
+        setClientCdCmb(getCmbOfGlobalData("CLIENT_CD", ''))
+      }
     }
 
-  }, [selRowId, callbackDelivery]);
+  }, [selRowId, callbackDelivery, clientCdCmb, dataList]);
   
   //조회
   const fnSearch = () => {
     var data = {codeCd : schValues.codeCd};
-    client.post(`${PRO_URL}/selectList`, data, {})
+    client.post(`${PRO_URL}/selectStoreList`, data, {})
       .then(res => {
         var dataList = res.data;
         setDataList(dataList);
@@ -205,7 +243,7 @@ const columns = [
     openModal('', '',  '저장 하시겠습니까?', 
       () => {
         //메뉴리스트 저장
-        client.post(`${PRO_URL}/save`,rowData, {})
+        client.post(`${PRO_URL}/saveStore`,rowData, {})
           .then(res => {
             alert('저장되었습니다.');
             fnSearch();
@@ -222,7 +260,7 @@ const columns = [
     openModal('', '',  '삭제 하시겠습니까?', 
       () => {
         //메뉴리스트 저장
-        client.post(`${PRO_URL}/delete`,rowData, {})
+        client.post(`${PRO_URL}/deleteStore`,rowData, {})
           .then(res => {
             alert('삭제되었습니다.');
             fnSearch();

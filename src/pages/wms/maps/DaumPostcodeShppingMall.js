@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { Box, TextField, IconButton, Grid } from '@mui/material';
+import { Box, TextField, IconButton, Grid, Button, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DaumPostcodeCommon from "./DaumPostcodeCommon.js";
 import { useModal } from "../../../context/ModalContext.js";
@@ -7,7 +7,8 @@ import { Map, MapMarker, useKakaoLoader} from "react-kakao-maps-sdk";
 import { KAKAO_API_KEY } from '../../../contraints.js';
 
 function DaumPostcodeShppingMall(props) {
-  const { openModal, closeModal, updateModalData, getModalData } = useModal();
+  const { modals, openModal, closeModal, updateModalData, getModalData } = useModal();
+  const key = 'FIND_ADDR'; 
 
   const [zonecode, setZonecode] = useState('');
   const [roadAddress, setRoadAddress] = useState('');
@@ -97,41 +98,59 @@ function DaumPostcodeShppingMall(props) {
     updateModalData('FIND_ADDR', { ...getModalData('FIND_ADDR'), [id]: value });
   };
 
+  const handleSubmit = () => {
+    const modalInfo = modals[key];
+    console.log('modalInfo', modalInfo, key)
+    if (modalInfo.callback && modalInfo.callback instanceof Function) {
+        const result = modalInfo.callback(modalInfo.data);
+        if (result == false) return;
+    }
+    closeModal(key);
+  };
+
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={6}>
-        <Box sx={{display:'flex', marginBottom:'10px'}}>
-          <TextField label="우편번호" variant="outlined" value={zonecode} InputProps={{ readOnly: true }} fullWidth />
-          <IconButton onClick={() => openModal('FIND_CMMN_POST', '우편번호 찾기', <DaumPostcodeCommon onComplete={completeHandler} />, null,  '600px', '800px')} aria-label="search address">
-            <SearchIcon />
-          </IconButton>
-        </Box>
-        <Box sx={{display:'flex', marginBottom:'10px'}}>
-          <TextField label="도로명주소" variant="outlined" value={roadAddress} InputProps={{ readOnly: true }} fullWidth />
-        </Box>
-        <Box sx={{display:'flex', marginBottom:'10px'}}>
-          <TextField label="지번주소" variant="outlined" value={jibunAddress} InputProps={{ readOnly: true }} fullWidth />
-        </Box>  
-        <Box sx={{display:'flex', marginBottom:'10px'}}>
-          <TextField label="상세주소" variant="outlined" value={detailedAddress} onChange={inputChangeHandler} fullWidth id="detailAddr" />
-        </Box>  
-        <Box sx={{display:'flex', marginBottom:'10px'}}>
-          <TextField label="배송처명" variant="outlined" value={deliveryNm} onChange={inputChangeHandler} fullWidth id="deliveryNm" />
-        </Box>
-        <Box sx={{display:'flex', marginBottom:'10px'}}>
-          <TextField label="경도" variant="outlined" value={coordinates.longitude} InputProps={{ readOnly: true }} fullWidth />
-          <TextField label="위도" variant="outlined" value={coordinates.latitude} InputProps={{ readOnly: true }} fullWidth />
-          <IconButton onClick={() => console.log('Geocoding...')} aria-label="search geocoding">
-            <SearchIcon />
-          </IconButton>
-        </Box>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <div id='map' style={{ width: '100%', height: '100%' }} center={{lat:37.5665, lng:126.9780}} >
-          {/* <MapMarker position={{ lat: 37.5665, lng: 126.9780 }} /> */}
-        </div>
-      </Grid>
-    </Grid>
+    <>
+      <DialogContent>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <Box sx={{display:'flex', marginBottom:'10px'}}>
+              <TextField label="우편번호" variant="outlined" value={zonecode} InputProps={{ readOnly: true }} fullWidth />
+              <IconButton onClick={() => openModal('FIND_CMMN_POST', '우편번호 찾기', <DaumPostcodeCommon onComplete={completeHandler} />, null,  '600px', '800px')} aria-label="search address">
+                <SearchIcon />
+              </IconButton>
+            </Box>
+            <Box sx={{display:'flex', marginBottom:'10px'}}>
+              <TextField label="도로명주소" variant="outlined" value={roadAddress} InputProps={{ readOnly: true }} fullWidth />
+            </Box>
+            <Box sx={{display:'flex', marginBottom:'10px'}}>
+              <TextField label="지번주소" variant="outlined" value={jibunAddress} InputProps={{ readOnly: true }} fullWidth />
+            </Box>  
+            <Box sx={{display:'flex', marginBottom:'10px'}}>
+              <TextField label="상세주소" variant="outlined" value={detailedAddress} onChange={inputChangeHandler} fullWidth id="detailAddr" />
+            </Box>  
+            <Box sx={{display:'flex', marginBottom:'10px'}}>
+              <TextField label="배송처명" variant="outlined" value={deliveryNm} onChange={inputChangeHandler} fullWidth id="deliveryNm" />
+            </Box>
+            <Box sx={{display:'flex', marginBottom:'10px'}}>
+              <TextField label="경도" variant="outlined" value={coordinates.longitude} InputProps={{ readOnly: true }} fullWidth />
+              <TextField label="위도" variant="outlined" value={coordinates.latitude} InputProps={{ readOnly: true }} fullWidth />
+              <IconButton onClick={() => console.log('Geocoding...')} aria-label="search geocoding">
+                <SearchIcon />
+              </IconButton>
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <div id='map' style={{ width: '100%', height: '100%' }} center={{lat:37.5665, lng:126.9780}} >
+              {/* <MapMarker position={{ lat: 37.5665, lng: 126.9780 }} /> */}
+            </div>
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+          <Button onClick={() => handleSubmit()}>확인</Button>
+          <Button onClick={() => closeModal(key)}>닫기</Button>
+      </DialogActions>
+    </>
   );
 }
 

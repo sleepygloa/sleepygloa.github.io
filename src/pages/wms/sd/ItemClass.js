@@ -41,7 +41,7 @@ export default function Item(props) {
   const PRO_URL = '/wms/sd/itemClass';
   const classes = useStyles();
   const {openModal} = useModal();
-  const { cmmnCdData, getCodesCmbByGroupCode } = useCommonData();
+  const { cmmnCdData, getCmbOfGlobalData } = useCommonData();
 
 
   const getRowId = "";
@@ -53,6 +53,7 @@ export default function Item(props) {
   //배송처 콜백 데이터 변수
   const [callbackDelivery, setCallbackDelivery] = useState(null);
 
+  const [clientCdCmb, setClientCdCmb] = useState([]); //고객사 콤보박스
   const [keepTempeGbnCdCmb, setKeepTempeGbnCdCmb] = useState([]);
   const [minUomCdCmb, setMinUomCdCmb] = useState([]);
   const [setItemYnCmb, setSetItemYnCmb] = useState([]);
@@ -60,13 +61,16 @@ export default function Item(props) {
   const [useYnCmb, setUseYnCmb] = useState([]);
   const columns = [
     { field: "id",                headerName: "ID",                               align:"center", width:20},
-    { field: "clientCd",          headerName: "고객사코드",            editable: false, align:"left", width:100},
-    { field: "itemClassCd",       headerName: "상품분류코드",          editable: false, align:"left", width:100},
-    { field: "largeClassCd",      headerName: "대분류코드",              editable: true, align:"left", width:100},
+    { field: "clientCd",          headerName: "고객사코드",            editable: true, 
+      align:"center", type: "singleSelect", valueFormatter: gvGridDropdownDisLabel,
+      valueOptions: clientCdCmb,
+    },
+    { field: "itemClassCd",       headerName: "상품분류코드",           editable: false, align:"left", width:100},
+    { field: "largeClassCd",      headerName: "대분류코드",             editable: true, align:"left", width:100},
     { field: "largeClassNm",      headerName: "대분류명",              editable: true, align:"left", width:100},
-    { field: "middleClassCd",     headerName: "중분류코드",              editable: true, align:"left", width:100},
+    { field: "middleClassCd",     headerName: "중분류코드",             editable: true, align:"left", width:100},
     { field: "middleClassNm",     headerName: "중분류명",              editable: true, align:"left", width:100},
-    { field: "smallClassCd",      headerName: "소분류코드",              editable: true, align:"left", width:100},
+    { field: "smallClassCd",      headerName: "소분류코드",             editable: true, align:"left", width:100},
     { field: "smallClassNm",      headerName: "소분류명",              editable: true, align:"left", width:100},
 
     { field: "useYn",              headerName: "사용여부",             editable: true, 
@@ -102,7 +106,7 @@ export default function Item(props) {
     middleClassNm: '',
     smallClassCd: '',
     smallClassNm: '',
-    useYn: '',
+    useYn: 'Y',
     remark: '',
   }
 
@@ -111,7 +115,14 @@ export default function Item(props) {
 
   //화면 로드시 1번만 실행
   useEffect(() => {
-  }, []);
+
+    if(clientCdCmb.length > 0) return;
+
+    //콤보박스 데이터 조회
+    setClientCdCmb(getCmbOfGlobalData("CLIENT_CD", ''))
+    setUseYnCmb(getCmbOfGlobalData('CMMN_CD', 'USE_YN'));
+
+  }, [clientCdCmb]);
   
   //조회
   const fnSearch = () => {
@@ -170,6 +181,18 @@ export default function Item(props) {
     );
   }
 
+  //복사클릭
+  function onClickCopy(){
+    selRowId === -1 ? alert('복사할 행을 선택해주세요.') :
+    openModal('', '',  '선택한 행을 복사 하시겠습니까?', 
+      () => {
+        var rowData = gvGetRowData(dataList, selRowId);
+        var copyData = {...rowData, id: dataList.length+1, itemClassCd: ''};
+        setDataList(dataList => dataList.concat(copyData));
+      }
+    );
+  }
+
   //쎌클릭 핸들링
   const handleGridCellClick = (e) => {
     setValues(e.row); 
@@ -183,7 +206,10 @@ export default function Item(props) {
         onClickSelect={onClickSelect} 
         onClickAdd={onClickAdd} 
         onClickSave={onClickSave}
-        onClickDel={onClickDel}>
+        onClickDel={onClickDel}
+        onClickCustom1={onClickCopy}
+        onClickCustomNm1={'복사'}
+        >
           <SchTextField id="codeCd" label='코드/명'
             div={"3"}
             onChange={onChangeSearch} 

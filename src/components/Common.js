@@ -1,3 +1,7 @@
+import React, {useEffect, useState, useCallback, useRef } from "react";
+import { TextField } from "@mui/material";
+import numeral from 'numeral';
+
 //오늘날짜 구하기
 export function gvGetToday(){
     var date = new Date();
@@ -44,6 +48,15 @@ export function gvGetRowData(data, id){
     for(var i = 0; i < data.length; i++){
         if(data[i].id === id){
         return data[i]
+        }
+    }
+}
+//그리드 선택한 행의 데이터 세팅
+export function gvSetRowData(data, id, values){
+    for(var i = 0; i < data.length; i++){
+        if(data[i].id === id){
+            console.log(data[i], id, values)
+        data[i] = values;
         }
     }
 }
@@ -248,5 +261,91 @@ export const gvGridLevel2DropdownDisLabel = ({ value, field, api, id }, parent, 
     const options = ds[group][subGroup];
     const option = options.find(opt => opt.value === value);
     return option ? option.label : '';
+}
+
+
+//핸드폰 번호 포멧
+export const gvGridFieldFormatPhoneNumber = (value) => {
+    if (!value) return '';
+    const phoneNumber = value.replace(/[^\d]/g, '');
+    const phoneNumberLength = phoneNumber.length;
+    if (phoneNumberLength < 4) return phoneNumber;
+    if (phoneNumberLength < 8) return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3)}`;
+    return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 7)}-${phoneNumber.slice(7, 11)}`;
+};
+//핸드폰 번호 포멧
+export const gvGridFieldParsePhoneNumber = (value) => value.replace(/[^\d]/g, '');
+//핸드폰 번호 포멧
+export const gvGridFieldInputPhoneNumber = (params) => {
+    return <TextField
+        fullWidth
+        value={gvGridFieldFormatPhoneNumber(params.value)}
+        onChange={(e) => params.api.setEditCellValue({ id: params.id, field: params.field, value: gvGridFieldParsePhoneNumber(e.target.value) })}
+    />
+};
+
+//팩스 번호 포멧
+export const gvGridFieldFormatFaxNumber = (value) => {
+    if (!value) return '';
+    const faxNumber = value.replace(/[^\d]/g, '');
+    const faxNumberLength = faxNumber.length;
+    if (faxNumberLength < 4) return faxNumber;
+    if (faxNumberLength < 8) return `${faxNumber.slice(0, 3)}-${faxNumber.slice(3)}`;
+    return `${faxNumber.slice(0, 3)}-${faxNumber.slice(3, 7)}-${faxNumber.slice(7, 11)}`;
+}
+export const gvGridFieldParseFaxNumber = (value) => value.replace(/[^\d]/g, '');
+export const gvGridFieldInputFaxNumber = (params) => {
+    return <TextField
+        fullWidth
+        value={gvGridFieldFormatFaxNumber(params.value)}
+        onChange={(e) => params.api.setEditCellValue({ id: params.id, field: params.field, value: gvGridFieldParseFaxNumber(e.target.value) })}
+    />
+};
+
+//이메일 포멧
+export const gvGridFieldEmailInput = ({ api, value, id, field }) => {
+
+
+    const onChangeHandle = (event) => {
+        const { value } = event.target;
+        api.setEditCellValue({ id, field, value: value }, event);
+      };
+    const onBlurHandle = (event) => {
+        const { value } = event.target;
+        if(value == '') return;
+        const emailRegex = /^[a-zA-Z0-9._-]*@[a-zA-Z0-9.-]*\.[a-zA-Z]{0,6}$/;
+        if(!emailRegex.test(value)){
+            alert('이메일 형식이 아닙니다.')
+            api.setEditCellValue({ id, field, value: '' }, event);
+        }
+    };
+    const onKeyDownHandle = (event) => {
+        if(event.key === 'Enter'){
+            onBlurHandle(event);
+        }
+    }
+
+  return <TextField 
+            fullWidth 
+            value={value} 
+            onChange={onChangeHandle} 
+            onBlur={onBlurHandle} 
+            onKeyDown={onKeyDownHandle}/>;
+};
+
+
+//그리드 숫자(가로, 세로, 높이 등) 포켓
+// 사용 예: 1000 -> 1,000
+export const gvGridFieldNumberPreEdit = (params) => {
+    const hasError = isNaN(Number(params.props.value));
+    return { ...params.props, error: hasError };
+}
+export const gvGridFieldNumberFormatter = (value, defaultValue) => {
+    if(value === undefined || value == '') return (defaultValue ? defaultValue : '');
+    return numeral(value).format('0,0');
+
+}
+export const gvGridFieldNumberParser = (value) => {
+    return numeral(value).value(); // 콤마를 제거하고 숫자로 변환
 }
 

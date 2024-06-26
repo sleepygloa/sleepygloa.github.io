@@ -8,6 +8,7 @@ export const ModalsProvider = ({children}) => {
     const [modals, setModals] = useState([]);
 
     const openModal = (key, title, content, callback, width, height) => {
+        console.log(key,title, callback);
         setModals(prev => ({ ...prev, [key]: { open: true, title, content, callback, width, height, data:{} } }));
     }
 

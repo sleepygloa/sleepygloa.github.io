@@ -1,5 +1,8 @@
 import React, {useEffect, useContext, useState} from "react";
 
+//CommonData
+import { useCommonData } from "../../../context/CommonDataContext.js";
+
 // components
 import PageTitle from "../../../components/PageTitle/PageTitle.js";
 import SearchBar from "../../../components/SearchBar/SearchBar.js";
@@ -9,10 +12,17 @@ import { Grid } from "@mui/material";
 
 //Common
 import {client} from '../../../contraints.js';
-import { gvGridDropdownDisLabel, gvGetRowData, gvSetDropdownData } from "../../../components/Common.js";
-
-//CommonData
-import { useCommonData } from "../../../context/CommonDataContext.js";
+import { gvGridDropdownDisLabel, 
+  gvGetRowData, 
+  gvSetDropdownData, 
+  gvGridLevelDropdownDisLabel, 
+  gvSetLevelDropdownData ,
+  gvGridLevel2DropdownDisLabel, 
+  gvSetLevel2DropdownData ,
+  gvGridFieldNumberPreEdit,
+  gvGridFieldNumberFormatter,
+  gvGridFieldNumberParser , 
+} from "../../../components/Common.js";
 
 //Modal
 import {useModal} from "../../../context/ModalContext.js";
@@ -21,7 +31,7 @@ export default function Biz(props) {
   const {menuTitle} = '구역 관리';
   const PRO_URL = '/wms/sd/area';
   const {openModal} = useModal();
-  const { cmmnCdData, getCodesCmbByGroupCode } = useCommonData();
+  const { getCmbOfGlobalData } = useCommonData();
 
   const getRowId = "";
 
@@ -30,13 +40,13 @@ export default function Biz(props) {
   //메뉴 데이터 변수
   const [dataList, setDataList] = useState([]); //
 
-  const useYnCmb = [{value:"Y", label:"사용"},{value:"N", label:"미사용"}]; //사용여부콤보
+  const [useYnCmb, setUseYnCmb] = useState([]); //사용여부
   const [dcCmb, setDcCmb] = useState([]); //물류센터콤보
   const [keepTempGbnCmb, setKeepTempGbnCmb] = useState([]); //보관온도구분콤보
 
   const columns = [
     { field: "id",                headerName: "ID",                               align:"center", width:20},
-    { field: "dcCd",              headerName: "물류창고코드",         editable: true, 
+    { field: "dcCd",              headerName: "물류창고",         editable: true, 
         align:"center", type: "singleSelect", valueFormatter: gvGridDropdownDisLabel,  
         valueOptions: dcCmb,
     },
@@ -87,16 +97,13 @@ export default function Biz(props) {
     if (selRowId !== -1) {
 
     }else{
-      //최초조회
-      // fnSearch();
-      fnSearchDc();
+      if(useYnCmb.length === 0) setUseYnCmb(getCmbOfGlobalData('CMMN_CD', 'USE_YN'));
+      if(keepTempGbnCmb.length === 0) setKeepTempGbnCmb(getCmbOfGlobalData('CMMN_CD', 'KEEP_TEMPE_GBN_CD'))
 
-      //보관구분코드
-      const dataa = getCodesCmbByGroupCode('KEEP_TEMPE_GBN_CD');
-      setKeepTempGbnCmb(dataa);
+      if(dcCmb.length === 0) fnSearchDc();
     }
 
-  }, [selRowId, cmmnCdData]);
+  }, [selRowId, useYnCmb, keepTempGbnCmb, dcCmb]);
   
   //물류창고 조회
   const fnSearchDc = async () => {

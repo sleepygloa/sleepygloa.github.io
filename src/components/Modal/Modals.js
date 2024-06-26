@@ -33,16 +33,10 @@ const Modals = () => {
               }
             }}
           >
-            <DialogTitle sx={{ backgroundColor: theme.palette.primary.main, color: '#fff' }}>
-              {!(title == 'C' || title == 'I' || title == 'A') && (
-                <>
-                {title}
-                </>
-              )}
-              </DialogTitle>
-            <Divider />
             {(title == '' || title == 'C') && (
               <>
+                <DialogTitle sx={{ backgroundColor: theme.palette.primary.main, color: '#fff' }} />
+                <Divider />
                 <DialogContent>
                 {content}
                 </DialogContent>
@@ -52,8 +46,22 @@ const Modals = () => {
                 </DialogActions>
               </>
             )}
-            {(title == 'I' || title == 'A') && (
+            {(title == 'I') && (
               <>
+                <DialogTitle sx={{ backgroundColor: theme.palette.primary.main, color: '#fff' }} />
+                <Divider />
+                <DialogContent>
+                {content}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => closeModal(key)}>닫기</Button>
+                </DialogActions>
+              </>
+            )}
+            {(title == 'A') && (
+              <>
+                <DialogTitle sx={{ backgroundColor: "red", color: '#fff' }} />
+                <Divider />
                 <DialogContent>
                 {content}
                 </DialogContent>
@@ -64,7 +72,11 @@ const Modals = () => {
             )}
             {(title != '' && !(title == 'A' || title == 'I' || title == 'C')) && (
               <>
-              {content}
+                <DialogTitle sx={{ backgroundColor: theme.palette.primary.main, color: '#fff' }}>
+                  {title}
+                </DialogTitle>
+                <Divider />
+                {content}
               </>
             )}
           </Dialog>
