@@ -54,7 +54,7 @@ export default function Biz(props) {
   const [dealGbnCdCmb, setDealGbnCdCmb] = useState([]); //거래구분
 const columns = [
   { field: "id",                headerName: "ID",                               align:"center", width:20},
-  { field: "clientCd",          headerName: "고객사",            editable: true, 
+  { field: "clientCd",          headerName: "고객사",            editable: true,
     align:"center", type: "singleSelect", valueFormatter: gvGridDropdownDisLabel,
     valueOptions: clientCdCmb,
   },
@@ -64,7 +64,7 @@ const columns = [
   { field: "bizNm",             headerName: "사업자명",             editable: true, align:"left", width:200},
   { field: "ceoNm",             headerName: "대표자",               editable: true, align:"left", width:100},
   /* 주소 시작 */
-  { field: "deliveryNm",        headerName: "배송처명",            editable: false, align:"left", width:200,
+  { field: "deliveryNm",        headerName: "배송처명",            editable: true, align:"left", width:200,
       renderCell: (params) => (
         <Box sx={{ display: 'flex', justifyContent: 'space-between', width: 1, alignItems:'center' }}>
           <Typography variant="body2">{params.value}</Typography>

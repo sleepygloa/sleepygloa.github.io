@@ -356,6 +356,7 @@ export function FrmTextField(props){
 
 //폼 셀렉트 컴포넌트
 export function FrmSelect(props){
+  const readonly = (props.readonly ? true : false);
   return (
     <FormControl fullWidth>
     <InputLabel id={`${props.id}-label`}>{props.name}</InputLabel>
@@ -366,6 +367,9 @@ export function FrmSelect(props){
       value={props.formData[props.id]}
       onChange={props.onChange ? (e)=>props.onChange(e.target.value, props.id) : false}
       error={!!props.errors[props.id]}
+      inputProps={{
+        readOnly: readonly,
+      }}
     >
       {props.list && props.list.map((option) => (
         <MenuItem key={option.value+option.label} value={option.value}>{option.label}</MenuItem>
@@ -380,25 +384,30 @@ export function FrmDate(props) {
 
   return (
     <>
-      <style>
+    <FormControl fullWidth >
+      {/* <style>
           {`
             .react-datepicker-wrapper {
               width: 100%;
             }
           `}
-        </style>
+        </style> */}
+      {/* <InputLabel id={`${props.id}-label`}>{props.name}</InputLabel> */}
       <DatePicker
         className={classes.datePicker}
         name={props.name}
-        placeholderText={props.name}
+        // placeholderText={props.name}
+        // labelId={`${props.id}-label`}
+        // label={props.name}
         selected={parseSetDate(props.selected)}
         dateFormat='yyyy-MM-dd' // 날짜 형태
         shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
         minDate={new Date('2000-01-01')} // minDate 이전 날짜 선택 불가
         maxDate={new Date('2099-12-31')} // maxDate 이후 날짜 선택 불가
         onChange={props.onChange ? (e)=>props.onChange(parseDateString(e), props.id) : false}
-        customInput={<TextField style={{width:'100%'}} />}
+        customInput={<TextField label={props.name} style={{width:'100%'}}  fullWidth/>}
       />
+    </FormControl>
     </>
   )
 }

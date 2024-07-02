@@ -61,7 +61,77 @@ export function gvSetRowData(data, id, values){
     }
 }
 
+//그리드의 체크한 행의 데이터리스트 조회
+//data : 전체데이터, ids : 체크한 데이터의 id들
+export function gvGetRowDataListOfChk(data, ids){
+    var list = [];
+    for(var i = 0; i < data.length; i++){
+        for(var j = 0; j < ids.length; j++){
+            if(data[i].id === ids[j]){
+                list.push(data[i])
+            }
+        }
+    }
+    return list;
+}
 
+//그리드의 행추가 및 신규상태 추가
+export function gvDataGridAddRowAndStatus(dataList, data, addData){
+    // 새로운 데이터 리스트 생성
+    const newDataList = [...dataList]; // 기존 리스트 복사
+    
+    // 콜백 아이템을 순회하면서 새로운 행을 구성
+    data.forEach((item, index) => {
+        const newRow = {
+            ...item,
+            ...addData,
+            "modFlag" : "I"
+        };
+        newDataList.push(newRow);  // 새 리스트에 추가
+    });
+
+    return newDataList;
+}
+
+//그리드의 행삭제 및 삭제상태 변경(신규상태 일경우는 row 삭제)(역순으로)
+export function gvDataGridDelRowAndStatus(data, ids){
+    var list = [];
+    for(var i = 0; i < data.length; i++){
+        var row = data[i];
+        var chk = false;
+        for(var j = 0; j < ids.length; j++){
+            if(row.id === ids[j]){
+                if(row.status === 'I'){
+                    chk = true;
+                }else{
+                    row.status = 'D';
+                }
+            }
+        }
+        if(!chk) list.push(row);
+    }
+    return list;
+}
+
+//그리드의 체크박스있는 row 의 멀티 행삭제 및 삭제상태 변경(신규상태 일경우는 row 삭제)(역순으로)
+export function gvDataGridDelChkRowAndStatus(data, ids){
+    var list = [];
+    for(var i = 0; i < data.length; i++){
+        var row = data[i];
+        var chk = false;
+        for(var j = 0; j < ids.length; j++){
+            if(row.id === ids[j]){
+                if(row.status === 'I'){
+                    chk = true;
+                }else{
+                    row.status = 'D';
+                }
+            }
+        }
+        if(!chk) list.push(row);
+    }
+    return list;
+}
 
 //다이얼로그 공통
 export function gvConfirm(){
@@ -340,8 +410,9 @@ export const gvGridFieldNumberPreEdit = (params) => {
     const hasError = isNaN(Number(params.props.value));
     return { ...params.props, error: hasError };
 }
-export const gvGridFieldNumberFormatter = (value, defaultValue) => {
-    if(value === undefined || value == '') return (defaultValue ? defaultValue : '');
+export const gvGridFieldNumberFormatter = (value) => {
+    if(value == 0) return '0';
+    if(value === undefined || value == '') return '';
     return numeral(value).format('0,0');
 
 }

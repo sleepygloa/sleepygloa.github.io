@@ -100,7 +100,6 @@ function DaumPostcodeShppingMall(props) {
 
   const handleSubmit = () => {
     const modalInfo = modals[key];
-    console.log('modalInfo', modalInfo, key)
     if (modalInfo.callback && modalInfo.callback instanceof Function) {
         const result = modalInfo.callback(modalInfo.data);
         if (result == false) return;

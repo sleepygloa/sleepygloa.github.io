@@ -41,7 +41,7 @@ const Modals = () => {
                 {content}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => handleSubmit(key)}>확인</Button>
+                    <Button onFocus={this} onClick={() => handleSubmit(key)}>확인</Button>
                     <Button onClick={() => closeModal(key)}>닫기</Button>
                 </DialogActions>
               </>

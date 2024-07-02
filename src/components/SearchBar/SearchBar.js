@@ -31,15 +31,20 @@ export default function SearchBar(props) {
     >
       {children}
       <ButtonGroup size="small" aria-label="small outlined button group">
-        <Button
-          variant="outlined"
-          color="primary"
-          className={classes.button}
-          onClick={onClickSelect}
-          startIcon={<SearchIcon />}
-        >
-          조회
-        </Button>
+        {
+          onClickSelect ?
+            <Button
+            variant="outlined"
+            color="primary"
+            className={classes.button}
+            onClick={onClickSelect}
+            startIcon={<SearchIcon />}
+          >
+            조회
+          </Button>
+          :
+          ''
+        }
         {onClickAdd ? 
         <Button
           variant="outlined"
