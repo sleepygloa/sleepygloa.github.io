@@ -1,0 +1,66 @@
+/* css/portfolio.css */
+
+/* 포트폴리오 제목 중앙 정렬 */
+h1 {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  /* 카드 컨테이너 레이아웃 */
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  /* 카드 뉴스 스타일 */
+  .card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow: hidden;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .card img {
+    width: 100%;
+    height: auto;
+  }
+  .card-content {
+    padding: 20px;
+    flex: 1;
+  }
+  .card-content h3 {
+    margin-top: 0;
+  }
+  .card-content p {
+    font-size: 0.9em;
+    line-height: 1.4;
+  }
+  .card-footer {
+    background-color: #f1f1f1;
+    padding: 10px 20px;
+    text-align: right;
+    font-size: 0.8em;
+    color: #555;
+  }
+  
+  /* 진행중 프로젝트 카드 강조 */
+  .ongoing {
+    border: 2px solid #e74c3c;
+  }
+  .ongoing::before {
+    content: "진행중";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #e74c3c;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 0.8em;
+    border-radius: 3px;
+  }
+  

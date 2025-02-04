@@ -1,0 +1,423 @@
+/* ----------------------------------
+   Global Section Style 
+   ---------------------------------- */
+   section {
+    width: 100%;
+    padding: 40px 20px;  /* 좌우 패딩 */
+    box-sizing: border-box;
+    background-color: #fff;  /* 기본 섹션 배경 */
+  }
+  
+  section h2 {
+    margin-top: 0;
+    font-weight: 700;
+  }
+  
+  /* ----------------------------------
+     Hero Section 
+     ---------------------------------- */
+  #hero {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 60px); /* 헤더 높이를 뺀 영역 */
+    overflow: hidden;
+    background-color: #f2f2f2; /* 만약 이미지가 안 뜰 때 대비 */
+  }
+  
+  /* 슬라이더 컨테이너 */
+  .slider-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* 각 슬라이드 */
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+  .slide.active {
+    display: block;
+  }
+  
+  /* 슬라이드 이미지 전체 채우기 */
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* 슬라이드 텍스트 영역 */
+  .slide-content {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 20px 30px;
+    border-radius: 6px;
+    max-width: 80%;
+    font-weight: 500;
+  }
+  
+  /* 인디케이터 (슬라이드 dots) */
+  .slider-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+  }
+  
+  .slider-dots .dot {
+    width: 12px;
+    height: 12px;
+    background-color: #999;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .slider-dots .dot.active {
+    background-color: #fff;
+  }
+  
+  /* ----------------------------------
+     Solution-intro Section 
+     ---------------------------------- */
+  #solution-intro {
+    padding: 60px 20px;
+    text-align: center;
+    background-color: #f7f7f7;
+    border-top: 1px solid #eee; /* 위아래 얕은 보더로 구분감 */
+    border-bottom: 1px solid #eee;
+  }
+  
+  #solution-intro h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    line-height: 1.3;
+    color: #333;
+  }
+  
+  .intro-description {
+    font-size: 1.05rem;
+    color: #555;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  
+  /* 카드 목록 (서비스) */
+  .solution-services {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 20px;
+  }
+  
+  /* 3~4열 카드 유지 (원하는 열수에 맞춰 calc 수정) */
+  .service-item {
+    flex: 0 0 calc((100% - 200px) / 3); 
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: left;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+    transition: box-shadow 0.3s;
+  }
+  .service-item:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  /* 카드 헤더 */
+  .service-item h3 {
+    font-size: 1.2rem;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #6c5ce7;
+    font-weight: 600;
+  }
+  
+  /* 카드 본문 */
+  .service-item p {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  
+  /* 카드 이미지 */
+  .service-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    display: block;
+    margin-top: 10px;
+  }
+  
+  /* 반응형: 900px 이하 -> 2열, 600px 이하 -> 1열 */
+  @media (max-width: 900px) {
+    .service-item {
+      flex: 0 0 calc(50% - 80px);
+    }
+  }
+  @media (max-width: 600px) {
+    .service-item {
+      flex: 0 0 calc(100% - 40px);
+    }
+  }
+  
+  /* ----------------------------------
+     Latest Content Section 
+     ---------------------------------- */
+  #latest-content {
+    background-color: #f9f9f9;
+    padding: 60px 20px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .latest-content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 40px;
+  }
+  
+  .latest-content-info {
+    flex: 0 0 300px;
+  }
+  .latest-content-info h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: 700;
+  }
+  .latest-content-info p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 0;
+  }
+  
+  /* 카드 슬라이더 */
+  .latest-content-slider {
+    flex: 1;
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 10px; /* 약간 여유 공간 */
+  }
+  .latest-content-slider::-webkit-scrollbar {
+    height: 8px;
+  }
+  .latest-content-slider::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+  
+  /* 개별 카드 */
+  .content-card {
+    flex: 0 0 300px; 
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.3s;
+  }
+  .content-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  .content-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .content-card h3 {
+    font-size: 1rem;
+    margin: 10px;
+    color: #333;
+    font-weight: 600;
+  }
+  .content-card p {
+    font-size: 0.9rem;
+    margin: 0 10px 10px;
+    color: #555;
+    line-height: 1.4;
+  }
+  
+  /* 인디케이터 (하단 dot) */
+  .latest-content-indicator {
+    text-align: center;
+    margin-top: 20px;
+  }
+  .latest-content-indicator .dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    background-color: #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .latest-content-indicator .dot.active {
+    background-color: #666;
+  }
+  
+  /* ----------------------------------
+     Review Section 
+     ---------------------------------- */
+  #app-review {
+    padding: 60px 20px;
+    background-color: #fafafa;
+  }
+  
+  .review-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* 후기 헤더 */
+  .review-header h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: 700;
+  }
+  .review-header p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 40px;
+    line-height: 1.4;
+  }
+  
+  /* 후기 컨테이너 */
+  .review-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 50px;
+  }
+  
+  /* 왼쪽 이미지 영역 */
+  .review-images {
+    flex: 0 0 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+  }
+  .review-images img {
+    width: 200px;
+    height: 400px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  /* 오른쪽 텍스트 영역 */
+  .review-text {
+    flex: 1;
+    min-width: 300px;
+    color: #333;
+  }
+  .review-text h3 {
+    font-size: 1.2rem;
+    color: #2f7f32;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .review-text p {
+    line-height: 1.5;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    color: #555;
+  }
+  
+  /* 두 번째 후기 등 특색을 주려면 */
+  .second-review .review-images img {
+    border-color: #0073e6;
+  }
+  
+  /* 반응형 (768px 이하) */
+  @media (max-width: 768px) {
+    .review-content {
+      flex-direction: column;
+      align-items: center;
+    }
+    .review-images {
+      flex: none;
+      width: 100%;
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .review-images img {
+      width: 150px;
+      height: 300px;
+    }
+    .review-text {
+      width: 100%;
+      text-align: center;
+    }
+  }
+  
+  /* ----------------------------------
+     CTA Section 
+     ---------------------------------- */
+  #cta {
+    background-color: #fff;
+    text-align: center;
+    border-top: 1px solid #eee;
+    padding: 60px 20px;
+  }
+  
+  #cta .content-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  #cta h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 700;
+  }
+  
+  #cta p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 30px;
+    line-height: 1.4;
+  }
+  
+  #cta .cta-button {
+    display: inline-block;
+    padding: 14px 28px;
+    background: #6c5ce7;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: background 0.3s;
+  }
+  #cta .cta-button:hover {
+    background: #5a47c7;
+  }
+  

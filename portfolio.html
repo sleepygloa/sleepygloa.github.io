@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>컴퍼니디벨로퍼 - Portfolio</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard/dist/web/variable/pretendardvariable.css" />
+  <!-- 공통 CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- 포트폴리오 페이지 전용 CSS -->
+  <link rel="stylesheet" href="css/portfolio.css">
+</head>
+<body>
+  <div id="page-container">
+    <!-- 공통 헤더 포함 -->
+    <div id="header"></div>
+    
+    <main>
+      <h1>Portfolio</h1>
+      <div class="card-container">
+        <!-- 진행중 프로젝트 (상단 노출) -->
+        <div class="card ongoing">
+          <img src="https://via.placeholder.com/300x200?text=프로젝트+1" alt="프로젝트 1">
+          <div class="card-content">
+            <h3>프로젝트 1</h3>
+            <p>현재 진행중인 프로젝트입니다. 최신 기술을 적용하여 개발 중입니다.</p>
+          </div>
+          <div class="card-footer">
+            2025-02-01
+          </div>
+        </div>
+        <!-- 완료된 프로젝트 카드 -->
+        <div class="card">
+          <img src="https://via.placeholder.com/300x200?text=프로젝트+2" alt="프로젝트 2">
+          <div class="card-content">
+            <h3>프로젝트 2</h3>
+            <p>완료된 프로젝트입니다. 고객 맞춤형 솔루션을 제공하였습니다.</p>
+          </div>
+          <div class="card-footer">
+            2024-12-15
+          </div>
+        </div>
+        <div class="card">
+          <img src="https://via.placeholder.com/300x200?text=프로젝트+3" alt="프로젝트 3">
+          <div class="card-content">
+            <h3>프로젝트 3</h3>
+            <p>디자인과 기능 모두 높은 평가를 받은 완료 프로젝트입니다.</p>
+          </div>
+          <div class="card-footer">
+            2024-10-30
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <!-- 공통 푸터 포함 -->
+    <div id="footer"></div>
+  </div>
+  
+  <!-- 헤더와 푸터 동적 포함 스크립트 -->
+  <script>
+    function includeHTML(id, file) {
+      fetch(file)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.text();
+        })
+        .then(data => {
+          document.getElementById(id).innerHTML = data;
+        })
+        .catch(error => console.error("Error including HTML:", error));
+    }
+    includeHTML("header", "header.html");
+    includeHTML("footer", "footer.html");
+  </script>
+</body>
+</html>

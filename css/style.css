@@ -1,0 +1,87 @@
+/* css/style.css */
+
+/* 기본 폰트와 색상 설정 */
+body {
+  margin: 0;
+  font-family: 'Pretendard', sans-serif;
+  color: #333;
+  background-color: #f7f7f7;
+}
+
+html, body {
+  height: 100%;
+}
+
+/* 페이지 전체 레이아웃 */
+#page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* 공통 컨테이너 */
+.header-container,
+.footer-container {
+  width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+/* 헤더 스타일 */
+header {
+  background-color: #000;  /* 최상단일 때 검정색 */
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  padding: 10px 0;
+  transition: background-color 0.3s ease;
+}
+
+header.scrolled {
+  background-color: transparent;
+}
+
+.header-container .logo {
+  font-size: 1.5em;
+  font-weight: bold;
+  float: left;
+}
+
+.header-container nav {
+  float: right;
+}
+
+.header-container nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 1em;
+  transition: color 0.3s ease;
+}
+
+.header-container nav a:hover {
+  color: #ddd;
+}
+
+/* Footer 스타일 */
+footer {
+  background-color: #222;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+}
+
+/* Main 영역: 헤더 높이만큼 여백 */
+main {
+  margin-top: 50px; /* 헤더 높이 */
+  flex: 1;
+  padding: 0;  /* 제거된 패딩 */
+  background-color: #f7f7f7;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}

@@ -1,12 +1,279 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Portfolio</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>컴퍼니디벨로퍼</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard/dist/web/variable/pretendardvariable.css" />
+  <!-- 공통 CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- 홈 페이지 전용 CSS -->
+  <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-  <p>Hello, World!</p>
+  <div id="page-container">
+    <!-- 공통 헤더 (동적 포함 또는 직접 삽입) -->
+    <div id="header"></div>
+    
+    <main>
+
+      <!-- Hero 섹션 -->
+      <section id="hero">
+        <div class="slider-container">
+          <!-- 슬라이드 1 -->
+          <div class="slide active">
+            <img src="/images/slider/slide1.jpg"
+                 alt="Slide 1 - Business / Desk">
+            <div class="slide-content">
+              <h2>서비스 1</h2>
+              <p>웹/모바일 앱 개발 등 다양한 IT 솔루션 제공</p>
+            </div>
+          </div>
+          <!-- 슬라이드 2 -->
+          <div class="slide">
+            <img src="/images/slider/slide1.jpg"
+                 alt="Slide 2 - 클라우드 인프라">
+            <div class="slide-content">
+              <h2>서비스 2</h2>
+              <p>클라우드 인프라 구축과 AI 기반 데이터 분석</p>
+            </div>
+          </div>
+          <!-- 슬라이드 3 -->
+          <div class="slide">
+            <img src="/images/slider/slide1.jpg"
+                 alt="Slide 3 - AI 솔루션">
+            <div class="slide-content">
+              <h2>서비스 3</h2>
+              <p>공공데이터를 활용한 맞춤형 서비스 제공</p>
+            </div>
+          </div>
+          <!-- 슬라이드 인디케이터 -->
+          <div class="slider-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+      </section>
+      
+      <!-- 회사 소개 섹션 (#about)은 삭제됨 -->
+
+      <!-- 솔루션 소개 & 서비스 섹션 (회사 소개 내용 포함) -->
+      <section id="solution-intro">
+        <h2>서비스<br></h2>
+        <p class="intro-description">
+          고객 맞춤형 웹/모바일 기술을 AI와 접목하여 빠르고, 안정적이고, 신뢰성있는 서비스를 제공합니다.
+        </p>
+        
+        <!-- 솔루션 서비스 목록 (3열 카드) -->
+        <div class="solution-services">
+          <div class="service-item">
+            <h3>웹/모바일 앱 개발</h3>
+            <p>반응형과 최신기술 기반 최적의 사용자 경험을 제공합니다.</p>
+            <img src="/images/solution/solution1.jpg" alt="웹/모바일 앱 개발">
+          </div>
+          <div class="service-item">
+            <h3>클라우드 인프라 구축</h3>
+            <p>안정적이고 유연한 클라우드 환경을 바탕으로 비즈니스 확장성을 높입니다.</p>
+            <img src="/images/solution/solution2.jpg" alt="클라우드 인프라 구축">
+          </div>
+          <div class="service-item">
+            <h3>AI 기반 데이터 분석</h3>
+            <p>데이터에서 인사이트를 도출하고 의사결정을 지원하는 고도화된 분석 서비스.</p>
+            <img src="/images/solution/solution3.jpg" alt="AI 기반 데이터 분석">
+          </div>
+          <div class="service-item">
+            <h3>데이터베이스 관리</h3>
+            <p>효율적이고 안전한 데이터베이스 관리 솔루션을 제공합니다.</p>
+            <img src="/images/solution/solution4.jpg" alt="데이터베이스 관리">
+          </div>
+          <div class="service-item">
+            <h3>UI/UX 디자인</h3>
+            <p>AI 기반의 사용자 중심의 직관적이고 아름다운 디자인을 구현합니다.</p>
+            <img src="/images/solution/solution5.jpg" alt="UI/UX 디자인">
+          </div>
+          <div class="service-item">
+            <h3>안정적인 유지보수/운영 제공</h3>
+            <p>서비스의 안정성과 지속성을 보장하는 유지보수 및 운영 서비스를 제공합니다.</p>
+            <img src="/images/solution/solution6.jpg" alt="안정적인 유지보수/운영 제공">
+          </div>
+        </div>
+      </section>
+      
+      
+      <!-- 최신 콘텐츠 섹션 -->
+      <section id="latest-content">
+        <div class="latest-content-wrapper">
+          <div class="latest-content-info">
+            <h2>최신 포트폴리오</h2>
+            <p>컴디 이야기</p>
+          </div>
+          
+          <div class="latest-content-slider">
+            <div class="content-card">
+              <img src="/images/latest/latest1.jpg"
+                   alt="콘텐츠 이미지 1">
+              <h3>다양한 '벽꾸' 아이템으로 유니크한 공간 만들기</h3>
+              <p>포스터, 액자, 인형 등 '벽꾸' 할 수 있는 다채로운 아이템을 모아봤어요!</p>
+            </div>
+            <div class="content-card">
+              <img src="/images/latest/latest2.jpg"
+                   alt="콘텐츠 이미지 2">
+              <h3>새해에 새롭게, 시계 인테리어</h3>
+              <p>공간을 새롭게 꾸미고 싶다면 시계를 바꿔보시는 건 어떠세요?</p>
+            </div>
+            <div class="content-card">
+              <img src="/images/latest/latest3.jpg"
+                   alt="콘텐츠 이미지 3">
+              <h3>나를 위한 청정 부스팅, My 에어부스터</h3>
+              <p>쾌적한 라이프스타일을 고려하여 공기 관리에 최적화된 필터링을 제공합니다.</p>
+            </div>
+            <div class="content-card">
+              <img src="/images/latest/latest4.jpg"
+                   alt="콘텐츠 이미지 4">
+              <h3>농쳐서는 안 될 재미 컬렉션</h3>
+              <p>더 나은 여가를 위한 소품, 액자, 인테리어 아이템을 모아 보았습니다.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="latest-content-indicator">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </section>
+      
+      <section id="app-review">
+        <div class="review-wrapper">
+          <div class="review-header">
+            <h2>이용후기(개인)</h2>
+            <p>서비스를 이용하고 후기를 적어보아요.</p>
+          </div>
+          
+          <div class="review-content">
+            <div class="review-images">
+              <img src="/images/review/review1.jpg" alt="앱 스크린 1">
+            </div>
+            <div class="review-text">
+              <h3>만통을 제작한 박00씨 (Rook****)</h3>
+              <p>저는 미술관 도슨트를 일했었고, 미술관 특성상 많은 외국인들이 방문하는 일이 많았는데요, 
+                그러다 스마트메이커를 알게 되면서 저만의 통번역 앱을 제작하였습니다!
+              </p>
+              <p>
+                코딩을 몰라도 앱을 만들 수 있다는 것이 정말 신기했죠. 
+                구글에서 제공해주는 번역 언어를 계속 추가해서 현재는 42개국 언어로 통번역이 됩니다.
+              </p>
+            </div>
+          </div>
+
+          <div class="review-content">
+            <div class="review-images">
+              <img src="/images/review/review2.jpg" alt="앱 스크린 2">
+            </div>
+            <div class="review-text">
+              <h3>김00씨 (Tech****)</h3>
+              <p>저는 IT 업계에서 일하면서 다양한 프로젝트를 경험했습니다. 스마트메이커를 통해 저만의 프로젝트 관리 앱을 만들었고, 팀원들과 효율적으로 협업할 수 있었습니다.</p>
+              <p>코딩 지식이 없어도 쉽게 앱을 만들 수 있어서 매우 만족스럽습니다. 앞으로도 다양한 기능을 추가하여 더 나은 앱을 만들어 나갈 계획입니다.</p>
+            </div>
+          </div>
+
+          <div class="review-content">
+            <div class="review-images">
+              <img src="/images/review/review3.jpg" alt="앱 스크린 3">
+            </div>
+            <div class="review-text">
+              <h3>이00씨 (Design****)</h3>
+              <p>저는 디자이너로 일하면서 스마트메이커를 통해 저만의 포트폴리오 앱을 만들었습니다. 
+                다양한 디자인 요소를 쉽게 추가할 수 있어서 매우 만족스럽습니다.</p>
+              <p>코딩 지식이 없어도 직관적인 인터페이스 덕분에 쉽게 앱을 만들 수 있었습니다. 
+                앞으로도 스마트메이커를 통해 더 많은 앱을 만들어볼 계획입니다.</p>
+            </div>
+          </div>
+
+          <div class="review-content">
+            <div class="review-images">
+              <img src="/images/review/review4.jpg" alt="앱 스크린 4">
+            </div>
+            <div class="review-text">
+              <h3>박00씨 (Edu****)</h3>
+              <p>저는 교육 업계에서 일하면서 스마트메이커를 통해 교육용 앱을 만들었습니다. 
+                학생들이 쉽게 접근할 수 있는 인터페이스를 제공하여 학습 효과를 높였습니다.</p>
+              <p>코딩 지식이 없어도 다양한 기능을 추가할 수 있어서 매우 만족스럽습니다. 
+                앞으로도 스마트메이커를 통해 더 많은 교육용 앱을 만들어볼 계획입니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Call-to-Action 섹션 -->
+      <section id="cta">
+        <div class="content-wrapper">
+          <h2>문의하기</h2>
+          <p>궁금한 사항이 있으시면 언제든지 문의해 주세요.</p>
+          <a href="contact.html" class="cta-button">문의하기</a>
+        </div>
+      </section>
+    </main>
+    
+    <!-- 공통 푸터 -->
+    <div id="footer"></div>
+  </div>
+  
+  <!-- 헤더, 푸터 및 슬라이더 스크립트 -->
+  <script>
+    function includeHTML(id, file) {
+      fetch(file)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.text();
+        })
+        .then(data => {
+          document.getElementById(id).innerHTML = data;
+        })
+        .catch(error => console.error("Error including HTML:", error));
+    }
+    includeHTML("header", "header.html");
+    includeHTML("footer", "footer.html");
+
+    // 스크롤 시 헤더 배경 전환
+    window.addEventListener('scroll', function() {
+      var header = document.querySelector('header');
+      if (window.pageYOffset > 0) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+    
+    // Hero 슬라이더 기능
+    let slideIndex = 0;
+    const slides = document.querySelectorAll('.slider-container .slide');
+    const dots = document.querySelectorAll('.slider-dots .dot');
+    
+    function showSlide(index) {
+      slides.forEach(slide => slide.classList.remove('active'));
+      dots.forEach(dot => dot.classList.remove('active'));
+      slides[index].classList.add('active');
+      dots[index].classList.add('active');
+    }
+    
+    function nextSlide() {
+      slideIndex = (slideIndex + 1) % slides.length;
+      showSlide(slideIndex);
+    }
+    
+    setInterval(nextSlide, 5000);
+    
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        slideIndex = idx;
+        showSlide(slideIndex);
+      });
+    });
+  </script>
 </body>
 </html>
