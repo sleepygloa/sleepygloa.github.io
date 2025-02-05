@@ -4,10 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>컴퍼니디벨로퍼 - Contact</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard/dist/web/variable/pretendardvariable.css" />
-  <!-- 공통 CSS -->
+  <!-- 기본 스타일 -->
   <link rel="stylesheet" href="css/style.css">
-  <!-- 문의 전용 CSS -->
+  <!-- 문의/서비스 섹션 스타일 -->
   <link rel="stylesheet" href="css/contact.css">
 </head>
 <body>
@@ -16,248 +15,211 @@
     <div id="header"></div>
     
     <main>
-      <h1 class="contact-title">문의하기</h1>
-      
-      <section id="contact-section">
-        <div class="contact-container">
-          <!-- 좌측: 연락처 정보 -->
-          <div class="contact-info">
-            <h2>연락처 정보</h2>
-            <p><strong>상호명:</strong> 컴퍼니디벨로퍼</p>
-            <!-- <p><strong>전화:</strong> 010-0000-0000</p> -->
-            <p><strong>이메일:</strong> sleepygloawork@gmail.com</p>
-            <!-- <p><strong>주소:</strong> 서울특별시 강남구</p> -->
-            <p><strong>영업시간:</strong> 연중무휴 </p>
+      <div class="content-wrapper">
+        
+        <!-- 메인 타이틀 -->
+        <h1 class="contact-title">문의하기</h1>
 
-            <p><strong>GitHub:</strong> <a href="https://github.com/sleepygloa" target="_blank">https://github.com/sleepygloa</a></p>
-            <p><strong>카카오톡 오픈채팅:</strong> <a href="https://open.kakao.com/o/sJ50Ofeh" target="_blank">https://open.kakao.com/o/sJ50Ofeh</a></p>
+        <!-- 문의 섹션 -->
+        <section id="contact-section">
+          <div class="contact-container">
+            <!-- 좌측: 연락처 정보 -->
+            <div class="contact-info">
+              <h2>연락처 정보</h2>
+              <p><strong>상호명:</strong> 컴퍼니디벨로퍼</p>
+              <p><strong>이메일:</strong> sleepygloawork@gmail.com</p>
+              <p><strong>영업시간:</strong> 연중무휴</p>
+              <p><strong>GitHub:</strong> 
+                <a href="https://github.com/sleepygloa" target="_blank">https://github.com/sleepygloa</a>
+              </p>
+              <p><strong>카카오톡 오픈채팅:</strong> 
+                <a href="https://open.kakao.com/o/sJ50Ofeh" target="_blank">https://open.kakao.com/o/sJ50Ofeh</a>
+              </p>
+            </div>
+            
+            <!-- 우측: 문의 폼 -->
+            <div class="contact-form">
+              <h2>문의 작성</h2>
+              <form action="mailto:info@company.com" method="post" enctype="text/plain">
+                <label for="template">문의 템플릿 선택</label>
+                <select id="template" name="template">
+                  <option value="">-- 템플릿 카테고리 선택 --</option>
+                  <option value="견적/개발 문의">견적/개발 문의</option>
+                  <option value="유지보수/운영 문의">유지보수/운영 문의</option>
+                  <option value="개발인력요청">개발인력요청 문의</option>
+                  <option value="기타 문의">기타 문의</option>
+                </select>
+                
+                <label for="subject">제목</label>
+                <input type="text" id="subject" name="subject" placeholder="제목을 입력하세요" required>
+                
+                <label for="message">문의 내용</label>
+                <textarea id="message" name="message" rows="10" placeholder="문의 내용을 입력하세요" required></textarea>
+                
+                <button type="submit">메일 보내기</button>
+              </form>
+            </div>
           </div>
-          
-          <!-- 우측: 문의 폼 -->
-          <div class="contact-form">
-            <h2>문의 작성</h2>
-            <form action="mailto:info@company.com" method="post" enctype="text/plain">
-              <label for="template">문의 템플릿 선택</label>
-              <select id="template" name="template">
-                <option value="">-- 템플릿 카테고리 선택 --</option>
-                <option value="견적/개발 문의">견적/개발 문의</option>
-                <option value="유지보수/운영 문의">유지보수/운영 문의</option>
-                <option value="개발인력요청">개발인력요청 문의</option>
-                <option value="기타 문의">기타 문의</option>
-              </select>
-              
-              <label for="subject">제목</label>
-              <input type="text" id="subject" name="subject" placeholder="제목을 입력하세요" required>
-              
-              <label for="message">문의 내용</label>
-              <textarea id="message" name="message" rows="10" placeholder="문의 내용을 입력하세요" required></textarea>
-              
-              <button type="submit">메일 보내기</button>
-            </form>
-          </div>
-        </div>
-      </section>
+        </section>
 
+        <!-- 서비스 섹션 (Left Category / Right Content) -->
+        <section id="service-info">
+          <div class="service-l-container">
+            <!-- 왼쪽: 카테고리 5행 -->
+            <ul class="service-categories">
+              <li class="active" data-target="procedure">서비스 제공절차</li>
+              <li data-target="benefits">우리의 특별 혜택</li>
+              <li data-target="manpower">인력 투입</li>
+              <li data-target="maintenance">유지보수/운영 안내</li>
+              <li data-target="devscope">개발 범위</li>
+            </ul>
+            
+            <!-- 오른쪽: 내용 영역 (각 섹션) -->
+            <div class="service-content">
+              
+              <!-- 1) 서비스 절차 -->
+              <div class="service-panel show" id="panel-procedure">
+                <h2>서비스 제공절차</h2>
+                <ol>
+                  <li><strong>자료 전달 & 초기 상담</strong><br>
+                    고객이 프로젝트 개요, 레퍼런스 자료 등을 전달하고 간단한 상담을 진행합니다.
+                  </li>
+                  <li><strong>견적 및 기간 안내 + 계약 체결</strong><br>
+                    견적서 및 개발 일정을 제안하고, 계약 체결 후 미팅을 진행합니다.
+                  </li>
+                  <li><strong>기획/디자인 협의(AI)</strong><br>
+                    기획서, UI/UX 시안, 기능명세서 검토 -> 확정
+                  </li>
+                  <li><strong>초기 개발(시제품) & 1차 피드백</strong><br>
+                    프로토타입 공유 -> 기능·디자인 1차 피드백
+                  </li>
+                  <li><strong>상세 기능 개발 + 테스트/검수</strong></li>
+                  <li><strong>배포/서비스 안정화</strong></li>
+                  <li><strong>인수인계</strong></li>
+                </ol>
+              </div>
 
-      <section id="service-info">
-        <div class="service-info-wrapper">
-          
-        <!-- row1: 2열 -->
-        <div class="row row1">
-          <!-- 1) 서비스 제공절차 -->
-          <div class="info-block procedure">
-            <h2>서비스 제공절차</h2>
-            <ol>
-              <li><strong>자료 전달 & 초기 상담</strong><br>
-                고객이 프로젝트 개요, 레퍼런스 자료 등을 전달하고 간단한 상담을 진행합니다.
-              </li>
-              <li><strong>견적 및 기간 안내 + 계약 체결</strong><br>
-                견적서 및 개발 일정 안내 하고, 계약을 체결한 뒤 프로젝트를 채팅/줌/(필요시 대면) 미팅을 진행합니다.
-              </li>
-              <li><strong>기획/디자인 협의(AI)</strong><br>
-                전달 받은 기획서, UI/UX 시안, 기능명세서 를 검토하고, 내용을 확정합니다.
-                <br>* 시안을 통한 AI 기반 디자인이 생성되므로 인력비용이이 크게 절감됩니다.
-              </li>
-              <li><strong>초기 개발(시제품) & 1차 피드백</strong><br>
-                간단한 프로토타입을 구현하여 공유하고, 기능·디자인 1차 피드백을 받습니다.
-                <br>* 프로토타입을 빠르게 노출해 고객 요청사항이 반영되고 있는지 확인합니다.
-              </li>
-              <li><strong>상세 기능 개발 + 테스트/검수</strong><br>
-                전체 기능을 구현하고 QA(버그 수정, 성능 최적화)를 거쳐 2차 피드백을 통해 보완합니다.
-              </li>
-              <li><strong>배포/서비스 안정화</strong><br>
-                운영 서버에 배포하고 일정 기간 모니터링을 진행해 서비스가 안정화될 수 있도록 지원합니다.
-              </li>
-              <li><strong>인수인계</strong><br>
-                소스 코드·관리 계정 전달, 운영 매뉴얼 안내 등 최종 인수인계를 진행합니다.
-              </li>
-            </ol>
-          </div>
-      
-          <!-- 5) 우리의 특별 혜택 (기존) -->
-          <div class="info-block benefits">
-            <h2>우리의 특별 혜택</h2>
-            <ul>
-              <li>
-                <strong>하자보수 평생 무료!</strong><br>
-                계약 종료 이후에도 오류(버그)가 발견되면, 동일 환경/코드 기준으로 무상 보수를 제공합니다.
-                <em>(※ 단, 서버 변경·제3자 코드 수정 등은 제외)</em>
-              </li>
-              <li>
-                <strong>평생 유지보수 무료!</strong><br>
-                간단한 수정(텍스트·이미지 교체, 레이아웃 소폭 수정)은 무료, 새로운 기능 추가는 유료로 진행합니다.
-              </li>
-              <li>
-                <strong>문제없는 라이센스</strong><br>
-                무료 라이센스·이미지·오픈소스만 사용하므로, 상업적 이용에 대해 추가 저작권 문제가 없습니다.
-              </li>
-              <li>
-                <strong>언제든지 쓴소리 환영</strong><br>
-                강렬한 피드백을 받을 준비가 되어있습니다. 커피라도 사드려요!
-              </li>
-              <li>
-                <strong>도메인·호스팅 비용 별도</strong><br>
-                도메인·호스팅은 고객 사정에 맞춰 별도 비용이 청구될 수 있습니다.
-              </li>
-              <li>
-                <strong>24시간 내 피드백 약속</strong><br>
-                유지보수·하자보수 요청 시, 1영업일 내 1차 답변을 드립니다.
-              </li>
-            </ul>
-          </div>
-        </div>
-        </div>
-          
-        <!-- row2: 3열 -->
-        <div class="row row2">
-      
-          <!-- 3) 인력 투입 (대규모 전용, 금액 삭제) -->
-          <div class="info-block manpower">
-            <h2>인력 투입 (대규모 전용)</h2>
-            <ul>
-              <li>
-                <strong>개발 인력</strong><br>
-                - 주니어/미드 레벨 투입 가능<br>
-                - 상주/재택(하이브리드) 근무 형태 협의<br>
-                - 최소 1개월 단위 계약
-              </li>
-              <li>
-                <strong>디자이너 / 퍼블리셔</strong><br>
-                - 기본적으로 AI 디자인·퍼블리싱으로 대체<br>
-                <!-- - 고급 브랜딩/특수 디자인 필요 시 시니어 디자이너/퍼블리셔 파견 협의 -->
-              </li>
-              <li>
-                <strong>계약 방식</strong><br>
-                - 계약 기간 단위 결제, 프리랜서 또는 세금계산서 증빙<br>
-                - 구체 범위·공수는 계약 전 협의
-              </li>
-            </ul>
-          </div>
-      
-          <!-- 4) 유지보수/운영 (금액 삭제) -->
-          <div class="info-block maintenance">
-            <h2>유지보수/운영 안내</h2>
-            <ul>
-              <li>
-                <strong>소규모/중급 프로젝트</strong><br>
-                - 평생 유지보수 무료(간단 수정), 하자보수 평생 무료(서버/코드 동일 시)<br>
-                - 신규 기능 추가는 건별 협의
-              </li>
-              <li>
-                <strong>운영 지원</strong><br>
-                - 서버 모니터링, 보안 패치, 정기 업데이트 등<br>
-                - 긴급 오류 시 즉시 대응(주말/야간은 별도 협의)
-              </li>
-              <li>
-                <strong>대규모 플랫폼(인력 투입 대상)</strong><br>
-                - 운영/유지보수를 위한 개발자·DevOps 투입<br>
-                - 서버 확장, 모니터링 등 별도 계약
-              </li>
-            </ul>
-          </div>
-      
-          <!-- 2) 개발 범위 (금액 삭제) -->
-          <div class="info-block development-scope">
-            <h2>개발 범위</h2>
-            <ul>
-              <li>
-                <strong>기본적으로 제공되는 기능</strong><br>
-                <em>대상</em>: 기업/개인 홈페이지, 간단한 페이지<br>
-                <em>제공 가능 기능</em>:  
+              <!-- 2) 혜택 -->
+              <div class="service-panel" id="panel-benefits">
+                <h2>우리의 특별 혜택</h2>
                 <ul>
-                  <li>간단 기획 + AI 기반 디자인 + 홈페이지 제작</li>
-                  <li>회원가입/로그인/게시판 구현(기본 신규/수정/삭제/조회)</li>
-                  <li>반응형 웹 (PC/모바일 최적화)</li>
-                  <!-- <li></li> -->
-                  <!-- <li>간단한 SNS 공유/댓글/알림 기능 (선택)</li> -->
+                  <li>
+                    <strong>하자보수 평생 무료!</strong><br>
+                    계약 종료 이후에도 오류(버그)가 발견되면, 동일 환경/코드 기준으로 무상 보수를 제공합니다.
+                  </li>
+                  <li>
+                    <strong>평생 유지보수 무료!</strong><br>
+                    간단한 수정(텍스트·이미지 교체, 레이아웃 소폭 수정)은 무료, 새로운 기능 추가는 유료
+                  </li>
+                  <li><strong>문제없는 라이센스</strong><br>
+                    무료 라이센스·이미지·오픈소스만 사용하므로, 상업적 이용에 대해 추가 저작권 문제가 없습니다.
+                  </li>
+                  <li><strong>언제든지 쓴소리 환영</strong><br>
+                    강렬한 피드백을 받을 준비가 되어있습니다. 커피라도 사드려요!
+                  </li>
+                  <li><strong>도메인·호스팅 비용 별도</strong><br>
+                    도메인·호스팅은 고객 사정에 맞춰 별도 비용
+                  </li>
+                  <li><strong>24시간 내 피드백 약속</strong><br>
+                    유지보수·하자보수 요청 시, 1영업일 내 1차 답변
+                  </li>
                 </ul>
-                <!-- <p style="margin-top:6px;">* 결제·예약 등 상거래 기능은 미포함</p> -->
-              </li>
-              
-              <li>
-                <strong>추가적으로 제공되는 기능</strong><br>
-                <em>예</em>: 권한관리, 일정관리, 대댓글 게시판, 물류서비스, 배송서비스 등등<br>
-                <em>제공 가능 기능</em>:
-                <ul>
-                    <li>기본기능에 대한 내용은 모두 적용됩니다.</li>
-                    <li>상세 기획 + AI 기반 디자인 + 웹/앱 연동 + 설계서 상세 작성</li>
-                    <!-- <li></li> -->
-                    <li>외부 API 연동 (지도, SNS간편회원가입/로그인 등등)</li>
-                    <li>클라우드 인프라 연동(AWS, Azure, GCP 등)</li>
-                </ul>
-                <!-- <p style="margin-top:6px;">* 복잡한 실시간 기능(예: 실시간 채팅)은 별도 협의</p> -->
-              </li>
-              
-              <li>
-                <strong>고급/대규모 플랫폼</strong><br>
-                <em>대상</em>: 포털, 전문 SaaS(Subscription), 대규모 데이터 처리(빅데이터/AI), 멀티테넌트, 초고트래픽 e-commerce 등<br>
-                <em>개발 서비스 제공</em>: <strong>없음</strong> (인력 투입만 가능)<br>
-                <ul>
-                  <li>고객 측에서 프로젝트 전반을 리딩</li>
-                  <li>당사는 개발/디자인 인력 파견, 월 단위 계약</li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-          
-      
-      </section>
+              </div>
 
-        <!-- 다른 섹션들과 달리 참고사항은 별도의 full-width 블록으로 배치 -->
+              <!-- 3) 인력 투입 -->
+              <div class="service-panel" id="panel-manpower">
+                <h2>인력 투입 (대규모 전용)</h2>
+                <ul>
+                  <li>
+                    <strong>개발 인력</strong><br>
+                    - 주니어/미드 레벨 투입 가능<br>
+                    - 상주/재택(하이브리드) 근무 형태 협의<br>
+                    - 최소 1개월 단위 계약
+                  </li>
+                  <li>
+                    <strong>디자이너 / 퍼블리셔</strong><br>
+                    - 기본적으로 AI 디자인·퍼블리싱으로 대체
+                  </li>
+                  <li>
+                    <strong>계약 방식</strong><br>
+                    - 계약 기간 단위 결제, 프리랜서 또는 세금계산서 증빙<br>
+                    - 구체 범위·공수는 계약 전 협의
+                  </li>
+                </ul>
+              </div>
+
+              <!-- 4) 유지보수/운영 안내 -->
+              <div class="service-panel" id="panel-maintenance">
+                <h2>유지보수/운영 안내</h2>
+                <ul>
+                  <li>
+                    <strong>소규모/중급 프로젝트</strong><br>
+                    - 평생 유지보수 무료(간단 수정), 하자보수 평생 무료(서버/코드 동일)
+                  </li>
+                  <li>
+                    <strong>운영 지원</strong><br>
+                    - 서버 모니터링, 보안 패치, 정기 업데이트 등
+                  </li>
+                  <li>
+                    <strong>대규모 플랫폼(인력 투입 대상)</strong><br>
+                    - 운영/유지보수를 위한 개발자·DevOps 투입<br>
+                    - 서버 확장, 모니터링 등 별도 계약
+                  </li>
+                </ul>
+              </div>
+
+              <!-- 5) 개발 범위 -->
+              <div class="service-panel" id="panel-devscope">
+                <h2>개발 범위</h2>
+                <ul>
+                  <li>
+                    <strong>기본적으로 제공되는 기능</strong><br>
+                    (기업/개인 홈페이지, 간단한 페이지<br>
+                    회원가입/로그인/게시판, 반응형 등)
+                  </li>
+                  <li>
+                    <strong>추가적으로 제공되는 기능</strong><br>
+                    (권한관리, 일정관리, 대댓글 게시판, 물류·배송 연동 등)
+                  </li>
+                  <li>
+                    <strong>고급/대규모 플랫폼</strong><br>
+                    포털, 전문 SaaS, 대규모 데이터 처리, 초고트래픽 e-commerce etc.<br>
+                    개발 서비스 제공 없음 (인력 투입만 가능)
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 참고사항: footer와 동일한 색 (#222), 작은 폰트 -->
         <section id="reference-block">
-            <div class="info-block reference">
+          <div class="reference-content">
             <h2>참고사항</h2>
             <ul>
               <li>
                 <strong>공수·비용 산정</strong><br>
-                - 소규모/중급 프로젝트: 기능 요구사항에 따라 **수백만 원**대 협의<br>
-                - 대규모 프로젝트: 직접 개발은 하지 않으며, 인력 투입 시 월 단위 협약<br>
-                - 자세한 금액은 <em>화면 수, 기능 복잡도, 스택, 기간</em> 등에 따라 건별 산정
+                - 소규모/중급 프로젝트: 기능 요구사항에 따라 수백만 원대 협의<br>
+                - 대규모 프로젝트: 인력 투입 시 월 단위 협약
               </li>
               <li>
                 <strong>하자보수 기준</strong><br>
-                - 최초 세팅된 환경(호스팅/서버) 및 동일 코드 기준으로 무상<br>
+                - 최초 세팅된 환경(호스팅/서버) 및 동일 코드 기준 무상<br>
                 - 환경 변경 시 건별 비용
               </li>
               <li>
-                <strong>간단한 수정 범위</strong><br>
-                - 텍스트/이미지 교체, 한 페이지 이하의 미세 수정<br>
-                - 범위를 넘어서는 경우 건당 추가 견적
-              </li>
-              <li>
                 <strong>도메인/호스팅 비용</strong><br>
-                - 고객이 원하는 업체(예: AWS, 카페24 등) 선택 가능<br>
-                - 월 요금 별도
+                - 고객 원하는 업체 선택 (AWS, 카페24 등), 월 요금 별도
               </li>
               <li>
-                <strong>긴급 대응·주말/야간</strong><br>
-                - 긴급 오류(서버 다운 등) 발생 시 즉시 조치, 주말/야간은 별도 요율<br>
-                - 사전 SLA 계약 시 안정적인 대응 가능
+                <strong>긴급 대응</strong><br>
+                - 서버 다운 등 긴급 오류 발생 시 즉시 조치, 주말/야간은 별도 요율
               </li>
             </ul>
-        </div>
+          </div>
         </section>
-  
+        
+      </div><!-- .content-wrapper -->
     </main>
     
     <!-- 공통 푸터 (동적 포함) -->
@@ -284,34 +246,49 @@
     includeHTML("header", "header.html");
     includeHTML("footer", "footer.html");
 
-    /* 
-      1) 문의 템플릿을 JSON으로 관리하는 방법:
-         - templates.json 파일을 별도로 두고, fetch로 불러온 뒤
-           select의 change 이벤트에서 해당 내용을 message에 삽입.
-    */
+    // 문의 템플릿 JSON 로드
     let inquiryData = {};
-
-    // JSON 파일 (/js/contact/templates.json) 불러오기
     fetch('/js/contact/templates.json')
-        .then(res => res.json())
-        .then(data => {
-        inquiryData = data;
-        })
-        .catch(err => console.error(err));
+      .then(res => res.json())
+      .then(data => { inquiryData = data; })
+      .catch(err => console.error(err));
 
     // select 변경 이벤트
     document.getElementById('template').addEventListener('change', function() {
-        const selected = this.value;   // ex: "견적/개발 문의"
-        const messageArea = document.getElementById('message');
-
-        if (inquiryData[selected]) {
-        // **객체**가 아니라, 그 내부의 "message" 값만 가져와야 함
-        messageArea.value = inquiryData[selected].message; 
-        } else {
+      const selected = this.value;
+      const messageArea = document.getElementById('message');
+      if (inquiryData[selected]) {
+        messageArea.value = inquiryData[selected].message;
+      } else {
         messageArea.value = "";
-        }
+      }
     });
 
+    // ------------------------------------
+    // 왼쪽 카테고리 클릭 -> 우측 내용 표시
+    // ------------------------------------
+    document.querySelectorAll('.service-categories li').forEach(li => {
+      li.addEventListener('click', () => {
+        // 모든 li 비활성화
+        document.querySelectorAll('.service-categories li').forEach(item => {
+          item.classList.remove('active');
+        });
+        // 클릭된 li 활성화
+        li.classList.add('active');
+
+        // 모든 panel 숨기기
+        document.querySelectorAll('.service-panel').forEach(panel => {
+          panel.classList.remove('show');
+        });
+
+        // data-target 속성으로 panel 찾기
+        const target = li.getAttribute('data-target');
+        const panel = document.getElementById('panel-' + target);
+        if (panel) {
+          panel.classList.add('show');
+        }
+      });
+    });
   </script>
 </body>
 </html>

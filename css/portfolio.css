@@ -1,66 +1,199 @@
-/* css/portfolio.css */
-
 /* 포트폴리오 제목 중앙 정렬 */
 h1 {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  
-  /* 카드 컨테이너 레이아웃 */
-  .card-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
-  
-  /* 카드 뉴스 스타일 */
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* 카드 컨테이너 레이아웃 */
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 0 20px; /* 양옆 여백 */
+}
+
+/* 카드 스타일 */
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  overflow: hidden;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 카드 내용 */
+.card-content {
+  padding: 20px;
+  flex: 1;
+}
+.card-content h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+.card-content p {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: #555;
+}
+
+/* 카드 푸터 (날짜) */
+.card-footer {
+  background-color: #f1f1f1;
+  padding: 10px 20px;
+  text-align: right;
+  font-size: 0.8em;
+  color: #555;
+}
+
+/* 진행중 프로젝트 카드 강조 */
+.ongoing {
+  border: 2px solid #e74c3c;
+}
+.ongoing::before {
+  content: "진행중";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #e74c3c;
+  color: #fff;
+  padding: 5px 10px;
+  font-size: 0.8em;
+  border-radius: 3px;
+}
+
+/*************************
+  모달 스타일
+*************************/
+.modal {
+  display: none; /* 기본은 숨김 */
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0;
+  width: 100%; 
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  overflow: auto; 
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 20px;
+  width: 80%;
+  max-width: 600px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.modal-content p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #555;
+}
+
+.modal .close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: #999;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.modal .close:hover {
+  color: #333;
+}
+
+/*************************
+  반응형
+*************************/
+@media (max-width: 768px) {
   .card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    overflow: hidden;
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-  }
-  .card img {
     width: 100%;
-    height: auto;
-  }
-  .card-content {
-    padding: 20px;
-    flex: 1;
+    max-width: 400px;
+    margin: 0 auto;
   }
   .card-content h3 {
-    margin-top: 0;
+    font-size: 1.1rem;
   }
   .card-content p {
-    font-size: 0.9em;
-    line-height: 1.4;
+    font-size: 0.9rem;
   }
-  .card-footer {
-    background-color: #f1f1f1;
-    padding: 10px 20px;
-    text-align: right;
-    font-size: 0.8em;
-    color: #555;
+  .modal-content {
+    width: 90%;
+    margin-top: 20%;
   }
-  
-  /* 진행중 프로젝트 카드 강조 */
-  .ongoing {
-    border: 2px solid #e74c3c;
-  }
-  .ongoing::before {
-    content: "진행중";
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: #e74c3c;
-    color: #fff;
-    padding: 5px 10px;
-    font-size: 0.8em;
-    border-radius: 3px;
-  }
-  
+}
+/* 카드 이미지 컨테이너 */
+.card-image {
+  width: 100%;
+  height: 200px; /* 고정 높이 설정 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eee;
+  overflow: hidden;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 모달 내 이미지 컨테이너 */
+.modal-image-container {
+  width: 100%;
+  height: 400px; /* 일정한 높이 유지 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ddd;
+}
+
+.modal-image-container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Swiper 버튼 디자인 */
+.swiper-button-next, .swiper-button-prev {
+  color: #333;
+}
+
+/* 점 네비게이션 디자인 */
+.swiper-pagination-bullet {
+  background: #666;
+  opacity: 0.5;
+}
+.swiper-pagination-bullet-active {
+  background: #000;
+  opacity: 1;
+}

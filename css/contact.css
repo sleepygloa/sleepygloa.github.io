@@ -1,11 +1,9 @@
-/* -----------------------------
-   Page Layout
-   ----------------------------- */
-   main {
-    margin-top: 60px; /* 헤더 높이를 감안, 필요 시 조정 */
-    background-color: #f9f9f9; /* 페이지 배경 */
+
+  /* 메인 영역 */
+  main {
+    margin-top: 60px; /* 헤더 높이 고려 */
     padding: 60px 20px;
-    min-height: 80vh; /* 페이지가 짧아도 최소 높이 확보 */
+    flex: 1;
   }
   
   /* 메인 타이틀 (문의하기) */
@@ -16,10 +14,10 @@
     margin-bottom: 40px;
     font-weight: 700;
   }
-  
+
   /* -----------------------------
-     Contact Section
-     ----------------------------- */
+     문의 섹션
+  ----------------------------- */
   #contact-section {
     max-width: 1200px;
     margin: 0 auto;
@@ -28,15 +26,12 @@
     padding: 40px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }
-  
-  /* 문의 섹션 내부 레이아웃 */
   .contact-container {
     display: flex;
     flex-wrap: wrap;
     gap: 40px;
   }
-  
-  /* 좌측(연락처 정보) 박스 */
+  /* 연락처 정보 */
   .contact-info {
     flex: 1;
     min-width: 300px;
@@ -49,20 +44,29 @@
   .contact-info h2 {
     margin-top: 0;
     font-size: 1.5rem;
-    color: #2f7f32; /* 녹색 계열 강조 */
+    color: #2f7f32;
     margin-bottom: 20px;
     font-weight: 600;
+    position: relative;
+    padding-left: 40px;
+  }
+  .contact-info h2::before {
+    content: "";
+    position: absolute;
+    left: 0; 
+    top: 5px;
+    width: 6px;
+    height: 24px;
+    background-color: #2f7f32;
+    border-radius: 3px;
   }
   .contact-info p {
     margin: 8px 0;
     line-height: 1.5;
     color: #555;
   }
-  .contact-info strong {
-    color: #333;
-  }
   
-  /* 우측(문의 폼) 박스 */
+  /* 문의 폼 */
   .contact-form {
     flex: 1.5;
     min-width: 300px;
@@ -75,12 +79,22 @@
   .contact-form h2 {
     margin-top: 0;
     font-size: 1.5rem;
-    color: #6c5ce7; /* 보라 계열 강조 */
+    color: #6c5ce7;
     margin-bottom: 20px;
     font-weight: 600;
+    position: relative;
+    padding-left: 40px;
   }
-  
-  /* 폼 요소 */
+  .contact-form h2::before {
+    content: "";
+    position: absolute;
+    left: 0; 
+    top: 5px;
+    width: 6px;
+    height: 24px;
+    background-color: #6c5ce7;
+    border-radius: 3px;
+  }
   .contact-form form {
     display: flex;
     flex-direction: column;
@@ -101,7 +115,6 @@
     font-size: 0.95rem;
     margin-bottom: 5px;
   }
-  
   .contact-form form button {
     margin-top: 20px;
     padding: 12px 20px;
@@ -116,8 +129,8 @@
   .contact-form form button:hover {
     background-color: #5a47c7;
   }
-  
-  /* 반응형: 768px 이하 */
+
+  /* 반응형(문의 섹션) */
   @media (max-width: 768px) {
     #contact-section {
       padding: 30px 10px;
@@ -126,131 +139,155 @@
       flex-direction: column;
     }
   }
-  
-/* 전체 섹션 레이아웃 */
-#service-info {
-    max-width: 1200px;    /* 가운데 정렬, 1200px 제한 */
-    margin: 0 auto;       /* 중앙 정렬 */
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 40px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  }
-  
-/* 내부 래퍼 */
-.service-info-wrapper {
-    display: flex;
-    flex-direction: column; /* row1, row2를 세로로 쌓음 */
-    gap: 40px;
-  }
-  
-/* 공통 스타일 for row1, row2 */
-.row {
-    display: flex;
-    gap: 40px;  /* 칸 간격 */
-  }
-  
-  /* row1: 2열 */
-  .row1 .info-block {
-    flex: 1; /* 2개 칸이 균등 분할 */
-    min-width: 0; /* flex 아이템 폭 제한 방지 */
-  }
-  
-  /* row2: 3열 */
-  .row2 .info-block {
-    flex: 1; /* 3개 칸을 균등 분할 */
-    min-width: 0;
-  }
-  
-/* info-block 박스 공통 스타일 */
-.info-block {
-    background: #fff;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 30px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    box-sizing: border-box;
-  }
-  
-  /* 제목 스타일 */
-  .info-block h2 {
-    margin-top: 0;
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    font-weight: 700;
-    color: #333;
-  }
-  
-  /* 목록 스타일 */
-  .info-block ul,
-  .info-block ol {
-    margin: 0;
-    padding-left: 20px;
-    line-height: 1.5;
-    color: #555;
-    font-size: 0.95rem;
-  }
-  
-/* 참고사항 섹션(#reference-block)을 전체 폭으로 */
-#reference-block {
-    width: 100%;             /* 브라우저 전체 폭 차지 */
-    background-color: #fafafa; /* 가벼운 배경색(선택) */
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* .info-block.reference: 전체 폭을 사용하고, 작은 글씨 */
-  .info-block.reference {
-    display: block;
-    width: 100%;
-    max-width: none;         /* 혹시 상위 CSS에서 max-width를 지정했다면 제거 */
-    margin: 0;               /* 중앙 정렬/여백 제거 */
-    padding: 20px;           /* 상하좌우 여백 */
-    box-sizing: border-box;
-    font-size: 0.85rem;      /* 글씨 크기 축소 (예: 85% 정도) */
-    color: #777;             /* 텍스트 컬러 다소 연하게 */
-    background-color: #fafafa; /* 상위 배경색과 같거나 약간 변경 가능 */
-    border-top: 1px solid #eee; /* 상단 선(선택) */
-    border-bottom: 1px solid #eee; /* 하단 선(선택) */
-  }
-  
-  /* h2 크기도 조금 작게 조정 */
-  .info-block.reference h2 {
-    margin-top: 0;
-    font-size: 1.2rem;       /* 좀 더 작게 */
-    margin-bottom: 10px;
-    font-weight: 600;
-    color: #555;
-  }
-  
-  /* 리스트 스타일 */
-  .info-block.reference ul {
-    margin: 0;
-    padding-left: 20px;
-    line-height: 1.4;
-  }
 
-  /* 반응형 (768px 이하) */
-  @media (max-width: 768px) {
-    .row {
-      flex-direction: column;
-    }
-    #service-info {
-      padding: 30px 10px;
-    }
-    .service-info-wrapper {
-      flex-direction: column;
-    }
-    .info-block {
-      min-width: auto;
-      width: 100%;
-    }
-    .info-block.reference {
-      font-size: 0.8rem;
-      padding: 15px;
-    }
-    .info-block.reference h2 {
-      font-size: 1rem;
-    }
-  }
   
+
+
+  /************************************
+ Left Category + Right Content Layout
+*************************************/
+
+/* 서비스 섹션 전체 */
+#service-info {
+  margin-top: 40px; /* 위와 간격 */
+}
+
+/* 왼쪽 카테고리 + 오른쪽 내용 레이아웃 */
+.service-l-container {
+  display: flex;
+  /* gap: 40px; */
+}
+
+/* 왼쪽: 5개 카테고리 (ul) */
+.service-categories {
+  flex: 0 0 200px;       /* 왼쪽 폭 고정 */
+  list-style: none;
+  margin: 0; 
+  padding: 0;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  overflow: hidden;      /* 둥근 모서리 안쪽 */
+}
+.service-categories li {
+  padding: 15px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  font-size: 1rem;
+  color: #333;
+  transition: background-color 0.3s;
+}
+.service-categories li:last-child {
+  border-bottom: none;
+}
+.service-categories li:hover {
+  background-color: #f2f2f2;
+}
+.service-categories li.active {
+  background-color: #6c5ce7;
+  color: #fff;
+}
+
+/* 오른쪽: 패널 내용 */
+.service-content {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  min-height: 350px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* 개별 패널 (기본 숨김) */
+.service-panel {
+  display: none;
+}
+.service-panel.show {
+  display: block;
+}
+
+/* 패널 공통 스타일 */
+.service-panel h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  font-weight: 700;
+  color: #333;
+}
+.service-panel ol, 
+.service-panel ul {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.5;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+/********************
+ Footer-like Reference
+********************/
+
+/* 참고사항: footer와 동일한 #222, 작은 폰트 */
+#reference-block {
+  width: 100%;
+  background-color: #222; /* footer와 동일 */
+  color: #ccc;           /* 밝은 회색 텍스트 */
+  padding: 40px 20px;
+  margin-top: 40px;
+  box-sizing: border-box;
+}
+
+#reference-block .reference-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  font-size: 0.85rem;     /* 작은 글씨 */
+  line-height: 1.4;
+}
+
+#reference-block .reference-content h2 {
+  font-size: 1.2rem;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #fff;           /* 타이틀 흰색 */
+}
+
+#reference-block .reference-content ul {
+  margin: 0;
+  padding-left: 20px;
+}
+#reference-block .reference-content li {
+  margin-bottom: 10px;
+}
+#reference-block .reference-content strong {
+  color: #eee;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .service-l-container {
+    flex-direction: column;
+  }
+  .service-categories {
+    flex: none;
+    display: flex;
+    overflow-x: auto; /* 좌우 스크롤 */
+    border-radius: 8px;
+  }
+  .service-categories li {
+    flex: 0 0 auto;
+    border-bottom: none;
+    border-right: 1px solid #eee;
+    white-space: nowrap;
+  }
+  .service-categories li:last-child {
+    border-right: none;
+  }
+  .service-content {
+    margin-top: 20px;
+    min-height: auto;
+  }
+}

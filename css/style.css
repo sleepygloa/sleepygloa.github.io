@@ -1,16 +1,26 @@
 /* css/style.css */
+@font-face {
+  font-family: 'GodoB'; /* 폰트 이름(마음대로 지정 가능) */
+  src: 
+       url('/fonts/D2Coding-Ver1.3.2-20180524.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap; /* 로딩 중일 때 fallback 폰트 표시 */
+}
+
 
 /* 기본 폰트와 색상 설정 */
 body {
+  font-family: 'D2Coding-Ver1.3.2-20180524', sans-serif;
   margin: 0;
-  font-family: 'Pretendard', sans-serif;
-  color: #333;
-  background-color: #f7f7f7;
+  background: #f7f7f7;
 }
+
 
 html, body {
   height: 100%;
 }
+
 
 /* 페이지 전체 레이아웃 */
 #page-container {
@@ -46,6 +56,7 @@ header.scrolled {
   font-size: 1.5em;
   font-weight: bold;
   float: left;
+  color: #fff;
 }
 
 .header-container nav {
@@ -85,3 +96,6 @@ main {
   margin: 0 auto;
   padding: 0 20px;
 }
+
+
+
